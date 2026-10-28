@@ -1,0 +1,19 @@
+# Local MongoDB only. The app itself runs as separate local processes (see README).
+services:
+  mongodb:
+    image: mongo:7
+    container_name: mailpilot-mongodb
+    restart: unless-stopped
+    ports:
+      # Bound to localhost only so the unauthenticated dev DB is not exposed to your network.
+      - "127.0.0.1:27017:27017"
+    volumes:
+      - mailpilot_mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  mailpilot_mongo_data:
