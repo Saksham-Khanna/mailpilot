@@ -102,6 +102,8 @@ def exchange_code(settings: Settings, code: str, code_verifier: str) -> OAuthTok
     try:
         flow.fetch_token(code=code)
     except Exception as exc:  # noqa: BLE001 - library raises several request/OAuth errors
+        import logging
+        logging.getLogger(__name__).error("OAuth exchange failed with error: %s", exc)
         # Do not echo the library message: it can include request details.
         raise OAuthExchangeError("Google rejected the authorization code") from exc
 
