@@ -7,9 +7,13 @@ before persistence.
 
 from __future__ import annotations
 
+import os
 import secrets
 from dataclasses import dataclass
 from datetime import datetime, timezone
+
+# Relax strict scope comparison because Google normalizes "email" to "https://www.googleapis.com/auth/userinfo.email"
+os.environ["OAUTHLIB_RELAX_TOKEN_SCOPE"] = "1"
 
 from google_auth_oauthlib.flow import Flow
 
