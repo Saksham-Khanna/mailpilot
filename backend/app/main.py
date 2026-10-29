@@ -9,7 +9,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pymongo.errors import PyMongoError
 
-from app.api.routes import auth, gmail, health
+from app.api.routes import auth, gmail, health, opportunities
 from app.core.config import STRICT_ENVIRONMENTS, get_settings
 from app.core.crypto import EncryptionError, TokenCipher
 from app.core.sessions import SessionConfig, SessionMiddleware, SessionSigner
@@ -121,6 +121,7 @@ def create_app() -> FastAPI:
     app.include_router(health.router, prefix="/api")
     app.include_router(auth.router, prefix="/api/auth")
     app.include_router(gmail.router, prefix="/api/gmail")
+    app.include_router(opportunities.router, prefix="/api/opportunities")
     return app
 
 

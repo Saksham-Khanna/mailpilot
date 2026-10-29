@@ -4,6 +4,7 @@ import Sidebar from "./components/Sidebar.jsx";
 import Header from "./components/Header.jsx";
 import Overview from "./pages/Overview.jsx";
 import Inbox from "./pages/Inbox.jsx";
+import Opportunities from "./pages/Opportunities.jsx";
 import ComingSoon from "./pages/ComingSoon.jsx";
 import { NAV_ITEMS } from "./lib/navigation.js";
 import { useBackendHealth } from "./lib/useBackendHealth.js";
@@ -35,6 +36,8 @@ export default function App() {
   let page;
   if (item.id === "inbox") {
     page = <Inbox gmail={gmail} health={health} />;
+  } else if (item.id === "opportunities") {
+    page = <Opportunities gmail={gmail} health={health} />;
   } else if (item.implemented) {
     page = <Overview health={health} gmail={gmail} />;
   } else {

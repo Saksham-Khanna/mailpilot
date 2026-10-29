@@ -86,4 +86,19 @@ export const disconnectGmail = ({ csrfToken } = {}) =>
     timeoutMs: 20000,
   });
 
+export const getClassifications = ({ category, limit = 50, offset = 0, signal } = {}) => {
+  const params = new URLSearchParams({ limit: String(limit), offset: String(offset) });
+  if (category) params.set("category", category);
+  return request(`/opportunities?${params}`, { signal });
+};
+
+export const classifyEmails = ({ csrfToken, limit = 20 } = {}) => {
+  return request("/opportunities/classify", {
+    method: "POST",
+    csrfToken,
+    body: { limit },
+    timeoutMs: 30000,
+  });
+};
+
 export const getGoogleStartUrl = () => `${API_BASE_URL}/auth/google/start`;

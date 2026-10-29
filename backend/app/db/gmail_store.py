@@ -32,6 +32,7 @@ class GmailStore:
         self.connections = db["gmail_connections"]
         self.credentials = db["gmail_credentials"]
         self.messages = db["gmail_messages"]
+        self.classifications = db["email_classifications"]
         self.sync_state = db["gmail_sync_state"]
         self.oauth_states = db["gmail_oauth_states"]
         self._indexes_ready = False
@@ -61,6 +62,19 @@ class GmailStore:
             self.messages.create_index(
                 [("user_id", 1), ("gmail_thread_id", 1)],
                 name="message_user_thread",
+            )
+            self.classifications.create_index(
+                [("user_id", 1), ("gmail_message_id", 1)],
+                unique=True,
+                name="classification_user_gmail_id",
+            )
+            self.classifications.create_index(
+                [("user_id", 1), ("category", 1)],
+                name="classification_user_category",
+            )
+            self.classifications.create_index(
+                [("user_id", 1), ("received_at", DESCENDING)],
+                name="classification_user_received",
             )
             self.sync_state.create_index("user_id", unique=True, name="sync_state_user")
         except PyMongoError:
@@ -299,6 +313,49 @@ class GmailStore:
     def count_messages(self, user_id: str) -> int:
         return self.messages.count_documents({"user_id": user_id})
 
+    # ----------------------------------------------------------- classifications
+
+    def upsert_classification(
+        self,
+        *,
+        user_id: str,
+        gmail_message_id: str,
+        data: dict[str, Any],
+        classified_at: datetime,
+    ) -> None:
+        document = {**data, "user_id": user_id, "gmail_message_id": gmail_message_id, "classified_at": classified_at}
+        self.classifications.update_one(
+            {"user_id": user_id, "gmail_message_id": gmail_message_id},
+            {"$set": document},
+            upsert=True,
+        )
+
+    def list_classifications(
+        self, *, user_id: str, category: str | None = None, limit: int = 50, offset: int = 0
+    ) -> tuple[list[dict[str, Any]], int]:
+        query: dict[str, Any] = {"user_id": user_id}
+        if category:
+            query["category"] = category
+        total = self.classifications.count_documents(query)
+        cursor = (
+            self.classifications.find(query)
+            .sort([("received_at", DESCENDING), ("_id", DESCENDING)])
+            .skip(offset)
+            .limit(limit)
+        )
+        return list(cursor), total
+
+    def get_classification(self, *, user_id: str, gmail_message_id: str) -> dict[str, Any] | None:
+        return self.classifications.find_one(
+            {"user_id": user_id, "gmail_message_id": gmail_message_id}
+        )
+
+    def count_classifications(self, user_id: str, category: str | None = None) -> int:
+        query: dict[str, Any] = {"user_id": user_id}
+        if category:
+            query["category"] = category
+        return self.classifications.count_documents(query)
+
     # --------------------------------------------------------------- deletion
 
     def delete_user_data(self, user_id: str) -> dict[str, int]:
@@ -307,6 +364,7 @@ class GmailStore:
             "credentials": self.credentials.delete_many({"_id": user_id}).deleted_count,
             "connection": self.connections.delete_many({"_id": user_id}).deleted_count,
             "messages": self.messages.delete_many({"user_id": user_id}).deleted_count,
+            "classifications": self.classifications.delete_many({"user_id": user_id}).deleted_count,
             "sync_state": self.sync_state.delete_many({"_id": user_id}).deleted_count,
             "oauth_states": self.oauth_states.delete_many({"user_id": user_id}).deleted_count,
         }
