@@ -1,4 +1,4 @@
-# Local MongoDB only. The app itself runs as separate local processes (see README).
+# Local MongoDB and n8n services. The app itself runs as separate local processes (see README).
 services:
   mongodb:
     image: mongo:7
@@ -15,5 +15,20 @@ services:
       timeout: 5s
       retries: 5
 
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: mailpilot-n8n
+    restart: unless-stopped
+    ports:
+      # Bound to localhost only so n8n is not exposed publicly.
+      - "127.0.0.1:5678:5678"
+    environment:
+      - N8N_PORT=5678
+      - WEBHOOK_URL=http://localhost:5678/
+      - N8N_ENCRYPTION_KEY=mailpilot_n8n_secure_encryption_key_change_in_prod
+    volumes:
+      - mailpilot_n8n_data:/home/node/.n8n
+
 volumes:
   mailpilot_mongo_data:
+  mailpilot_n8n_data:

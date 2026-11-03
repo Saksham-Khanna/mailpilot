@@ -69,6 +69,7 @@ def session_info(
 
 @router.get("/google/start")
 def google_start(
+    include_send: bool = Query(default=False),
     user_id: str = Depends(get_current_user),
     store=Depends(get_gmail_store),
     cipher=Depends(get_token_cipher),
@@ -84,7 +85,7 @@ def google_start(
     raw_state = google_oauth.new_state()
     try:
         authorization_url, code_verifier = google_oauth.create_authorization_request(
-            settings, raw_state
+            settings, raw_state, include_send=include_send
         )
     except google_oauth.OAuthConfigurationError:
         raise HTTPException(

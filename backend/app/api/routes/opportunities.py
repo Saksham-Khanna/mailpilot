@@ -50,6 +50,8 @@ def _format_classification(doc: dict) -> EmailClassificationResponse:
         priority=doc.get("priority", "Medium"),
         confidence=float(doc.get("confidence", 0.8)),
         opportunity=doc.get("opportunity"),
+        reply_eligibility=doc.get("reply_eligibility", "reply_recommended"),
+        reason=str(doc.get("reason") or ""),
         classified_at=_aware(doc.get("classified_at")),
     )
 
@@ -116,9 +118,10 @@ def classify_messages(
     now = datetime.now(tz=timezone.utc)
 
     for msg in messages_to_classify:
-        subject = msg.get("subject", "")
-        sender = f"{msg.get('sender_name', '')} <{msg.get('sender_email', '')}>"
-        body = msg.get("body_text", "")
+        full_msg = store.get_message(user_id=user_id, gmail_message_id=msg["gmail_message_id"]) or msg
+        subject = full_msg.get("subject", "")
+        sender = f"{full_msg.get('sender_name', '')} <{full_msg.get('sender_email', '')}>"
+        body = full_msg.get("body_text", "")
 
         result = classify_email(
             settings=settings,
@@ -128,17 +131,19 @@ def classify_messages(
         )
 
         classification_doc = {
-            "gmail_message_id": msg["gmail_message_id"],
-            "gmail_thread_id": msg.get("gmail_thread_id"),
-            "sender_name": msg.get("sender_name"),
-            "sender_email": msg.get("sender_email"),
+            "gmail_message_id": full_msg["gmail_message_id"],
+            "gmail_thread_id": full_msg.get("gmail_thread_id"),
+            "sender_name": full_msg.get("sender_name"),
+            "sender_email": full_msg.get("sender_email"),
             "subject": subject,
-            "received_at": msg.get("received_at"),
+            "received_at": full_msg.get("received_at"),
             "category": result["category"],
             "summary": result["summary"],
             "priority": result["priority"],
             "confidence": result["confidence"],
             "opportunity": result["opportunity"],
+            "reply_eligibility": result.get("reply_eligibility", "reply_recommended"),
+            "reason": result.get("reason", ""),
         }
 
         store.upsert_classification(
@@ -150,6 +155,15 @@ def classify_messages(
 
         full_doc = {**classification_doc, "classified_at": now}
         classified_results.append(_format_classification(full_doc))
+
+    if classified_results:
+        store.record_activity(
+            user_id=user_id,
+            activity_type="emails_classified",
+            description=f"Classified {len(classified_results)} email messages and extracted opportunities.",
+            status="success",
+            metadata={"classified_count": len(classified_results)},
+        )
 
     return ClassifyResponse(
         classified_count=len(classified_results),

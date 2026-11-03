@@ -255,3 +255,64 @@ def test_get_message_uses_full_format_and_validates_id():
         client.get_message("")
     with pytest.raises(GmailApiError):
         client.get_message("x" * 201)
+
+
+def test_transient_error_recovery_with_backoff():
+    service = FakeService()
+    request = SequenceRequest(
+        [
+            http_error(502),
+            http_error(503),
+            {"emailAddress": "user@example.com", "historyId": "1"},
+        ]
+    )
+    service.getProfile = lambda **kwargs: request
+    sleeps = []
+    client = GmailClient(
+        FakeCredentials(),
+        service=service,
+        sleep=sleeps.append,
+        max_retries=2,
+    )
+    assert client.get_profile()["emailAddress"] == "user@example.com"
+    assert request.calls == 3
+    assert len(sleeps) == 2
+    assert sleeps[0] > 0
+    assert sleeps[1] >= sleeps[0]
+
+
+def test_transport_error_retries_and_exhausts():
+    service = FakeService()
+
+    class FailingRequest:
+        def __init__(self):
+            self.calls = 0
+
+        def execute(self):
+            self.calls += 1
+            raise TimeoutError("connection timed out")
+
+    req = FailingRequest()
+    service.getProfile = lambda **kwargs: req
+    sleeps = []
+    client = GmailClient(
+        FakeCredentials(),
+        service=service,
+        sleep=sleeps.append,
+        max_retries=2,
+    )
+    with pytest.raises(GmailUnavailableError):
+        client.get_profile()
+    assert req.calls == 3
+    assert len(sleeps) == 2
+
+
+def test_permanent_errors_not_retried():
+    service = FakeService()
+    request = SequenceRequest([http_error(400)])
+    service.getProfile = lambda **kwargs: request
+    client = GmailClient(FakeCredentials(), service=service)
+    with pytest.raises(GmailApiError):
+        client.get_profile()
+    assert request.calls == 1
+

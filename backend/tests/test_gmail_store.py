@@ -27,9 +27,23 @@ def document(message_id: str, received_at: datetime, **extra):
 def test_indexes_are_created_and_idempotent(gmail_store):
     gmail_store.ensure_indexes()
     gmail_store.ensure_indexes()
-    assert "message_user_gmail_id" in gmail_store.messages.index_information()
-    index = gmail_store.messages.index_information()["message_user_gmail_id"]
-    assert index.get("unique") is True
+    
+    # Check messages index (user_id + received_at)
+    assert "message_user_received" in gmail_store.messages.index_information()
+    msg_id_index = gmail_store.messages.index_information()["message_user_gmail_id"]
+    assert msg_id_index.get("unique") is True
+
+    # Check classifications index (user_id + gmail_message_id)
+    assert "classification_user_gmail_id" in gmail_store.classifications.index_information()
+    class_id_index = gmail_store.classifications.index_information()["classification_user_gmail_id"]
+    assert class_id_index.get("unique") is True
+
+    # Check drafts index (user_id + created_at)
+    assert "draft_user_created" in gmail_store.drafts.index_information()
+
+    # Check activity logs index (user_id + timestamp)
+    assert "activity_user_timestamp" in gmail_store.activity_logs.index_information()
+
     assert "oauth_state_ttl" in gmail_store.oauth_states.index_information()
 
 

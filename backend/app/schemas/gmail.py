@@ -26,6 +26,7 @@ class GmailStatus(BaseModel):
     last_error: str | None = None
     needs_reconnect: bool = False
     message_count: int = 0
+    can_send: bool = False
 
 
 class SyncResponse(BaseModel):

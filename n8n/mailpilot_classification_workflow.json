@@ -1,0 +1,69 @@
+{
+  "name": "MailPilot Email Classification & Opportunity Extraction",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "mailpilot-classify",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "mailpilot-classify"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.groq.com/openai/v1/chat/completions",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "groqApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"llama-3.3-70b-versatile\",\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"You are MailPilot, an AI email assistant for students and job seekers. Classify the following email into exactly ONE of these categories:\\n- Job Opportunity\\n- Internship\\n- Interview\\n- Assessment\\n- Application Update\\n- Rejection\\n- Offer Letter\\n- Recruiter Message\\n- Other\\n\\nFor job alerts or digest emails containing multiple jobs, extract ONLY the top/most prominent featured job (do not treat the entire digest as a single job). \\n\\nExtract structured opportunity fields when available:\\n- company_name: The actual hiring company (NEVER put job boards like LinkedIn, Indeed, Glassdoor as company name; use null if unknown)\\n- job_role: A clean specific job title (NEVER use email subject lines or alert phrases as the job role; use null if unknown)\\n- location: City, State or Remote\\n- work_mode: Remote, Hybrid, or On-site\\n- salary: Compensation range or null\\n- skills: Array of technical/professional skills or []\\n- deadline: Application deadline or null\\n- application_link: Direct application URL or null\\n\\nAlso generate:\\n- summary: Concise 1-2 sentence summary\\n- priority: \\\"High\\\", \\\"Medium\\\", or \\\"Low\\\"\\n- confidence: float between 0.0 and 1.0\\n- opportunity: Object with the above fields if category is Job Opportunity, Internship, Interview, or Offer Letter (otherwise null). Use null for unknown fields.\\n\\nReturn ONLY valid JSON.\\n\\nSender: \" + $json.body.sender + \"\\nSubject: \" + $json.body.subject + \"\\nBody:\\n\" + $json.body.body\n    }\n  ],\n  \"temperature\": 0.1,\n  \"response_format\": {\"type\": \"json_object\"}\n}",
+        "options": {}
+      },
+      "name": "Groq API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"category\": JSON.parse($json.choices[0].message.content).category,\n  \"summary\": JSON.parse($json.choices[0].message.content).summary,\n  \"priority\": JSON.parse($json.choices[0].message.content).priority,\n  \"confidence\": JSON.parse($json.choices[0].message.content).confidence,\n  \"opportunity\": JSON.parse($json.choices[0].message.content).opportunity\n}",
+        "options": {}
+      },
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [680, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Groq API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq API": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

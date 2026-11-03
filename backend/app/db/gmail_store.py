@@ -7,6 +7,7 @@ Fernet ciphertext; this module never decrypts or logs them.
 from __future__ import annotations
 
 from datetime import datetime, timezone
+import uuid
 from typing import Any
 
 from pymongo import DESCENDING, ReturnDocument
@@ -33,6 +34,8 @@ class GmailStore:
         self.credentials = db["gmail_credentials"]
         self.messages = db["gmail_messages"]
         self.classifications = db["email_classifications"]
+        self.drafts = db["email_drafts"]
+        self.activity_logs = db["activity_logs"]
         self.sync_state = db["gmail_sync_state"]
         self.oauth_states = db["gmail_oauth_states"]
         self._indexes_ready = False
@@ -77,6 +80,22 @@ class GmailStore:
                 name="classification_user_received",
             )
             self.sync_state.create_index("user_id", unique=True, name="sync_state_user")
+            self.drafts.create_index(
+                [("user_id", 1), ("updated_at", DESCENDING)],
+                name="draft_user_updated",
+            )
+            self.drafts.create_index(
+                [("user_id", 1), ("created_at", DESCENDING)],
+                name="draft_user_created",
+            )
+            self.drafts.create_index(
+                [("user_id", 1), ("message_id", 1)],
+                name="draft_user_message",
+            )
+            self.activity_logs.create_index(
+                [("user_id", 1), ("timestamp", DESCENDING)],
+                name="activity_user_timestamp",
+            )
         except PyMongoError:
             raise StoreUnavailable("database_unavailable") from None
         self._indexes_ready = True
@@ -356,6 +375,33 @@ class GmailStore:
             query["category"] = category
         return self.classifications.count_documents(query)
 
+    # ------------------------------------------------------------------ drafts
+
+    def upsert_draft(self, *, user_id: str, draft_id: str, data: dict[str, Any]) -> None:
+        self.drafts.update_one(
+            {"user_id": user_id, "_id": draft_id},
+            {"$set": {**data, "user_id": user_id, "_id": draft_id}},
+            upsert=True,
+        )
+
+    def get_draft(self, *, user_id: str, draft_id: str) -> dict[str, Any] | None:
+        return self.drafts.find_one({"user_id": user_id, "_id": draft_id})
+
+    def list_drafts(self, *, user_id: str, limit: int = 50, offset: int = 0) -> tuple[list[dict[str, Any]], int]:
+        query = {"user_id": user_id}
+        total = self.drafts.count_documents(query)
+        cursor = (
+            self.drafts.find(query)
+            .sort([("updated_at", DESCENDING), ("_id", DESCENDING)])
+            .skip(offset)
+            .limit(limit)
+        )
+        return list(cursor), total
+
+    def delete_draft(self, *, user_id: str, draft_id: str) -> bool:
+        result = self.drafts.delete_one({"user_id": user_id, "_id": draft_id})
+        return result.deleted_count > 0
+
     # --------------------------------------------------------------- deletion
 
     def delete_user_data(self, user_id: str) -> dict[str, int]:
@@ -365,6 +411,62 @@ class GmailStore:
             "connection": self.connections.delete_many({"_id": user_id}).deleted_count,
             "messages": self.messages.delete_many({"user_id": user_id}).deleted_count,
             "classifications": self.classifications.delete_many({"user_id": user_id}).deleted_count,
+            "drafts": self.drafts.delete_many({"user_id": user_id}).deleted_count,
+            "activity_logs": self.activity_logs.delete_many({"user_id": user_id}).deleted_count,
             "sync_state": self.sync_state.delete_many({"_id": user_id}).deleted_count,
             "oauth_states": self.oauth_states.delete_many({"user_id": user_id}).deleted_count,
         }
+
+    # ----------------------------------------------------------- activity logs
+
+    def record_activity(
+        self,
+        *,
+        user_id: str,
+        activity_type: str,
+        description: str,
+        status: str = "success",
+        message_id: str | None = None,
+        metadata: dict[str, Any] | None = None,
+    ) -> str:
+        log_id = str(uuid.uuid1())
+        now = datetime.now(tz=timezone.utc)
+        doc = {
+            "_id": log_id,
+            "user_id": user_id,
+            "activity_type": activity_type,
+            "description": description,
+            "timestamp": now,
+            "status": status,
+            "message_id": message_id,
+            "metadata": metadata or {},
+        }
+        try:
+            self.activity_logs.insert_one(doc)
+        except Exception as exc:
+            import logging
+            logging.getLogger(__name__).warning("Failed to record activity log: %s", type(exc).__name__)
+        return log_id
+
+    def list_activity_logs(
+        self,
+        *,
+        user_id: str,
+        activity_type: str | None = None,
+        status: str | None = None,
+        limit: int = 50,
+        offset: int = 0,
+    ) -> tuple[list[dict[str, Any]], int]:
+        query: dict[str, Any] = {"user_id": user_id}
+        if activity_type:
+            query["activity_type"] = activity_type
+        if status:
+            query["status"] = status
+        total = self.activity_logs.count_documents(query)
+        cursor = (
+            self.activity_logs.find(query)
+            .sort([("timestamp", DESCENDING), ("_id", DESCENDING)])
+            .skip(offset)
+            .limit(limit)
+        )
+        return list(cursor), total

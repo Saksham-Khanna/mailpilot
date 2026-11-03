@@ -95,6 +95,8 @@ def gmail_status(
     connection = store.get_connection(user_id)
     if connection is None:
         return GmailStatus(connected=False)
+    scopes = connection.get("scopes") or []
+    can_send = "https://www.googleapis.com/auth/gmail.send" in scopes or any("gmail.send" in s or "gmail.modify" in s or "mail.google.com" in s for s in scopes)
     return GmailStatus(
         connected=True,
         google_email=connection.get("google_email"),
@@ -104,6 +106,7 @@ def gmail_status(
         last_error=connection.get("last_error"),
         needs_reconnect=bool(connection.get("needs_reconnect")),
         message_count=store.count_messages(user_id),
+        can_send=can_send,
     )
 
 

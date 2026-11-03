@@ -101,4 +101,67 @@ export const classifyEmails = ({ csrfToken, limit = 20 } = {}) => {
   });
 };
 
-export const getGoogleStartUrl = () => `${API_BASE_URL}/auth/google/start`;
+export const getGoogleStartUrl = (includeSend = false) =>
+  `${API_BASE_URL}/auth/google/start${includeSend ? "?include_send=true" : ""}`;
+
+export const getDrafts = ({ limit = 50, offset = 0, signal } = {}) => {
+  const params = new URLSearchParams({ limit: String(limit), offset: String(offset) });
+  return request(`/drafts?${params}`, { signal });
+};
+
+export const generateDraft = ({ csrfToken, message_id, reply_type = "general_reply", instructions, confirm_no_reply } = {}) => {
+  const body = { message_id, reply_type };
+  if (instructions) body.instructions = instructions;
+  if (confirm_no_reply) body.confirm_no_reply = true;
+  return request("/drafts/generate", {
+    method: "POST",
+    csrfToken,
+    body,
+    timeoutMs: 30000,
+  });
+};
+
+export const updateDraft = ({ csrfToken, draftId, recipient, subject, body, status } = {}) => {
+  const payload = {};
+  if (recipient !== undefined) payload.recipient = recipient;
+  if (subject !== undefined) payload.subject = subject;
+  if (body !== undefined) payload.body = body;
+  if (status !== undefined) payload.status = status;
+  return request(`/drafts/${encodeURIComponent(draftId)}`, {
+    method: "PUT",
+    csrfToken,
+    body: payload,
+    timeoutMs: 15000,
+  });
+};
+
+export const deleteDraft = ({ csrfToken, draftId } = {}) => {
+  return request(`/drafts/${encodeURIComponent(draftId)}`, {
+    method: "DELETE",
+    csrfToken,
+    timeoutMs: 15000,
+  });
+};
+
+export const regenerateDraft = ({ csrfToken, draftId } = {}) => {
+  return request(`/drafts/${encodeURIComponent(draftId)}/regenerate`, {
+    method: "POST",
+    csrfToken,
+    timeoutMs: 30000,
+  });
+};
+
+export const sendDraft = ({ csrfToken, draftId } = {}) => {
+  return request(`/drafts/${encodeURIComponent(draftId)}/send`, {
+    method: "POST",
+    csrfToken,
+    timeoutMs: 30000,
+  });
+};
+
+export const getActivityLogs = ({ limit = 50, offset = 0, activity_type, status, signal } = {}) => {
+  const params = new URLSearchParams({ limit: String(limit), offset: String(offset) });
+  if (activity_type) params.set("activity_type", activity_type);
+  if (status) params.set("status", status);
+  return request(`/logs?${params}`, { signal });
+};

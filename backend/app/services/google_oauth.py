@@ -22,9 +22,10 @@ from app.core.config import Settings
 AUTH_URI = "https://accounts.google.com/o/oauth2/auth"
 TOKEN_URI = "https://oauth2.googleapis.com/token"
 GMAIL_READONLY_SCOPE = "https://www.googleapis.com/auth/gmail.readonly"
-# Reading inbox messages and identifying the authenticated account only.
-# No gmail.send / gmail.modify / mail.google.com scopes are requested.
-GMAIL_SCOPES = ("openid", "email", GMAIL_READONLY_SCOPE)
+GMAIL_SEND_SCOPE = "https://www.googleapis.com/auth/gmail.send"
+GMAIL_READONLY_SCOPES = ("openid", "email", GMAIL_READONLY_SCOPE)
+GMAIL_SEND_SCOPES = ("openid", "email", GMAIL_READONLY_SCOPE, GMAIL_SEND_SCOPE)
+GMAIL_SCOPES = GMAIL_READONLY_SCOPES
 
 
 class OAuthConfigurationError(RuntimeError):
@@ -62,15 +63,17 @@ def _client_config(settings: Settings) -> dict:
     }
 
 
-def create_authorization_request(settings: Settings, state: str) -> tuple[str, str]:
+def create_authorization_request(settings: Settings, state: str, **kwargs: Any) -> tuple[str, str]:
     """Return ``(authorization_url, pkce_code_verifier)``.
 
     PKCE supplements the client secret. The verifier is short-lived, bound to the
     state document and encrypted at rest.
     """
+    include_send = kwargs.get("include_send", False)
+    scopes = GMAIL_SEND_SCOPES if include_send else GMAIL_READONLY_SCOPES
     flow = Flow.from_client_config(
         _client_config(settings),
-        scopes=list(GMAIL_SCOPES),
+        scopes=list(scopes),
         redirect_uri=settings.google_redirect_uri,
         state=state,
         autogenerate_code_verifier=True,

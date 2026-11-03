@@ -6,8 +6,21 @@ callback so the caller can re-encrypt and persist them.
 
 from __future__ import annotations
 
+import base64
 import logging
 import time
+from email.message import EmailMessage
+
+def create_message(to: str, subject: str, body: str, thread_id: str | None = None) -> dict[str, Any]:
+    message = EmailMessage()
+    message.set_content(body)
+    message["To"] = to
+    message["Subject"] = subject
+    encoded_message = base64.urlsafe_b64encode(message.as_bytes()).decode("utf-8")
+    body_dict = {"raw": encoded_message}
+    if thread_id:
+        body_dict["threadId"] = thread_id
+    return body_dict
 from collections.abc import Callable
 from typing import Any
 
@@ -251,4 +264,11 @@ class GmailClient:
         service = self._ensure_service()
         return self._execute(
             service.users().messages().get(userId="me", id=message_id, format="full")
+        )
+
+    def send_message(self, to: str, subject: str, body: str, thread_id: str | None = None) -> dict[str, Any]:
+        service = self._ensure_service()
+        msg_body = create_message(to, subject, body, thread_id)
+        return self._execute(
+            service.users().messages().send(userId="me", body=msg_body)
         )

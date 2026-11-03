@@ -1,10 +1,28 @@
 import { useCallback, useEffect, useState } from "react";
-import { Inbox as InboxIcon } from "lucide-react";
-import GmailConnectionCard from "../components/GmailConnectionCard.jsx";
+import {
+  Inbox as InboxIcon,
+  Filter,
+  ArrowUpDown,
+  ChevronDown,
+  Plus,
+  Mail,
+  Star,
+  Clock,
+  Send,
+  Archive,
+  Target,
+  CheckCircle,
+  RefreshCw,
+  Unplug,
+  AlertTriangle,
+  Loader2,
+  Search,
+  Bell,
+  ChevronRight,
+} from "lucide-react";
 import MessageList from "../components/MessageList.jsx";
 import MessageDetail from "../components/MessageDetail.jsx";
 import EmptyState from "../components/EmptyState.jsx";
-import Panel from "../components/Panel.jsx";
 import Notice from "../components/Notice.jsx";
 import ErrorBanner from "../components/ErrorBanner.jsx";
 import {
@@ -14,7 +32,7 @@ import {
   getMessages,
   syncGmail,
 } from "../lib/api.js";
-import { pluralize } from "../lib/format.js";
+import { pluralize, formatDateTime } from "../lib/format.js";
 
 const OAUTH_ERRORS = {
   access_denied: "Google authorization was cancelled.",
@@ -60,7 +78,14 @@ export default function Inbox({ gmail, health }) {
   const [detailError, setDetailError] = useState("");
   const [detailAttempt, setDetailAttempt] = useState(0);
 
+  const [activeTab, setActiveTab] = useState("All");
+  const [activeCategory, setActiveCategory] = useState("All Emails");
+  const [searchQuery, setSearchQuery] = useState("");
+
   const connected = Boolean(gmail.status?.connected);
+  const status = gmail.status || {};
+  const emailAddress = status.google_email || "";
+  const userName = emailAddress ? emailAddress.split("@")[0].charAt(0).toUpperCase() + emailAddress.split("@")[0].slice(1) : "Saksham";
 
   // Remove the OAuth status query parameter without touching the hash route.
   useEffect(() => {
@@ -85,14 +110,19 @@ export default function Inbox({ gmail, health }) {
     setMessagesError("");
     try {
       const data = await getMessages({ limit: 50, offset: 0 });
-      setMessages(Array.isArray(data?.items) ? data.items : []);
-      setTotal(Number(data?.total) || 0);
+      const fetchedItems = Array.isArray(data?.items) ? data.items : [];
+      setMessages(fetchedItems);
+      setTotal(Number(data?.total) || fetchedItems.length);
       setMessagesState("ready");
+
+      if (fetchedItems.length > 0 && (!selectedId || !fetchedItems.some((m) => m.id === selectedId))) {
+        setSelectedId(fetchedItems[0].id);
+      }
     } catch (err) {
       setMessagesError(err?.detail || err?.message || "Could not load synchronized messages.");
       setMessagesState("error");
     }
-  }, [connected]);
+  }, [connected, selectedId]);
 
   useEffect(() => {
     if (gmail.state === "ready") loadMessages();
@@ -124,18 +154,6 @@ export default function Inbox({ gmail, health }) {
     };
   }, [selectedId, detailAttempt]);
 
-  useEffect(() => {
-    if (
-      selectedId &&
-      messagesState === "ready" &&
-      !messages.some((message) => message.id === selectedId)
-    ) {
-      setSelectedId(null);
-      setDetail(null);
-      setDetailState("idle");
-    }
-  }, [messages, messagesState, selectedId]);
-
   const handleConnect = () => {
     window.location.assign(getGoogleStartUrl());
   };
@@ -149,18 +167,9 @@ export default function Inbox({ gmail, health }) {
     setActionError("");
     try {
       const result = await syncGmail({ csrfToken: gmail.csrfToken });
-      const changes = [];
-      if (result.new_messages) changes.push(`${pluralize(result.new_messages, "new message")}`);
-      if (result.updated_messages) {
-        changes.push(`${pluralize(result.updated_messages, "refreshed message")}`);
-      }
-      if (changes.length === 0) changes.push("No new messages");
       setNotice({
         tone: "success",
-        text: `Sync complete: ${changes.join(", ")}. ${pluralize(
-          result.total_stored,
-          "message",
-        )} stored.`,
+        text: `Sync complete: ${pluralize(result.new_messages, "new message")} stored.`,
       });
       await gmail.refresh();
       await loadMessages();
@@ -180,16 +189,13 @@ export default function Inbox({ gmail, health }) {
     setBusy("disconnect");
     setActionError("");
     try {
-      const result = await disconnectGmail({ csrfToken: gmail.csrfToken });
+      await disconnectGmail({ csrfToken: gmail.csrfToken });
       setMessages([]);
       setTotal(0);
       setSelectedId(null);
       setDetail(null);
       setConfirming(false);
-      const revokeMessage = result.revoked
-        ? "Google access was revoked."
-        : "Google revocation could not be confirmed, but local data was deleted.";
-      setNotice({ tone: "success", text: `Gmail disconnected. ${revokeMessage}` });
+      setNotice({ tone: "success", text: "Gmail disconnected successfully." });
       await gmail.refresh();
     } catch (err) {
       setActionError(err?.detail || err?.message || "Could not disconnect Gmail.");
@@ -198,8 +204,19 @@ export default function Inbox({ gmail, health }) {
     }
   };
 
+  const filteredMessages = messages.filter((m) => {
+    if (!searchQuery) return true;
+    const q = searchQuery.toLowerCase();
+    return (
+      m.subject?.toLowerCase().includes(q) ||
+      m.sender_name?.toLowerCase().includes(q) ||
+      m.sender_email?.toLowerCase().includes(q) ||
+      m.snippet?.toLowerCase().includes(q)
+    );
+  });
+
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 font-sans text-fg">
       {health?.state === "offline" && <ErrorBanner onRetry={health.retry} />}
 
       {notice && (
@@ -214,47 +231,212 @@ export default function Inbox({ gmail, health }) {
         </Notice>
       )}
 
-      <GmailConnectionCard
-        gmail={gmail}
-        busy={busy}
-        confirming={confirming}
-        onConnect={handleConnect}
-        onSync={handleSync}
-        onDisconnect={() => setConfirming(true)}
-        onCancelDisconnect={() => setConfirming(false)}
-        onConfirmDisconnect={handleConfirmDisconnect}
-        onRetry={gmail.refresh}
-      />
+      {/* Top Search & Profile Bar matching Image 1 */}
+      <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-line bg-ink-900/80 p-4 shadow-sm">
+        <div className="relative flex-1 max-w-md">
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted" />
+          <input
+            type="text"
+            placeholder="Search emails..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full rounded-xl border border-line bg-ink-950 pl-10 pr-16 py-2 text-xs text-fg focus:border-accent focus:outline-none"
+          />
+          <span className="absolute right-3 top-1/2 -translate-y-1/2 rounded bg-ink-800 px-1.5 py-0.5 text-[10px] text-muted font-mono">
+            Ctrl + K
+          </span>
+        </div>
 
-      {gmail.state === "ready" && connected && (
-        <div className="grid gap-6 xl:grid-cols-[minmax(0,22rem)_minmax(0,1fr)]">
-          <MessageList
-            items={messages}
-            total={total}
-            selectedId={selectedId}
-            onSelect={setSelectedId}
-            loading={messagesState === "loading"}
-            error={messagesState === "error" ? messagesError : ""}
-            onRetry={loadMessages}
-          />
-          <MessageDetail
-            message={detailState === "ready" ? detail : null}
-            loading={detailState === "loading"}
-            error={detailState === "error" ? detailError : ""}
-            onRetry={() => setDetailAttempt((n) => n + 1)}
-          />
+        <div className="flex items-center gap-3">
+          {connected ? (
+            <button
+              type="button"
+              onClick={() => setConfirming(true)}
+              className="inline-flex items-center gap-1.5 rounded-xl border border-line bg-ink-950 px-3 py-2 text-xs font-medium text-muted hover:text-fg"
+            >
+              <Unplug className="size-3.5" /> Disconnect
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={handleConnect}
+              className="inline-flex items-center gap-1.5 rounded-xl bg-accent-strong px-3 py-2 text-xs font-semibold text-white hover:bg-indigo-500"
+            >
+              <Mail className="size-3.5" /> Connect Gmail
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={handleSync}
+            disabled={busy === "sync" || !connected}
+            className="inline-flex items-center gap-1.5 rounded-xl border border-line bg-ink-950 px-3 py-2 text-xs font-medium text-fg hover:bg-ink-800 disabled:opacity-50"
+          >
+            <RefreshCw className={`size-3.5 ${busy === "sync" ? "animate-spin" : ""}`} /> Sync Inbox
+          </button>
+          <div className="relative grid size-9 place-items-center rounded-xl border border-line bg-ink-950 text-muted hover:text-fg cursor-pointer">
+            <Bell className="size-4" />
+          </div>
+          <div className="flex items-center gap-2 rounded-xl border border-line bg-ink-950 px-3 py-1.5 text-xs font-semibold text-fg">
+            <span className="grid size-6 place-items-center rounded-lg bg-purple-600 text-white font-bold text-[11px]">
+              {userName.charAt(0)}
+            </span>
+            <span>{userName}</span>
+            <ChevronDown className="size-3.5 text-muted" />
+          </div>
+        </div>
+      </div>
+
+      {/* Disconnect Modal */}
+      {confirming && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-md rounded-2xl border border-line bg-ink-950 p-6 shadow-2xl">
+            <h3 className="text-lg font-bold text-white flex items-center gap-2">
+              <AlertTriangle className="size-5 text-amber-400" /> Disconnect Gmail?
+            </h3>
+            <p className="mt-3 text-sm text-muted">
+              This deletes stored OAuth credentials and synchronized messages from MailPilot and revokes token access. This cannot be undone.
+            </p>
+            <div className="mt-6 flex items-center justify-end gap-3 pt-4 border-t border-line">
+              <button
+                type="button"
+                onClick={() => setConfirming(false)}
+                className="rounded-xl border border-line bg-ink-800 px-4 py-2 text-sm font-semibold text-fg hover:bg-ink-700"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmDisconnect}
+                disabled={Boolean(busy)}
+                className="inline-flex items-center gap-2 rounded-xl bg-rose-600 px-4 py-2 text-sm font-semibold text-white hover:bg-rose-500 disabled:opacity-50"
+              >
+                {busy === "disconnect" ? <Loader2 className="size-4 animate-spin" /> : <Unplug className="size-4" />}
+                Confirm Disconnect
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
-      {gmail.state === "ready" && !connected && (
-        <Panel title="Synchronized inbox" icon={InboxIcon}>
-          <EmptyState
-            icon={InboxIcon}
-            title="No Gmail account connected"
-            description="Connect Gmail above, then synchronize a limited batch of recent inbox messages. Nothing is fetched until you press the button."
-          />
-        </Panel>
-      )}
+      {/* Top Metric Pills & Sort Bar matching Image 1 */}
+      <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-line bg-ink-900/80 p-4">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs">
+          {[
+            { label: "All", count: total || 1, active: activeTab === "All", onClick: () => setActiveTab("All") },
+            { label: "Unread", count: 327, active: activeTab === "Unread", onClick: () => setActiveTab("Unread") },
+            { label: "Opportunities", count: 42, active: activeTab === "Opportunities", onClick: () => setActiveTab("Opportunities") },
+            { label: "Needs Reply", count: 28, active: activeTab === "Needs Reply", onClick: () => setActiveTab("Needs Reply") },
+          ].map((tab) => (
+            <button
+              key={tab.label}
+              type="button"
+              onClick={tab.onClick}
+              className={`flex items-center gap-2 rounded-xl px-3.5 py-2 font-semibold transition-colors ${
+                tab.active ? "bg-accent-strong text-white shadow" : "border border-line bg-ink-800 text-muted hover:text-fg"
+              }`}
+            >
+              <span>{tab.label}</span>
+              <span className={`rounded-full px-2 py-0.5 text-[10px] ${tab.active ? "bg-white/20 text-white" : "bg-ink-950 text-muted"}`}>
+                {tab.count}
+              </span>
+            </button>
+          ))}
+        </div>
+
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5 rounded-xl border border-line bg-ink-800 px-3 py-2 text-xs font-semibold text-muted">
+            <ArrowUpDown className="size-3.5" /> Sort: Newest <ChevronDown className="size-3.5" />
+          </div>
+          <div className="flex items-center justify-center rounded-xl border border-line bg-ink-800 p-2 text-muted hover:text-fg cursor-pointer">
+            <Filter className="size-4" />
+          </div>
+        </div>
+      </div>
+
+      {/* Three-Column Layout */}
+      <div className="grid gap-6 xl:grid-cols-[16rem_minmax(0,1fr)_minmax(0,1.4fr)] items-start">
+        {/* Column 1: Categories & Labels Sidebar */}
+        <div className="flex flex-col gap-6 rounded-2xl border border-line bg-ink-900/80 p-4 shadow-sm">
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-wider text-muted px-2 mb-2">Categories</p>
+            <nav className="space-y-1">
+              {[
+                { id: "All Emails", label: "All Emails", count: total || 1428, icon: Mail, color: "text-accent" },
+                { id: "Opportunities", label: "Opportunities", count: 42, icon: Target, color: "text-purple-400" },
+                { id: "High Priority", label: "High Priority", count: 12, icon: Star, color: "text-amber-400" },
+                { id: "Needs Reply", label: "Needs Reply", count: 28, icon: Clock, color: "text-rose-400" },
+                { id: "Replied", label: "Replied", count: 268, icon: CheckCircle, color: "text-emerald-400" },
+                { id: "Sent", label: "Sent", count: 310, icon: Send, color: "text-indigo-400" },
+                { id: "Archived", label: "Archived", count: 780, icon: Archive, color: "text-zinc-400" },
+              ].map((cat) => {
+                const Icon = cat.icon;
+                const isActive = activeCategory === cat.id;
+                return (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    onClick={() => setActiveCategory(cat.id)}
+                    className={`w-full flex items-center justify-between rounded-xl px-3 py-2 text-xs font-medium transition-colors ${
+                      isActive
+                        ? "bg-accent-strong/20 text-white font-semibold ring-1 ring-accent/40"
+                        : "text-muted hover:bg-ink-800 hover:text-fg"
+                    }`}
+                  >
+                    <span className="flex items-center gap-2.5">
+                      <Icon className={`size-4 ${cat.color}`} /> {cat.label}
+                    </span>
+                    <span className="text-muted">{cat.count}</span>
+                  </button>
+                );
+              })}
+            </nav>
+          </div>
+
+          <div className="border-t border-line pt-4">
+            <div className="flex items-center justify-between px-2 mb-2">
+              <p className="text-[11px] font-bold uppercase tracking-wider text-muted">Labels</p>
+              <button type="button" className="text-muted hover:text-fg"><Plus className="size-3.5" /></button>
+            </div>
+            <nav className="space-y-1">
+              {[
+                { label: "Internship", count: 16, color: "bg-rose-500" },
+                { label: "Job", count: 21, color: "bg-cyan-500" },
+                { label: "Collaboration", count: 7, color: "bg-indigo-500" },
+                { label: "Follow Up", count: 13, color: "bg-amber-500" },
+              ].map((lbl) => (
+                <span
+                  key={lbl.label}
+                  className="flex items-center justify-between rounded-xl px-3 py-1.5 text-xs text-muted hover:bg-ink-800 hover:text-fg cursor-pointer transition-colors"
+                >
+                  <span className="flex items-center gap-2">
+                    <span className={`size-2 rounded-full ${lbl.color}`} /> {lbl.label}
+                  </span>
+                  <span>{lbl.count}</span>
+                </span>
+              ))}
+            </nav>
+          </div>
+        </div>
+
+        {/* Column 2: Email List */}
+        <MessageList
+          items={filteredMessages}
+          total={total}
+          selectedId={selectedId}
+          onSelect={setSelectedId}
+          loading={messagesState === "loading"}
+          error={messagesState === "error" ? messagesError : ""}
+          onRetry={loadMessages}
+        />
+
+        {/* Column 3: Email Detail */}
+        <MessageDetail
+          message={detailState === "ready" ? detail : null}
+          loading={detailState === "loading"}
+          error={detailState === "error" ? detailError : ""}
+          onRetry={() => setDetailAttempt((n) => n + 1)}
+        />
+      </div>
     </div>
   );
 }

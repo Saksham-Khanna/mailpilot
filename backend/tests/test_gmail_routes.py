@@ -114,7 +114,7 @@ def fake_exchange(*, scopes=None, refresh=True):
 
 
 def patch_start(monkeypatch):
-    def create(settings, state):
+    def create(settings, state, **kwargs):
         return f"https://accounts.google.com/o/oauth2/auth?state={state}", "test-verifier"
 
     monkeypatch.setattr(google_oauth, "create_authorization_request", create)

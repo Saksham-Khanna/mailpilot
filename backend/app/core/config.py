@@ -168,6 +168,7 @@ class Settings:
     # Reserved for a later phase. Secrets use repr=False so they never reach logs.
     groq_api_key: str = field(default="", repr=False)
     llm_model: str = ""
+    n8n_webhook_url: str = "http://localhost:5678/webhook/mailpilot-classify"
     # Phase 2: Google OAuth client and token encryption. Secrets use repr=False.
     google_client_id: str = ""
     google_client_secret: str = field(default="", repr=False)
@@ -267,6 +268,7 @@ class Settings:
             mongodb_database=mongodb_database,
             groq_api_key=get("GROQ_API_KEY"),
             llm_model=get("LLM_MODEL"),
+            n8n_webhook_url=get("N8N_WEBHOOK_URL", "http://localhost:5678/webhook/mailpilot-classify"),
             google_client_id=google_client_id,
             google_client_secret=google_client_secret,
             google_redirect_uri=google_redirect_uri,

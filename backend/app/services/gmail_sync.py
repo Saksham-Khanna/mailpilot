@@ -164,6 +164,12 @@ def complete_connection(
         scopes=list(tokens.scopes),
         history_id=str(history_id) if history_id is not None else None,
     )
+    store.record_activity(
+        user_id=user_id,
+        activity_type="gmail_connected",
+        description=f"Gmail account {google_email} connected successfully.",
+        status="success",
+    )
     return google_email
 
 
@@ -202,6 +208,12 @@ def sync_inbox(
 
     client = client_factory(credentials, on_token_refresh=persist_refresh)
     synced_at = _utcnow()
+    store.record_activity(
+        user_id=user_id,
+        activity_type="sync_started",
+        description="Started synchronizing recent inbox messages from Gmail.",
+        status="success",
+    )
 
     try:
         profile = client.get_profile()
@@ -236,6 +248,13 @@ def sync_inbox(
             history_id=history_text,
             error=None,
         )
+        store.record_activity(
+            user_id=user_id,
+            activity_type="sync_completed",
+            description=f"Inbox synchronization completed successfully ({new_messages} new messages).",
+            status="success",
+            metadata={"new_messages": new_messages, "updated_messages": updated_messages},
+        )
         return SyncResult(
             google_email=google_email,
             considered=len(message_ids),
@@ -248,12 +267,34 @@ def sync_inbox(
     except GmailAuthError:
         store.mark_needs_reconnect(user_id)
         _record_failure(store, user_id, synced_at, GmailAuthError.code)
+        store.record_activity(
+            user_id=user_id,
+            activity_type="sync_failed",
+            description="Inbox synchronization failed due to expired authorization.",
+            status="failed",
+            metadata={"error": GmailAuthError.code},
+        )
         raise
     except (GmailError, GmailCredentialError, EncryptionError) as exc:
-        _record_failure(store, user_id, synced_at, getattr(exc, "code", "gmail_error"))
+        code = getattr(exc, "code", "gmail_error")
+        _record_failure(store, user_id, synced_at, code)
+        store.record_activity(
+            user_id=user_id,
+            activity_type="sync_failed",
+            description=f"Inbox synchronization failed ({code}).",
+            status="failed",
+            metadata={"error": code},
+        )
         raise
     except Exception as exc:  # noqa: BLE001 - record a safe code then re-raise
         _record_failure(store, user_id, synced_at, "internal_error")
+        store.record_activity(
+            user_id=user_id,
+            activity_type="sync_failed",
+            description="Inbox synchronization failed due to internal error.",
+            status="failed",
+            metadata={"error": "internal_error"},
+        )
         logger.warning("Gmail sync failed: %s", type(exc).__name__)
         raise
 
