@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import {
   Inbox as InboxIcon,
   Filter,
@@ -109,6 +109,18 @@ export default function Inbox({ gmail, health }) {
   const [activeTab, setActiveTab] = useState("All");
   const [activeCategory, setActiveCategory] = useState("All Emails");
   const [searchQuery, setSearchQuery] = useState("");
+  const searchInputRef = useRef(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        searchInputRef.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   const connected = Boolean(gmail.status?.connected);
   const status = gmail.status || {};
@@ -283,6 +295,7 @@ export default function Inbox({ gmail, health }) {
         <div className="relative flex-1 max-w-md">
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted" />
           <input
+            ref={searchInputRef}
             type="text"
             placeholder="Search emails..."
             value={searchQuery}
