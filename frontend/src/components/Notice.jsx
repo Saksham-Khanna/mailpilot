@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { AlertTriangle, CheckCircle2, Info, X } from "lucide-react";
 
 const TONES = {
@@ -27,6 +28,15 @@ const TONES = {
 export default function Notice({ tone = "info", children, onDismiss }) {
   const config = TONES[tone] || TONES.info;
   const Icon = config.icon;
+
+  useEffect(() => {
+    if (!onDismiss) return;
+    const timer = setTimeout(() => {
+      onDismiss();
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, [onDismiss]);
+
   return (
     <div
       role={config.role}
