@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Loader2, Mail, RefreshCw, Reply, Forward, Archive, Trash2, Star, MoreVertical, CheckCircle, ExternalLink } from "lucide-react";
 import Panel from "./Panel.jsx";
 import EmptyState from "./EmptyState.jsx";
@@ -16,6 +17,8 @@ function getSenderBrand(senderName, senderEmail) {
 }
 
 export default function MessageDetail({ message, loading, error, onRetry }) {
+  const [starred, setStarred] = useState(false);
+
   return (
     <div className="flex flex-col h-full bg-[#13151e] rounded-2xl border border-[#232638] overflow-hidden shadow-sm">
       {loading && (
@@ -54,14 +57,16 @@ export default function MessageDetail({ message, loading, error, onRetry }) {
           {/* Top Toolbar */}
           <div className="flex items-center justify-between border-b border-[#232638] px-5 py-3.5 bg-[#10121a]">
             <div className="flex items-center gap-3 text-muted">
-              <button type="button" title="Reply" className="hover:text-fg p-1.5 rounded-lg hover:bg-[#181b28] transition-colors"><Reply className="size-4" /></button>
-              <button type="button" title="Forward" className="hover:text-fg p-1.5 rounded-lg hover:bg-[#181b28] transition-colors"><Forward className="size-4" /></button>
-              <button type="button" title="Archive" className="hover:text-fg p-1.5 rounded-lg hover:bg-[#181b28] transition-colors"><Archive className="size-4" /></button>
-              <button type="button" title="Delete" className="hover:text-fg p-1.5 rounded-lg hover:bg-[#181b28] transition-colors"><Trash2 className="size-4" /></button>
+              <button type="button" title="Reply" onClick={() => window.location.hash = "#/drafts"} className="hover:text-fg p-1.5 rounded-lg hover:bg-[#181b28] transition-colors"><Reply className="size-4" /></button>
+              <button type="button" title="Forward" onClick={() => {}} className="hover:text-fg p-1.5 rounded-lg hover:bg-[#181b28] transition-colors"><Forward className="size-4" /></button>
+              <button type="button" title="Archive" onClick={() => {}} className="hover:text-fg p-1.5 rounded-lg hover:bg-[#181b28] transition-colors"><Archive className="size-4" /></button>
+              <button type="button" title="Delete" onClick={() => {}} className="hover:text-fg p-1.5 rounded-lg hover:bg-[#181b28] transition-colors"><Trash2 className="size-4" /></button>
             </div>
             <div className="flex items-center gap-3 text-muted">
-              <button type="button" title="Star" className="hover:text-amber-300 p-1.5 rounded-lg hover:bg-[#181b28] transition-colors"><Star className="size-4" /></button>
-              <button type="button" title="More" className="hover:text-fg p-1.5 rounded-lg hover:bg-[#181b28] transition-colors"><MoreVertical className="size-4" /></button>
+              <button type="button" title="Star" onClick={() => setStarred(!starred)} className="hover:text-amber-300 p-1.5 rounded-lg hover:bg-[#181b28] transition-colors">
+                <Star className={`size-4 ${starred ? "fill-amber-300 text-amber-300" : ""}`} />
+              </button>
+              <button type="button" title="More" onClick={() => {}} className="hover:text-fg p-1.5 rounded-lg hover:bg-[#181b28] transition-colors"><MoreVertical className="size-4" /></button>
             </div>
           </div>
 
