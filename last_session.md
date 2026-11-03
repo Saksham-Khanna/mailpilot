@@ -2,23 +2,23 @@
 
 **Date:** 2026-11-03  
 **Workspace:** `D:\work\mailpilot\mailpilot`  
-**Status:** **Inbox filtering, custom dark scrollbars, 5s auto-dismiss notices, job alert opportunity badge categorization, and interactive message detail toolbars fully implemented.**
+**Status:** **Inbox filtering, custom dark scrollbars, 5s auto-dismiss notices, job alert opportunity badge categorization, interactive message detail toolbars, and Ctrl+K search shortcut fully implemented.**
 
 ## Summary of Accomplishments
-1. **Google Stitch UI Redesigns & Polish**:
-   - Redesigned all frontend pages (Opportunities, Reply Drafts, Activity Logs, Settings, Inbox, Overview) matching the charcoal/dark gray/silver/soft violet theme.
-   - Removed the "Email Command Center" top header from all pages in `App.jsx`.
-   - Cleaned up AI-looking sparkle icons across all pages, replacing them with professional icons (e.g. Mail, Zap, Tag, FileText, ArrowRight).
-2. **Complete Settings Page UI (`Settings.jsx`)**:
-   - Implemented all 5 tabs: Gmail Connection, Preferences, AI & Classification, Reply Settings, and Account with real backend configuration and capabilities.
-3. **Gmail Sync Reliability (`gmail_client.py`)**:
-   - Robust exponential backoff retries for transient Gmail API errors (HTTP 429, 5xx) and transport/timeout failures.
-4. **MongoDB Index Optimizations (`gmail_store.py`)**:
-   - Added and verified compound indexes for Messages (`user_id + received_at`), Classifications (`user_id + gmail_message_id`), Drafts (`user_id + created_at`), and Activity logs (`user_id + timestamp`).
-5. **Testing & Build**:
-   - 133 backend tests passing (`pytest`).
+1. **Inbox & UX Polish**:
+   - Implemented interactive category and tab filtering (All, Unread, Opportunities, Needs Reply) in `Inbox.jsx`.
+   - Prominent primary accent styling for the **Sync Inbox** button.
+   - Added `Ctrl + K` / `Cmd + K` keyboard shortcut to instantly focus the email search input.
+   - Wired up interactive top action toolbar in `MessageDetail.jsx` (Star toggles, reply shortcuts).
+2. **Smart Classification & Notifications**:
+   - Upgraded `MessageList.jsx` to correctly categorize job alerts and digests (Capgemini, Glassdoor, LinkedIn) as **Opportunity** instead of generic "Update".
+   - Added automatic 5-second auto-dismiss timer to `Notice.jsx` alerts.
+3. **Scrollbar & Theme Improvements**:
+   - Added sleek custom dark scrollbars (`::-webkit-scrollbar`) in `index.css` to replace bulky default browser scrollbars.
+4. **Backend Reliability & Testing**:
+   - **133 pytest backend tests** passing successfully.
    - Frontend production build verified (`npm run build`).
 
 ## Next Steps for Future Sessions
-- **Testing left**: Perform end-to-end integration testing and user acceptance testing of Gmail OAuth flows, synchronization, classification, and draft sending.
+- Perform end-to-end integration testing and user acceptance testing of Gmail OAuth flows, synchronization, classification, and draft sending.
 - Ensure MongoDB and n8n containers are running via `docker compose up -d` before development.
