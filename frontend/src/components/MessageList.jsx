@@ -19,14 +19,28 @@ function getSenderBrand(senderName, senderEmail) {
 }
 
 function getCategoryBadge(message) {
-  const subject = (message.subject || "").toLowerCase();
-  if (subject.includes("intern") || subject.includes("engineer") || subject.includes("opportunity") || subject.includes("role") || subject.includes("developer") || subject.includes("sde")) {
+  const text = `${message.subject || ""} ${message.snippet || ""} ${message.sender_name || ""}`.toLowerCase();
+  if (
+    text.includes("intern") ||
+    text.includes("engineer") ||
+    text.includes("opportunity") ||
+    text.includes("opportunities") ||
+    text.includes("role") ||
+    text.includes("developer") ||
+    text.includes("sde") ||
+    text.includes("job") ||
+    text.includes("jobs") ||
+    text.includes("careers") ||
+    text.includes("hiring") ||
+    text.includes("alert") ||
+    text.includes("position")
+  ) {
     return { label: "Opportunity", color: "bg-purple-500/15 text-purple-300 border-purple-500/30" };
   }
-  if (subject.includes("interview") || subject.includes("schedule") || subject.includes("invitation")) {
+  if (text.includes("interview") || text.includes("schedule") || text.includes("invitation")) {
     return { label: "High Priority", color: "bg-rose-500/15 text-rose-300 border-rose-500/30" };
   }
-  if (subject.includes("reply") || subject.includes("question") || subject.includes("availability") || subject.includes("challenge")) {
+  if (text.includes("reply") || text.includes("question") || text.includes("availability") || text.includes("challenge")) {
     return { label: "Needs Reply", color: "bg-amber-500/15 text-amber-300 border-amber-500/30" };
   }
   return { label: "Update", color: "bg-indigo-500/15 text-indigo-300 border-indigo-500/30" };

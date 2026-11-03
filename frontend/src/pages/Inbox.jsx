@@ -34,6 +34,34 @@ import {
 } from "../lib/api.js";
 import { pluralize, formatDateTime } from "../lib/format.js";
 
+function getMessageCategory(message) {
+  const text = `${message.subject || ""} ${message.snippet || ""} ${message.sender_name || ""}`.toLowerCase();
+  if (
+    text.includes("intern") ||
+    text.includes("engineer") ||
+    text.includes("opportunity") ||
+    text.includes("opportunities") ||
+    text.includes("role") ||
+    text.includes("developer") ||
+    text.includes("sde") ||
+    text.includes("job") ||
+    text.includes("jobs") ||
+    text.includes("careers") ||
+    text.includes("hiring") ||
+    text.includes("alert") ||
+    text.includes("position")
+  ) {
+    return "Opportunity";
+  }
+  if (text.includes("interview") || text.includes("schedule") || text.includes("invitation")) {
+    return "High Priority";
+  }
+  if (text.includes("reply") || text.includes("question") || text.includes("availability") || text.includes("challenge")) {
+    return "Needs Reply";
+  }
+  return "Update";
+}
+
 const OAUTH_ERRORS = {
   access_denied: "Google authorization was cancelled.",
   invalid_state: "The authorization link was invalid, expired, or already used. Try again.",
@@ -205,14 +233,33 @@ export default function Inbox({ gmail, health }) {
   };
 
   const filteredMessages = messages.filter((m) => {
-    if (!searchQuery) return true;
-    const q = searchQuery.toLowerCase();
-    return (
-      m.subject?.toLowerCase().includes(q) ||
-      m.sender_name?.toLowerCase().includes(q) ||
-      m.sender_email?.toLowerCase().includes(q) ||
-      m.snippet?.toLowerCase().includes(q)
-    );
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      const matchSearch =
+        m.subject?.toLowerCase().includes(q) ||
+        m.sender_name?.toLowerCase().includes(q) ||
+        m.sender_email?.toLowerCase().includes(q) ||
+        m.snippet?.toLowerCase().includes(q);
+      if (!matchSearch) return false;
+    }
+
+    const cat = getMessageCategory(m);
+
+    if (activeTab === "Opportunities") {
+      if (cat !== "Opportunity") return false;
+    } else if (activeTab === "Needs Reply") {
+      if (cat !== "Needs Reply") return false;
+    }
+
+    if (activeCategory === "Opportunities") {
+      if (cat !== "Opportunity") return false;
+    } else if (activeCategory === "High Priority") {
+      if (cat !== "High Priority") return false;
+    } else if (activeCategory === "Needs Reply") {
+      if (cat !== "Needs Reply") return false;
+    }
+
+    return true;
   });
 
   return (
@@ -269,7 +316,7 @@ export default function Inbox({ gmail, health }) {
             type="button"
             onClick={handleSync}
             disabled={busy === "sync" || !connected}
-            className="inline-flex items-center gap-1.5 rounded-xl border border-line bg-ink-950 px-3 py-2 text-xs font-medium text-fg hover:bg-ink-800 disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-accent-strong px-4 py-2 text-xs font-semibold text-white shadow-md hover:bg-indigo-500 disabled:opacity-50"
           >
             <RefreshCw className={`size-3.5 ${busy === "sync" ? "animate-spin" : ""}`} /> Sync Inbox
           </button>
