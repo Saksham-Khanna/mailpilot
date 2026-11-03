@@ -2,7 +2,7 @@
 
 **Date:** 2026-11-03  
 **Workspace:** `D:\work\mailpilot\mailpilot`  
-**Status:** **All UI redesigns, Settings tabs, AI icon cleanup, Gmail sync resilience, and MongoDB index optimizations complete. Testing left.**
+**Status:** **Inbox filtering, custom dark scrollbars, 5s auto-dismiss notices, job alert opportunity badge categorization, and interactive message detail toolbars fully implemented.**
 
 ## Summary of Accomplishments
 1. **Google Stitch UI Redesigns & Polish**:
