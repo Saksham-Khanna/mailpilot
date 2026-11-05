@@ -36,7 +36,7 @@ const CATEGORY_TABS = [
 function PriorityBadge({ priority }) {
   const tones = {
     High: "bg-rose-500/10 text-rose-300 border-rose-500/20",
-    Medium: "bg-amber-500/10 text-amber-200 border-amber-500/20",
+    Medium: "bg-[#D4AF37]/15 text-[#D4AF37] border-[#D4AF37]/30",
     Low: "bg-emerald-500/10 text-emerald-300 border-emerald-500/20",
   };
   return (
@@ -49,7 +49,7 @@ function PriorityBadge({ priority }) {
 function CategoryBadge({ category }) {
   const isInternship = category?.toLowerCase().includes("internship");
   return (
-    <span className="inline-flex items-center rounded-lg bg-ink-800 border border-line px-2.5 py-1 text-xs font-medium text-accent">
+    <span className="inline-flex items-center rounded-lg bg-[#1F1F22] border border-[#303034] px-2.5 py-1 text-xs font-medium text-[#D4AF37]">
       {isInternship ? "Internship" : category}
     </span>
   );
@@ -79,7 +79,6 @@ export default function Opportunities({ gmail, health }) {
       setTotal(Number(data?.total) || fetchedItems.length);
       setState("ready");
 
-      // Auto-select first item if none selected or if selected item not in new list
       if (fetchedItems.length > 0 && (!selectedId || !fetchedItems.some((i) => i.message_id === selectedId))) {
         setSelectedId(fetchedItems[0].message_id);
       } else if (fetchedItems.length === 0) {
@@ -120,7 +119,6 @@ export default function Opportunities({ gmail, health }) {
   const selectedItem = items.find((i) => i.message_id === selectedId) || items[0] || null;
   const opp = selectedItem?.opportunity || null;
 
-  // Compute stat counts
   const highPriorityCount = items.filter((i) => i.priority === "High").length || 18;
   const needsReplyCount = items.filter((i) => i.reply_eligibility === "reply_required" || i.category === "Interview Invitation").length || 12;
   const appliedCount = items.filter((i) => i.category === "Application Update" || i.category === "Offer Letter").length || 12;
@@ -130,7 +128,6 @@ export default function Opportunities({ gmail, health }) {
     <div className="flex flex-col gap-6 font-sans text-fg">
       {health?.state === "offline" && <ErrorBanner onRetry={health.retry} />}
 
-      {/* Page Header */}
       <div>
         <h2 className="text-2xl font-bold tracking-tight sm:text-3xl text-white">Opportunities</h2>
         <p className="mt-1 text-sm text-muted">
@@ -146,10 +143,9 @@ export default function Opportunities({ gmail, health }) {
 
       {/* Top 4 Stat Cards */}
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        {/* Total Opportunities */}
-        <div className="rounded-2xl border border-line bg-ink-900/80 p-5 shadow-sm transition-all hover:border-accent/40">
+        <div className="rounded-2xl border border-[#303034] bg-[#19191C] p-5 shadow-sm transition-all hover:border-[#D4AF37]/40">
           <div className="flex items-center justify-between">
-            <span className="grid size-10 place-items-center rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20">
+            <span className="grid size-10 place-items-center rounded-xl bg-[#1F1F22] text-[#D4AF37] border border-[#303034]">
               <Building className="size-5" />
             </span>
           </div>
@@ -159,10 +155,9 @@ export default function Opportunities({ gmail, health }) {
           </div>
         </div>
 
-        {/* High Priority */}
-        <div className="rounded-2xl border border-line bg-ink-900/80 p-5 shadow-sm transition-all hover:border-accent/40">
+        <div className="rounded-2xl border border-[#303034] bg-[#19191C] p-5 shadow-sm transition-all hover:border-[#D4AF37]/40">
           <div className="flex items-center justify-between">
-            <span className="grid size-10 place-items-center rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
+            <span className="grid size-10 place-items-center rounded-xl bg-[#1F1F22] text-[#D4AF37] border border-[#303034]">
               <Star className="size-5" />
             </span>
           </div>
@@ -172,10 +167,9 @@ export default function Opportunities({ gmail, health }) {
           </div>
         </div>
 
-        {/* Needs Reply */}
-        <div className="rounded-2xl border border-line bg-ink-900/80 p-5 shadow-sm transition-all hover:border-accent/40">
+        <div className="rounded-2xl border border-[#303034] bg-[#19191C] p-5 shadow-sm transition-all hover:border-[#D4AF37]/40">
           <div className="flex items-center justify-between">
-            <span className="grid size-10 place-items-center rounded-xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+            <span className="grid size-10 place-items-center rounded-xl bg-[#1F1F22] text-[#D4AF37] border border-[#303034]">
               <Clock className="size-5" />
             </span>
           </div>
@@ -185,10 +179,9 @@ export default function Opportunities({ gmail, health }) {
           </div>
         </div>
 
-        {/* Applied / Tracked */}
-        <div className="rounded-2xl border border-line bg-ink-900/80 p-5 shadow-sm transition-all hover:border-accent/40">
+        <div className="rounded-2xl border border-[#303034] bg-[#19191C] p-5 shadow-sm transition-all hover:border-[#D4AF37]/40">
           <div className="flex items-center justify-between">
-            <span className="grid size-10 place-items-center rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            <span className="grid size-10 place-items-center rounded-xl bg-[#1F1F22] text-[#D4AF37] border border-[#303034]">
               <CheckCircle className="size-5" />
             </span>
           </div>
@@ -200,14 +193,14 @@ export default function Opportunities({ gmail, health }) {
       </div>
 
       {/* Action Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-line bg-ink-900/80 p-4">
+      <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[#303034] bg-[#19191C] p-4">
         <div className="flex flex-wrap items-center gap-3">
           {connected ? (
             <button
               type="button"
               onClick={handleClassify}
               disabled={busy}
-              className="inline-flex items-center gap-2 rounded-xl bg-accent-strong px-4 py-2.5 text-sm font-semibold text-white shadow-lg transition-colors hover:bg-indigo-500 disabled:bg-ink-700 disabled:text-muted"
+              className="inline-flex items-center gap-2 rounded-xl bg-[#D4AF37] px-4 py-2.5 text-sm font-semibold text-[#0B0B0D] shadow-lg transition-colors hover:bg-[#F5D77A] disabled:bg-[#303034] disabled:text-muted"
             >
               {busy ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : <Tag aria-hidden="true" className="size-4" />}
               {busy ? "Classifying..." : "Classify Synchronized Emails"}
@@ -221,7 +214,7 @@ export default function Opportunities({ gmail, health }) {
           type="button"
           onClick={loadItems}
           disabled={state === "loading"}
-          className="inline-flex items-center gap-2 rounded-xl border border-line bg-ink-800 px-4 py-2 text-sm font-medium text-fg transition-colors hover:bg-ink-700 disabled:opacity-50"
+          className="inline-flex items-center gap-2 rounded-xl border border-[#303034] bg-[#1F1F22] px-4 py-2 text-sm font-medium text-fg transition-colors hover:bg-[#2A2A2E] disabled:opacity-50"
         >
           <RefreshCw className={`size-4 ${state === "loading" ? "animate-spin" : ""}`} /> Refresh
         </button>
@@ -237,8 +230,8 @@ export default function Opportunities({ gmail, health }) {
               onClick={() => setActiveTab(tab.value)}
               className={`rounded-xl px-4 py-2 text-xs font-semibold transition-colors ${
                 activeTab === tab.value
-                  ? "bg-accent-strong text-white shadow-md"
-                  : "border border-line bg-ink-900/80 text-muted hover:text-fg"
+                  ? "bg-[#D4AF37] text-[#0B0B0D] shadow-md"
+                  : "border border-[#303034] bg-[#19191C] text-muted hover:text-fg"
               }`}
             >
               {tab.label} {tab.value === "All" ? totalCount : tab.value.includes("Internship") ? 18 : tab.value.includes("Job") ? 20 : 3}
@@ -248,13 +241,13 @@ export default function Opportunities({ gmail, health }) {
         <div className="flex items-center gap-2">
           <button
             type="button"
-            className="inline-flex items-center gap-2 rounded-xl border border-line bg-ink-900/80 px-3 py-2 text-xs font-medium text-muted hover:text-fg"
+            className="inline-flex items-center gap-2 rounded-xl border border-[#303034] bg-[#19191C] px-3 py-2 text-xs font-medium text-muted hover:text-fg"
           >
             <ArrowUpDown className="size-3.5" /> Sort: Newest
           </button>
           <button
             type="button"
-            className="grid size-9 place-items-center rounded-xl border border-line bg-ink-900/80 text-muted hover:text-fg"
+            className="grid size-9 place-items-center rounded-xl border border-[#303034] bg-[#19191C] text-muted hover:text-fg"
             aria-label="Filter"
           >
             <Filter className="size-4" />
@@ -266,14 +259,14 @@ export default function Opportunities({ gmail, health }) {
       <div className="grid gap-6 lg:grid-cols-12">
         {/* Left Column: Opportunities List (5 cols) */}
         <div className="lg:col-span-5 flex flex-col gap-3">
-          <div className="rounded-2xl border border-line bg-ink-900/80 overflow-hidden shadow-xl">
-            <div className="border-b border-line px-5 py-3.5 flex items-center justify-between">
+          <div className="rounded-2xl border border-[#303034] bg-[#19191C] overflow-hidden shadow-xl">
+            <div className="border-b border-[#303034] px-5 py-3.5 flex items-center justify-between">
               <span className="text-xs font-bold uppercase tracking-wider text-muted">Opportunities List ({items.length})</span>
             </div>
 
             {state === "loading" && (
               <div className="flex items-center justify-center gap-2 p-12 text-sm text-muted" role="status">
-                <Loader2 aria-hidden="true" className="size-5 animate-spin text-accent" />
+                <Loader2 aria-hidden="true" className="size-5 animate-spin text-[#D4AF37]" />
                 Loading opportunities...
               </div>
             )}
@@ -302,7 +295,7 @@ export default function Opportunities({ gmail, health }) {
             )}
 
             {state === "ready" && items.length > 0 && (
-              <div className="divide-y divide-line max-h-[700px] overflow-y-auto">
+              <div className="divide-y divide-[#303034] max-h-[700px] overflow-y-auto">
                 {items.map((item) => {
                   const isSelected = item.message_id === selectedId;
                   const itemOpp = item.opportunity;
@@ -314,13 +307,13 @@ export default function Opportunities({ gmail, health }) {
                     <div
                       key={item.message_id}
                       onClick={() => setSelectedId(item.message_id)}
-                      className={`cursor-pointer p-4 transition-all hover:bg-ink-800/60 ${
-                        isSelected ? "bg-ink-800/90 border-l-4 border-accent shadow-inner" : "bg-transparent"
+                      className={`cursor-pointer p-4 transition-all hover:bg-[#1F1F22] ${
+                        isSelected ? "bg-[#D4AF37]/15 border-l-4 border-[#D4AF37] shadow-inner" : "bg-transparent"
                       }`}
                     >
                       <div className="flex items-start justify-between gap-3">
                         <div className="flex items-start gap-3">
-                          <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-emerald-500/10 text-emerald-300 font-bold border border-emerald-500/20 text-sm">
+                          <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-[#1F1F22] text-[#D4AF37] font-bold border border-[#303034] text-sm">
                             {initial}
                           </span>
                           <div>
@@ -330,11 +323,11 @@ export default function Opportunities({ gmail, health }) {
                         </div>
                         <div className="flex flex-col items-end gap-1.5 shrink-0">
                           <PriorityBadge priority={item.priority} />
-                          <span className="text-[11px] font-semibold text-accent">{Math.round(item.confidence * 100)}%</span>
+                          <span className="text-[11px] font-semibold text-[#D4AF37]">{Math.round(item.confidence * 100)}%</span>
                         </div>
                       </div>
 
-                      <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-muted pt-2 border-t border-line/40">
+                      <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-muted pt-2 border-t border-[#303034]/40">
                         {itemOpp?.location && (
                           <span className="inline-flex items-center gap-1">
                             <MapPin className="size-3 text-muted" /> {itemOpp.location}
@@ -361,8 +354,8 @@ export default function Opportunities({ gmail, health }) {
 
         {/* Right Column: Selected Opportunity Details (7 cols) */}
         <div className="lg:col-span-7 flex flex-col">
-          <div className="rounded-2xl border border-line bg-ink-900/80 p-6 shadow-xl relative overflow-hidden">
-            <div className="absolute right-0 top-0 h-48 w-48 bg-gradient-to-br from-purple-500/10 via-indigo-500/5 to-transparent pointer-events-none rounded-bl-full" />
+          <div className="rounded-2xl border border-[#303034] bg-[#19191C] p-6 shadow-xl relative overflow-hidden">
+            <div className="absolute right-0 top-0 h-48 w-48 bg-gradient-to-br from-[#D4AF37]/10 via-[#303034]/10 to-transparent pointer-events-none rounded-bl-full" />
 
             {!selectedItem ? (
               <div className="flex flex-col items-center justify-center p-16 text-center text-muted">
@@ -377,12 +370,12 @@ export default function Opportunities({ gmail, health }) {
                 {/* Header row */}
                 <div className="flex flex-wrap items-start justify-between gap-4">
                   <div className="flex items-center gap-4">
-                    <span className="grid size-14 place-items-center rounded-2xl bg-emerald-500/10 text-emerald-300 font-bold text-xl border border-emerald-500/20 shadow-md">
+                    <span className="grid size-14 place-items-center rounded-2xl bg-[#1F1F22] text-[#D4AF37] font-bold text-xl border border-[#303034] shadow-md">
                       {(opp?.company_name || selectedItem.sender_name || "G").charAt(0).toUpperCase()}
                     </span>
                     <div>
                       <h3 className="text-xl font-bold text-white">{opp?.company_name || selectedItem.sender_name || "Company"}</h3>
-                      <h4 className="text-sm font-semibold text-accent mt-0.5">{opp?.job_role || selectedItem.subject}</h4>
+                      <h4 className="text-sm font-semibold text-[#D4AF37] mt-0.5">{opp?.job_role || selectedItem.subject}</h4>
                     </div>
                   </div>
                   {opp?.application_link ? (
@@ -390,22 +383,22 @@ export default function Opportunities({ gmail, health }) {
                       href={opp.application_link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 rounded-xl bg-accent-strong px-4 py-2.5 text-sm font-semibold text-white shadow-lg transition-colors hover:bg-indigo-500"
+                      className="inline-flex items-center gap-2 rounded-xl bg-[#D4AF37] px-4 py-2.5 text-sm font-semibold text-[#0B0B0D] shadow-lg transition-colors hover:bg-[#F5D77A]"
                     >
                       Apply Now <ExternalLink className="size-4" />
                     </a>
                   ) : (
-                    <span className="inline-flex items-center gap-1.5 rounded-xl border border-line bg-ink-800 px-4 py-2 text-xs font-semibold text-muted">
+                    <span className="inline-flex items-center gap-1.5 rounded-xl border border-[#303034] bg-[#1F1F22] px-4 py-2 text-xs font-semibold text-muted">
                       No Direct Link
                     </span>
                   )}
                 </div>
 
                 {/* Badges row */}
-                <div className="flex flex-wrap items-center gap-2.5 pt-2 border-t border-line/60">
+                <div className="flex flex-wrap items-center gap-2.5 pt-2 border-t border-[#303034]/60">
                   <CategoryBadge category={selectedItem.category} />
                   <PriorityBadge priority={selectedItem.priority} />
-                  <span className="inline-flex items-center rounded-lg bg-indigo-500/10 border border-indigo-500/20 px-3 py-1 text-xs font-semibold text-indigo-300">
+                  <span className="inline-flex items-center rounded-lg bg-[#1F1F22] border border-[#303034] px-3 py-1 text-xs font-semibold text-[#D4AF37]">
                     {Math.round(selectedItem.confidence * 100)}% AI Confidence
                   </span>
                   {selectedItem.received_at && (
@@ -415,31 +408,31 @@ export default function Opportunities({ gmail, health }) {
 
                 {/* 4 Metadata Cards Grid */}
                 <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4 text-xs">
-                  <div className="rounded-xl border border-line bg-ink-950/60 p-3.5">
+                  <div className="rounded-xl border border-[#303034] bg-[#141416] p-3.5">
                     <div className="flex items-center gap-2 text-muted mb-1">
-                      <MapPin className="size-4 text-accent shrink-0" />
+                      <MapPin className="size-4 text-[#D4AF37] shrink-0" />
                       <span>Location</span>
                     </div>
                     <p className="font-semibold text-white text-sm">{opp?.location || "Remote / Unspecified"}</p>
                   </div>
 
-                  <div className="rounded-xl border border-line bg-ink-950/60 p-3.5">
+                  <div className="rounded-xl border border-[#303034] bg-[#141416] p-3.5">
                     <div className="flex items-center gap-2 text-muted mb-1">
-                      <Briefcase className="size-4 text-accent shrink-0" />
+                      <Briefcase className="size-4 text-[#D4AF37] shrink-0" />
                       <span>Work Mode</span>
                     </div>
                     <p className="font-semibold text-white text-sm">{opp?.work_mode || "Hybrid"}</p>
                   </div>
 
-                  <div className="rounded-xl border border-line bg-ink-950/60 p-3.5">
+                  <div className="rounded-xl border border-[#303034] bg-[#141416] p-3.5">
                     <div className="flex items-center gap-2 text-muted mb-1">
-                      <DollarSign className="size-4 text-accent shrink-0" />
+                      <DollarSign className="size-4 text-[#D4AF37] shrink-0" />
                       <span>Stipend / Salary</span>
                     </div>
                     <p className="font-semibold text-white text-sm">{opp?.salary || "Competitive"}</p>
                   </div>
 
-                  <div className="rounded-xl border border-line bg-ink-950/60 p-3.5">
+                  <div className="rounded-xl border border-[#303034] bg-[#141416] p-3.5">
                     <div className="flex items-center gap-2 text-muted mb-1">
                       <Calendar className="size-4 text-amber-300 shrink-0" />
                       <span>Deadline</span>
@@ -449,14 +442,14 @@ export default function Opportunities({ gmail, health }) {
                 </div>
 
                 {/* Email Summary */}
-                <div className="rounded-xl border border-line bg-ink-950/60 p-4">
-                  <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-accent mb-2">
+                <div className="rounded-xl border border-[#303034] bg-[#141416] p-4">
+                  <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#D4AF37] mb-2">
                     <FileText className="size-4" /> Email Summary
                   </div>
                   <p className="text-sm text-muted leading-relaxed">
                     {selectedItem.summary || "No summary available for this synchronized email."}
                   </p>
-                  <div className="mt-3 pt-3 border-t border-line/40 text-xs text-muted flex items-center justify-between">
+                  <div className="mt-3 pt-3 border-t border-[#303034]/40 text-xs text-muted flex items-center justify-between">
                     <span>From: <strong className="text-fg">{selectedItem.sender_name || selectedItem.sender_email}</strong></span>
                     <span>Subject: <strong className="text-fg">{selectedItem.subject}</strong></span>
                   </div>
@@ -464,13 +457,13 @@ export default function Opportunities({ gmail, health }) {
 
                 {/* Required Skills */}
                 {opp?.skills && opp.skills.length > 0 && (
-                  <div className="rounded-xl border border-line bg-ink-950/60 p-4">
-                    <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-accent mb-3">
+                  <div className="rounded-xl border border-[#303034] bg-[#141416] p-4">
+                    <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#D4AF37] mb-3">
                       <Target className="size-4" /> Required Skills
                     </div>
                     <div className="flex flex-wrap items-center gap-2">
                       {opp.skills.map((skill, idx) => (
-                        <span key={idx} className="rounded-lg bg-ink-800 border border-line px-3 py-1 text-xs font-medium text-fg">
+                        <span key={idx} className="rounded-lg bg-[#1F1F22] border border-[#303034] px-3 py-1 text-xs font-medium text-fg">
                           {skill}
                         </span>
                       ))}

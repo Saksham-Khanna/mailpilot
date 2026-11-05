@@ -122,11 +122,11 @@ export default function Overview({ health, gmail }) {
       )}
 
       {/* Hero Banner */}
-      <div className="relative overflow-hidden rounded-2xl border border-line bg-gradient-to-r from-[#171328] via-[#121422] to-[#10111a] p-6 sm:p-8 shadow-xl">
-        <div className="absolute right-0 top-0 h-full w-1/2 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-purple-900/30 via-indigo-900/10 to-transparent pointer-events-none" />
+      <div className="relative overflow-hidden rounded-2xl border border-[#303034] bg-gradient-to-r from-[#19191C] via-[#141416] to-[#0B0B0D] p-6 sm:p-8 shadow-xl">
+        <div className="absolute right-0 top-0 h-full w-1/2 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[#D4AF37]/10 via-[#303034]/20 to-transparent pointer-events-none" />
         <div className="relative z-10 flex flex-wrap items-center justify-between gap-4">
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-purple-500/30 bg-purple-500/10 px-3 py-1 text-xs font-semibold text-purple-300">
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#D4AF37]/30 bg-[#D4AF37]/10 px-3 py-1 text-xs font-semibold text-[#D4AF37]">
               AI-Powered Email Intelligence
             </div>
             {connected ? (
@@ -154,13 +154,13 @@ export default function Overview({ health, gmail }) {
               <>
                 <a
                   href="#/inbox"
-                  className="inline-flex items-center gap-2 rounded-xl border border-line bg-ink-900/80 px-4 py-2.5 text-sm font-semibold text-fg transition-colors hover:bg-ink-800"
+                  className="inline-flex items-center gap-2 rounded-xl border border-[#303034] bg-[#1F1F22] px-4 py-2.5 text-sm font-semibold text-fg transition-colors hover:border-[#D4AF37]/50"
                 >
-                  <Mail className="size-4 text-accent" /> View Inbox
+                  <Mail className="size-4 text-[#D4AF37]" /> View Inbox
                 </a>
                 <a
                   href="#/opportunities"
-                  className="inline-flex items-center gap-2 rounded-xl bg-accent-strong px-4 py-2.5 text-sm font-semibold text-white shadow-lg transition-colors hover:bg-indigo-500"
+                  className="inline-flex items-center gap-2 rounded-xl bg-[#D4AF37] px-4 py-2.5 text-sm font-semibold text-[#0B0B0D] shadow-lg transition-colors hover:bg-[#F5D77A]"
                 >
                   <Target className="size-4" /> + New Opportunity
                 </a>
@@ -169,7 +169,7 @@ export default function Overview({ health, gmail }) {
               <button
                 type="button"
                 onClick={() => window.location.assign(getGoogleStartUrl())}
-                className="inline-flex items-center gap-2 rounded-xl bg-accent-strong px-5 py-3 text-sm font-semibold text-white shadow-lg transition-colors hover:bg-indigo-500"
+                className="inline-flex items-center gap-2 rounded-xl bg-[#D4AF37] px-5 py-3 text-sm font-semibold text-[#0B0B0D] shadow-lg transition-colors hover:bg-[#F5D77A]"
               >
                 <Mail className="size-4" /> Connect Gmail
               </button>
@@ -181,9 +181,9 @@ export default function Overview({ health, gmail }) {
       {/* Metrics Row (4 Stat Cards) */}
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {/* Card 1: Total Emails */}
-        <div className="rounded-2xl border border-line bg-ink-900/80 p-5 shadow-sm transition-all hover:border-accent/40">
+        <div className="rounded-2xl border border-[#303034] bg-[#19191C] p-5 shadow-sm transition-all hover:border-[#D4AF37]/40">
           <div className="flex items-center justify-between">
-            <span className="grid size-10 place-items-center rounded-xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+            <span className="grid size-10 place-items-center rounded-xl bg-[#1F1F22] text-[#D4AF37] border border-[#303034]">
               <Mail className="size-5" />
             </span>
             <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-xs font-semibold text-emerald-300 border border-emerald-500/20">
@@ -197,9 +197,9 @@ export default function Overview({ health, gmail }) {
         </div>
 
         {/* Card 2: Active Threads */}
-        <div className="rounded-2xl border border-line bg-ink-900/80 p-5 shadow-sm transition-all hover:border-accent/40">
+        <div className="rounded-2xl border border-[#303034] bg-[#19191C] p-5 shadow-sm transition-all hover:border-[#D4AF37]/40">
           <div className="flex items-center justify-between">
-            <span className="grid size-10 place-items-center rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20">
+            <span className="grid size-10 place-items-center rounded-xl bg-[#1F1F22] text-[#D4AF37] border border-[#303034]">
               <Target className="size-5" />
             </span>
             <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-xs font-semibold text-emerald-300 border border-emerald-500/20">
@@ -213,9 +213,9 @@ export default function Overview({ health, gmail }) {
         </div>
 
         {/* Card 3: Awaiting Reply */}
-        <div className="rounded-2xl border border-line bg-ink-900/80 p-5 shadow-sm transition-all hover:border-accent/40">
+        <div className="rounded-2xl border border-[#303034] bg-[#19191C] p-5 shadow-sm transition-all hover:border-[#D4AF37]/40">
           <div className="flex items-center justify-between">
-            <span className="grid size-10 place-items-center rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
+            <span className="grid size-10 place-items-center rounded-xl bg-[#1F1F22] text-[#D4AF37] border border-[#303034]">
               <FileEdit className="size-5" />
             </span>
             <span className="inline-flex items-center gap-1 rounded-full bg-rose-500/10 px-2 py-0.5 text-xs font-semibold text-rose-300 border border-rose-500/20">
@@ -229,9 +229,9 @@ export default function Overview({ health, gmail }) {
         </div>
 
         {/* Card 4: Sent Today */}
-        <div className="rounded-2xl border border-line bg-ink-900/80 p-5 shadow-sm transition-all hover:border-accent/40">
+        <div className="rounded-2xl border border-[#303034] bg-[#19191C] p-5 shadow-sm transition-all hover:border-[#D4AF37]/40">
           <div className="flex items-center justify-between">
-            <span className="grid size-10 place-items-center rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            <span className="grid size-10 place-items-center rounded-xl bg-[#1F1F22] text-[#D4AF37] border border-[#303034]">
               <CheckCircle2 className="size-5" />
             </span>
             <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-xs font-semibold text-emerald-300 border border-emerald-500/20">
@@ -250,21 +250,21 @@ export default function Overview({ health, gmail }) {
         {/* Left Column (7 cols) */}
         <div className="lg:col-span-8 flex flex-col gap-6">
           {/* Recent Opportunities Panel */}
-          <div className="rounded-2xl border border-line bg-ink-900/80 p-6 shadow-sm">
-            <div className="flex items-center justify-between pb-4 border-b border-line">
+          <div className="rounded-2xl border border-[#303034] bg-[#19191C] p-6 shadow-sm">
+            <div className="flex items-center justify-between pb-4 border-b border-[#303034]">
               <div className="flex items-center gap-2.5">
-                <Target className="size-5 text-accent" />
+                <Target className="size-5 text-[#D4AF37]" />
                 <h3 className="text-base font-bold text-white">Recent Opportunities</h3>
               </div>
-              <a href="#/opportunities" className="text-xs font-semibold text-accent hover:underline flex items-center gap-1">
+              <a href="#/opportunities" className="text-xs font-semibold text-[#D4AF37] hover:underline flex items-center gap-1">
                 View All →
               </a>
             </div>
 
-            <div className="mt-4 divide-y divide-line">
+            <div className="mt-4 divide-y divide-[#303034]">
               {loadingData && (
                 <div className="flex items-center gap-2 py-6 text-sm text-muted">
-                  <Loader2 className="size-4 animate-spin" /> Loading opportunities...
+                  <Loader2 className="size-4 animate-spin text-[#D4AF37]" /> Loading opportunities...
                 </div>
               )}
               {!loadingData && !connected && (
@@ -273,7 +273,7 @@ export default function Overview({ health, gmail }) {
                   <button
                     type="button"
                     onClick={() => window.location.assign(getGoogleStartUrl())}
-                    className="mt-3 inline-flex items-center gap-2 rounded-xl bg-accent-strong px-4 py-2 text-xs font-semibold text-white shadow-lg transition-colors hover:bg-indigo-500"
+                    className="mt-3 inline-flex items-center gap-2 rounded-xl bg-[#D4AF37] px-4 py-2 text-xs font-semibold text-[#0B0B0D] shadow-lg transition-colors hover:bg-[#F5D77A]"
                   >
                     <Mail className="size-3.5" /> Connect Gmail
                   </button>
@@ -282,7 +282,7 @@ export default function Overview({ health, gmail }) {
               {!loadingData && connected && opportunities.length === 0 && (
                 <div className="py-8 text-center">
                   <p className="text-sm text-muted">No opportunities extracted yet.</p>
-                  <a href="#/opportunities" className="mt-2 inline-block text-xs font-semibold text-accent hover:underline">
+                  <a href="#/opportunities" className="mt-2 inline-block text-xs font-semibold text-[#D4AF37] hover:underline">
                     Classify synchronized emails in Opportunities
                   </a>
                 </div>
@@ -293,9 +293,9 @@ export default function Overview({ health, gmail }) {
                 const role = details.job_role || opp.subject || "Software Engineering Role";
                 const priority = opp.priority || "Medium";
                 return (
-                  <div key={opp.message_id} className="py-3.5 first:pt-0 last:pb-0 flex items-center justify-between gap-4 transition-colors hover:bg-ink-950/30 px-2 rounded-xl">
+                  <div key={opp.message_id} className="py-3.5 first:pt-0 last:pb-0 flex items-center justify-between gap-4 transition-colors hover:bg-[#1F1F22] px-2 rounded-xl">
                     <div className="flex items-center gap-3 min-w-0">
-                      <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-indigo-600 to-purple-600 text-white font-bold text-xs shadow-inner">
+                      <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-[#1F1F22] text-[#D4AF37] border border-[#303034] font-bold text-xs shadow-inner">
                         {company.charAt(0).toUpperCase()}
                       </span>
                       <div className="min-w-0">
@@ -305,7 +305,7 @@ export default function Overview({ health, gmail }) {
                     </div>
                     <div className="flex items-center gap-3 shrink-0">
                       <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium ${
-                        priority === "High" ? "bg-rose-500/10 text-rose-300 border-rose-500/30" : "bg-amber-500/10 text-amber-300 border-amber-500/30"
+                        priority === "High" ? "bg-rose-500/10 text-rose-300 border-rose-500/30" : "bg-[#D4AF37]/15 text-[#D4AF37] border-[#D4AF37]/30"
                       }`}>
                         {priority} Match
                       </span>
@@ -318,21 +318,21 @@ export default function Overview({ health, gmail }) {
           </div>
 
           {/* AI Suggestions Panel */}
-          <div className="rounded-2xl border border-line bg-ink-900/80 p-6 shadow-sm">
-            <div className="flex items-center justify-between pb-4 border-b border-line">
+          <div className="rounded-2xl border border-[#303034] bg-[#19191C] p-6 shadow-sm">
+            <div className="flex items-center justify-between pb-4 border-b border-[#303034]">
               <div className="flex items-center gap-2.5">
-                <Activity className="size-5 text-accent" />
+                <Activity className="size-5 text-[#D4AF37]" />
                 <h3 className="text-base font-bold text-white">AI Suggestions</h3>
               </div>
-              <a href="#/drafts" className="text-xs font-semibold text-accent hover:underline">
+              <a href="#/drafts" className="text-xs font-semibold text-[#D4AF37] hover:underline">
                 View All →
               </a>
             </div>
 
             <div className="mt-4 grid gap-3">
-              <div className="flex items-center justify-between gap-4 rounded-xl border border-line bg-ink-950/60 p-4 transition-all hover:border-accent/40">
+              <div className="flex items-center justify-between gap-4 rounded-xl border border-[#303034] bg-[#141416] p-4 transition-all hover:border-[#D4AF37]/40">
                 <div className="flex items-center gap-3">
-                  <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-indigo-500/10 text-indigo-400">
+                  <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-[#1F1F22] text-[#D4AF37] border border-[#303034]">
                     <FileEdit className="size-4" />
                   </span>
                   <div>
@@ -342,15 +342,15 @@ export default function Overview({ health, gmail }) {
                 </div>
                 <a
                   href="#/drafts"
-                  className="inline-flex items-center gap-1.5 rounded-lg bg-accent-strong px-3.5 py-1.5 text-xs font-semibold text-white hover:bg-indigo-500"
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-[#D4AF37] px-3.5 py-1.5 text-xs font-semibold text-[#0B0B0D] hover:bg-[#F5D77A]"
                 >
                   Generate Replies →
                 </a>
               </div>
 
-              <div className="flex items-center justify-between gap-4 rounded-xl border border-line bg-ink-950/60 p-4 transition-all hover:border-accent/40">
+              <div className="flex items-center justify-between gap-4 rounded-xl border border-[#303034] bg-[#141416] p-4 transition-all hover:border-[#D4AF37]/40">
                 <div className="flex items-center gap-3">
-                  <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-purple-500/10 text-purple-400">
+                  <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-[#1F1F22] text-[#D4AF37] border border-[#303034]">
                     <Target className="size-4" />
                   </span>
                   <div>
@@ -360,15 +360,15 @@ export default function Overview({ health, gmail }) {
                 </div>
                 <a
                   href="#/opportunities"
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-line bg-ink-800 px-3.5 py-1.5 text-xs font-semibold text-fg hover:bg-ink-700"
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-[#303034] bg-[#1F1F22] px-3.5 py-1.5 text-xs font-semibold text-fg hover:bg-[#2A2A2E]"
                 >
                   View Opportunities →
                 </a>
               </div>
 
-              <div className="flex items-center justify-between gap-4 rounded-xl border border-line bg-ink-950/60 p-4 transition-all hover:border-accent/40">
+              <div className="flex items-center justify-between gap-4 rounded-xl border border-[#303034] bg-[#141416] p-4 transition-all hover:border-[#D4AF37]/40">
                 <div className="flex items-center gap-3">
-                  <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-emerald-500/10 text-emerald-400">
+                  <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-[#1F1F22] text-[#D4AF37] border border-[#303034]">
                     <Activity className="size-4" />
                   </span>
                   <div>
@@ -378,7 +378,7 @@ export default function Overview({ health, gmail }) {
                 </div>
                 <a
                   href="#/logs"
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-line bg-ink-800 px-3.5 py-1.5 text-xs font-semibold text-fg hover:bg-ink-700"
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-[#303034] bg-[#1F1F22] px-3.5 py-1.5 text-xs font-semibold text-fg hover:bg-[#2A2A2E]"
                 >
                   View Activity Logs →
                 </a>
@@ -387,35 +387,35 @@ export default function Overview({ health, gmail }) {
           </div>
 
           {/* Outreach Performance Panel */}
-          <div className="rounded-2xl border border-line bg-ink-900/80 p-6 shadow-sm">
-            <div className="flex items-center justify-between pb-4 border-b border-line">
+          <div className="rounded-2xl border border-[#303034] bg-[#19191C] p-6 shadow-sm">
+            <div className="flex items-center justify-between pb-4 border-b border-[#303034]">
               <div className="flex items-center gap-2.5">
-                <Activity className="size-5 text-accent" />
+                <Activity className="size-5 text-[#D4AF37]" />
                 <h3 className="text-base font-bold text-white">Outreach Performance</h3>
               </div>
-              <span className="rounded-lg border border-line bg-ink-950 px-3 py-1 text-xs font-medium text-muted">
+              <span className="rounded-lg border border-[#303034] bg-[#141416] px-3 py-1 text-xs font-medium text-muted">
                 Last 7 Days ▾
               </span>
             </div>
 
             <div className="mt-6 grid gap-6 md:grid-cols-2 items-center">
               <div className="space-y-4">
-                <div className="flex items-center justify-between text-sm py-2 border-b border-line/50">
-                  <span className="text-muted flex items-center gap-2"><Mail className="size-4 text-indigo-400" /> Emails Sent</span>
+                <div className="flex items-center justify-between text-sm py-2 border-b border-[#303034]/50">
+                  <span className="text-muted flex items-center gap-2"><Mail className="size-4 text-[#D4AF37]" /> Emails Sent</span>
                   <div className="flex items-center gap-2">
                     <span className="font-bold text-white">268</span>
                     <span className="text-xs text-emerald-400 font-semibold">↑ +18%</span>
                   </div>
                 </div>
-                <div className="flex items-center justify-between text-sm py-2 border-b border-line/50">
-                  <span className="text-muted flex items-center gap-2"><FileEdit className="size-4 text-purple-400" /> Replies</span>
+                <div className="flex items-center justify-between text-sm py-2 border-b border-[#303034]/50">
+                  <span className="text-muted flex items-center gap-2"><FileEdit className="size-4 text-[#D4AF37]" /> Replies</span>
                   <div className="flex items-center gap-2">
                     <span className="font-bold text-white">47</span>
                     <span className="text-xs text-emerald-400 font-semibold">↑ +32%</span>
                   </div>
                 </div>
-                <div className="flex items-center justify-between text-sm py-2 border-b border-line/50">
-                  <span className="text-muted flex items-center gap-2"><Target className="size-4 text-amber-400" /> Reply Rate</span>
+                <div className="flex items-center justify-between text-sm py-2 border-b border-[#303034]/50">
+                  <span className="text-muted flex items-center gap-2"><Target className="size-4 text-[#D4AF37]" /> Reply Rate</span>
                   <div className="flex items-center gap-2">
                     <span className="font-bold text-white">17.5%</span>
                     <span className="text-xs text-emerald-400 font-semibold">↑ +11%</span>
@@ -435,8 +435,8 @@ export default function Overview({ health, gmail }) {
                 <svg className="w-full h-36 overflow-visible" viewBox="0 0 350 120" preserveAspectRatio="none">
                   <defs>
                     <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0.4" />
-                      <stop offset="100%" stopColor="#8b5cf6" stopOpacity="0.0" />
+                      <stop offset="0%" stopColor="#D4AF37" stopOpacity="0.3" />
+                      <stop offset="100%" stopColor="#D4AF37" stopOpacity="0.0" />
                     </linearGradient>
                   </defs>
                   <path
@@ -446,15 +446,15 @@ export default function Overview({ health, gmail }) {
                   <path
                     d="M 0 90 Q 50 40 100 80 T 200 50 T 300 30 T 350 20"
                     fill="none"
-                    stroke="#a78bfa"
+                    stroke="#D4AF37"
                     strokeWidth="2.5"
                     strokeLinecap="round"
                   />
-                  <circle cx="100" cy="80" r="4" fill="#a78bfa" />
-                  <circle cx="200" cy="50" r="4" fill="#a78bfa" />
-                  <circle cx="300" cy="30" r="4" fill="#a78bfa" />
+                  <circle cx="100" cy="80" r="4" fill="#D4AF37" />
+                  <circle cx="200" cy="50" r="4" fill="#D4AF37" />
+                  <circle cx="300" cy="30" r="4" fill="#D4AF37" />
                 </svg>
-                <div className="flex justify-between text-[11px] text-muted pt-2 border-t border-line">
+                <div className="flex justify-between text-[11px] text-muted pt-2 border-t border-[#303034]">
                   <span>Mon</span>
                   <span>Tue</span>
                   <span>Wed</span>
@@ -471,9 +471,9 @@ export default function Overview({ health, gmail }) {
         {/* Right Column (5 cols) */}
         <div className="lg:col-span-4 flex flex-col gap-6">
           {/* Quick Actions Panel */}
-          <div className="rounded-2xl border border-line bg-ink-900/80 p-6 shadow-sm">
-            <h3 className="text-base font-bold text-white pb-4 border-b border-line flex items-center gap-2">
-              <CheckCircle2 className="size-5 text-accent" /> Quick Actions
+          <div className="rounded-2xl border border-[#303034] bg-[#19191C] p-6 shadow-sm">
+            <h3 className="text-base font-bold text-white pb-4 border-b border-[#303034] flex items-center gap-2">
+              <CheckCircle2 className="size-5 text-[#D4AF37]" /> Quick Actions
             </h3>
 
             <div className="mt-4 grid gap-2.5">
@@ -481,10 +481,10 @@ export default function Overview({ health, gmail }) {
                 type="button"
                 onClick={handleQuickSync}
                 disabled={busyAction === "sync" || !connected}
-                className="w-full flex items-center justify-between p-3 rounded-xl border border-line bg-ink-950/60 text-sm font-medium text-fg transition-all hover:border-accent/40 hover:bg-ink-800 disabled:opacity-50"
+                className="w-full flex items-center justify-between p-3 rounded-xl border border-[#303034] bg-[#141416] text-sm font-medium text-fg transition-all hover:border-[#D4AF37]/40 hover:bg-[#1F1F22] disabled:opacity-50"
               >
                 <span className="flex items-center gap-3">
-                  {busyAction === "sync" ? <Loader2 className="size-4 animate-spin text-accent" /> : <RefreshCw className="size-4 text-accent" />}
+                  {busyAction === "sync" ? <Loader2 className="size-4 animate-spin text-[#D4AF37]" /> : <RefreshCw className="size-4 text-[#D4AF37]" />}
                   Sync Gmail
                 </span>
                 <ChevronRight className="size-4 text-muted" />
@@ -494,30 +494,30 @@ export default function Overview({ health, gmail }) {
                 type="button"
                 onClick={handleQuickClassify}
                 disabled={busyAction === "classify" || !connected}
-                className="w-full flex items-center justify-between p-3 rounded-xl border border-line bg-ink-950/60 text-sm font-medium text-fg transition-all hover:border-accent/40 hover:bg-ink-800 disabled:opacity-50"
+                className="w-full flex items-center justify-between p-3 rounded-xl border border-[#303034] bg-[#141416] text-sm font-medium text-fg transition-all hover:border-[#D4AF37]/40 hover:bg-[#1F1F22] disabled:opacity-50"
               >
                 <span className="flex items-center gap-3">
-                  <Target className="size-4 text-purple-400" /> Extract Opportunities
+                  <Target className="size-4 text-[#D4AF37]" /> Extract Opportunities
                 </span>
                 <ChevronRight className="size-4 text-muted" />
               </button>
 
               <a
                 href="#/drafts"
-                className="w-full flex items-center justify-between p-3 rounded-xl border border-line bg-ink-950/60 text-sm font-medium text-fg transition-all hover:border-accent/40 hover:bg-ink-800"
+                className="w-full flex items-center justify-between p-3 rounded-xl border border-[#303034] bg-[#141416] text-sm font-medium text-fg transition-all hover:border-[#D4AF37]/40 hover:bg-[#1F1F22]"
               >
                 <span className="flex items-center gap-3">
-                  <FileEdit className="size-4 text-amber-400" /> Generate Reply Drafts
+                  <FileEdit className="size-4 text-[#D4AF37]" /> Generate Reply Drafts
                 </span>
                 <ChevronRight className="size-4 text-muted" />
               </a>
 
               <a
                 href="#/logs"
-                className="w-full flex items-center justify-between p-3 rounded-xl border border-line bg-ink-950/60 text-sm font-medium text-fg transition-all hover:border-accent/40 hover:bg-ink-800"
+                className="w-full flex items-center justify-between p-3 rounded-xl border border-[#303034] bg-[#141416] text-sm font-medium text-fg transition-all hover:border-[#D4AF37]/40 hover:bg-[#1F1F22]"
               >
                 <span className="flex items-center gap-3">
-                  <ScrollText className="size-4 text-emerald-400" /> View Activity Logs
+                  <ScrollText className="size-4 text-[#D4AF37]" /> View Activity Logs
                 </span>
                 <ChevronRight className="size-4 text-muted" />
               </a>
@@ -525,12 +525,12 @@ export default function Overview({ health, gmail }) {
           </div>
 
           {/* Recent Activity Panel */}
-          <div className="rounded-2xl border border-line bg-ink-900/80 p-6 shadow-sm">
-            <div className="flex items-center justify-between pb-4 border-b border-line">
+          <div className="rounded-2xl border border-[#303034] bg-[#19191C] p-6 shadow-sm">
+            <div className="flex items-center justify-between pb-4 border-b border-[#303034]">
               <h3 className="text-base font-bold text-white flex items-center gap-2">
-                <Activity className="size-5 text-accent" /> Recent Activity
+                <Activity className="size-5 text-[#D4AF37]" /> Recent Activity
               </h3>
-              <a href="#/logs" className="text-xs font-semibold text-accent hover:underline">
+              <a href="#/logs" className="text-xs font-semibold text-[#D4AF37] hover:underline">
                 View All →
               </a>
             </div>
@@ -538,7 +538,7 @@ export default function Overview({ health, gmail }) {
             <div className="mt-4 space-y-4">
               {loadingData && (
                 <div className="flex items-center gap-2 py-4 text-sm text-muted">
-                  <Loader2 className="size-4 animate-spin" /> Loading activity...
+                  <Loader2 className="size-4 animate-spin text-[#D4AF37]" /> Loading activity...
                 </div>
               )}
               {!loadingData && logs.length === 0 && (

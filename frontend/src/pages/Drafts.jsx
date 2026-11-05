@@ -57,7 +57,7 @@ const REPLY_TYPES = [
 function StatusBadge({ status }) {
   const tones = {
     draft: "bg-amber-500/10 text-amber-300 border-amber-500/20",
-    saved: "bg-indigo-500/10 text-indigo-300 border-indigo-500/20",
+    saved: "bg-[#D4AF37]/15 text-[#D4AF37] border-[#D4AF37]/30",
     approved: "bg-emerald-500/10 text-emerald-300 border-emerald-500/20",
     sent: "bg-emerald-500/20 text-emerald-300 border-emerald-500/40",
   };
@@ -77,7 +77,7 @@ function StatusBadge({ status }) {
 function EligibilityBadge({ eligibility }) {
   const tones = {
     reply_required: "bg-emerald-500/10 text-emerald-300 border-emerald-500/20",
-    reply_recommended: "bg-indigo-500/10 text-indigo-300 border-indigo-500/20",
+    reply_recommended: "bg-[#D4AF37]/15 text-[#D4AF37] border-[#D4AF37]/30",
     no_reply_needed: "bg-zinc-500/10 text-zinc-400 border-zinc-500/20",
   };
   const labels = {
@@ -86,7 +86,7 @@ function EligibilityBadge({ eligibility }) {
     no_reply_needed: "No Reply Needed",
   };
   return (
-    <span className={`inline-flex items-center rounded-lg bg-ink-800 border border-line px-2.5 py-1 text-xs font-medium text-accent`}>
+    <span className={`inline-flex items-center rounded-lg bg-[#1F1F22] border border-[#303034] px-2.5 py-1 text-xs font-medium text-[#D4AF37]`}>
       {labels[eligibility] || "Opportunity"}
     </span>
   );
@@ -150,7 +150,6 @@ export default function Drafts({ gmail, health }) {
     loadData();
   }, [loadData]);
 
-  // Select first draft by default when drafts load (only depend on drafts)
   useEffect(() => {
     if (drafts.length > 0) {
       if (!selectedDraft || !drafts.some((d) => d.draft_id === selectedDraft.draft_id)) {
@@ -321,7 +320,6 @@ export default function Drafts({ gmail, health }) {
     setNotice({ tone: "success", text: "Draft content copied to clipboard!" });
   };
 
-  // Filter drafts by tab
   const filteredDrafts = drafts.filter((d) => {
     if (activeTab === "All") return true;
     if (activeTab === "Opportunities") return d.subject?.toLowerCase().includes("intern") || d.subject?.toLowerCase().includes("job") || d.subject?.toLowerCase().includes("role");
@@ -329,11 +327,9 @@ export default function Drafts({ gmail, health }) {
     return true;
   });
 
-  // Associated classification / opportunity for selected draft
   const selectedClassification = selectedDraft && classifications[selectedDraft.original_message_id];
   const selectedOpportunity = selectedClassification?.opportunity;
 
-  // Stat counts
   const totalDraftsCount = drafts.length || 28;
   const readyCount = drafts.filter((d) => d.status === "approved" || d.status === "saved").length || 12;
   const reviewCount = drafts.filter((d) => d.status === "draft").length || 8;
@@ -343,7 +339,6 @@ export default function Drafts({ gmail, health }) {
     <div className="flex flex-col gap-6 font-sans text-fg">
       {health?.state === "offline" && <ErrorBanner onRetry={health.retry} />}
 
-      {/* Page Header */}
       <div>
         <h2 className="text-2xl font-bold tracking-tight sm:text-3xl text-white">Reply Drafts</h2>
         <p className="mt-1 text-sm text-muted">
@@ -359,9 +354,9 @@ export default function Drafts({ gmail, health }) {
 
       {/* Top 4 Stat Cards */}
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <div className="rounded-2xl border border-line bg-ink-900/80 p-5 shadow-sm transition-all hover:border-accent/40">
+        <div className="rounded-2xl border border-[#303034] bg-[#19191C] p-5 shadow-sm transition-all hover:border-[#D4AF37]/40">
           <div className="flex items-center justify-between">
-            <span className="grid size-10 place-items-center rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20">
+            <span className="grid size-10 place-items-center rounded-xl bg-[#1F1F22] text-[#D4AF37] border border-[#303034]">
               <Mail className="size-5" />
             </span>
           </div>
@@ -371,9 +366,9 @@ export default function Drafts({ gmail, health }) {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-line bg-ink-900/80 p-5 shadow-sm transition-all hover:border-accent/40">
+        <div className="rounded-2xl border border-[#303034] bg-[#19191C] p-5 shadow-sm transition-all hover:border-[#D4AF37]/40">
           <div className="flex items-center justify-between">
-            <span className="grid size-10 place-items-center rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            <span className="grid size-10 place-items-center rounded-xl bg-[#1F1F22] text-[#D4AF37] border border-[#303034]">
               <CheckCircle className="size-5" />
             </span>
           </div>
@@ -383,9 +378,9 @@ export default function Drafts({ gmail, health }) {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-line bg-ink-900/80 p-5 shadow-sm transition-all hover:border-accent/40">
+        <div className="rounded-2xl border border-[#303034] bg-[#19191C] p-5 shadow-sm transition-all hover:border-[#D4AF37]/40">
           <div className="flex items-center justify-between">
-            <span className="grid size-10 place-items-center rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
+            <span className="grid size-10 place-items-center rounded-xl bg-[#1F1F22] text-[#D4AF37] border border-[#303034]">
               <Edit3 className="size-5" />
             </span>
           </div>
@@ -395,9 +390,9 @@ export default function Drafts({ gmail, health }) {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-line bg-ink-900/80 p-5 shadow-sm transition-all hover:border-accent/40">
+        <div className="rounded-2xl border border-[#303034] bg-[#19191C] p-5 shadow-sm transition-all hover:border-[#D4AF37]/40">
           <div className="flex items-center justify-between">
-            <span className="grid size-10 place-items-center rounded-xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+            <span className="grid size-10 place-items-center rounded-xl bg-[#1F1F22] text-[#D4AF37] border border-[#303034]">
               <Clock className="size-5" />
             </span>
           </div>
@@ -410,10 +405,10 @@ export default function Drafts({ gmail, health }) {
 
       {/* Action & Generator Bar */}
       {connected && (
-        <div className="rounded-2xl border border-line bg-ink-900/80 p-4 shadow-xl">
+        <div className="rounded-2xl border border-[#303034] bg-[#19191C] p-4 shadow-xl">
           <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
             <div className="flex flex-wrap items-center gap-3">
-              <span className="text-xs font-bold uppercase tracking-wider text-accent">AI Draft Generator</span>
+              <span className="text-xs font-bold uppercase tracking-wider text-[#D4AF37]">AI Draft Generator</span>
               <span className="text-xs text-muted">Last generated: {lastGeneratedTime}</span>
             </div>
             {!canSend && (
@@ -431,7 +426,7 @@ export default function Drafts({ gmail, health }) {
               <select
                 value={selectedMessageId}
                 onChange={(e) => setSelectedMessageId(e.target.value)}
-                className="w-full rounded-xl border border-line bg-ink-950 px-3.5 py-2.5 text-sm text-fg focus:border-accent focus:outline-none"
+                className="w-full rounded-xl border border-[#303034] bg-[#0B0B0D] px-3.5 py-2.5 text-sm text-fg focus:border-[#D4AF37] focus:outline-none"
               >
                 <option value="">-- Choose message to reply --</option>
                 {messages.map((m) => {
@@ -450,7 +445,7 @@ export default function Drafts({ gmail, health }) {
               <select
                 value={replyType}
                 onChange={(e) => setReplyType(e.target.value)}
-                className="w-full rounded-xl border border-line bg-ink-950 px-3.5 py-2.5 text-sm text-fg focus:border-accent focus:outline-none"
+                className="w-full rounded-xl border border-[#303034] bg-[#0B0B0D] px-3.5 py-2.5 text-sm text-fg focus:border-[#D4AF37] focus:outline-none"
               >
                 {REPLY_TYPES.map((t) => (
                   <option key={t.id} value={t.id}>{t.label}</option>
@@ -461,7 +456,7 @@ export default function Drafts({ gmail, health }) {
               <button
                 type="submit"
                 disabled={busy || !selectedMessageId}
-                className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-accent-strong px-4 py-2.5 text-sm font-semibold text-white shadow-lg transition-colors hover:bg-indigo-500 disabled:bg-ink-700 disabled:text-muted"
+                className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-[#D4AF37] px-4 py-2.5 text-sm font-semibold text-[#0B0B0D] shadow-lg transition-colors hover:bg-[#F5D77A] disabled:bg-[#303034] disabled:text-muted"
               >
                 {busy ? <Loader2 className="size-4 animate-spin" /> : <Mail className="size-4" />}
                 Generate New Drafts
@@ -481,8 +476,8 @@ export default function Drafts({ gmail, health }) {
               onClick={() => setActiveTab(tab.value)}
               className={`rounded-xl px-4 py-2 text-xs font-semibold transition-colors ${
                 activeTab === tab.value
-                  ? "bg-accent-strong text-white shadow-md"
-                  : "border border-line bg-ink-900/80 text-muted hover:text-fg"
+                  ? "bg-[#D4AF37] text-[#0B0B0D] shadow-md"
+                  : "border border-[#303034] bg-[#19191C] text-muted hover:text-fg"
               }`}
             >
               {tab.label} {tab.value === "All" ? totalDraftsCount : tab.value === "Opportunities" ? 14 : tab.value === "Follow Up" ? 8 : 6}
@@ -492,13 +487,13 @@ export default function Drafts({ gmail, health }) {
         <div className="flex items-center gap-2">
           <button
             type="button"
-            className="inline-flex items-center gap-2 rounded-xl border border-line bg-ink-900/80 px-3 py-2 text-xs font-medium text-muted hover:text-fg"
+            className="inline-flex items-center gap-2 rounded-xl border border-[#303034] bg-[#19191C] px-3 py-2 text-xs font-medium text-muted hover:text-fg"
           >
             <ArrowUpDown className="size-3.5" /> Sort: Newest
           </button>
           <button
             type="button"
-            className="grid size-9 place-items-center rounded-xl border border-line bg-ink-900/80 text-muted hover:text-fg"
+            className="grid size-9 place-items-center rounded-xl border border-[#303034] bg-[#19191C] text-muted hover:text-fg"
             aria-label="Filter"
           >
             <Filter className="size-4" />
@@ -510,14 +505,14 @@ export default function Drafts({ gmail, health }) {
       <div className="grid gap-6 lg:grid-cols-12">
         {/* Left Column: Drafts List (5 cols) */}
         <div className="lg:col-span-5 flex flex-col gap-3">
-          <div className="rounded-2xl border border-line bg-ink-900/80 overflow-hidden shadow-xl">
-            <div className="border-b border-line px-5 py-3.5 flex items-center justify-between">
+          <div className="rounded-2xl border border-[#303034] bg-[#19191C] overflow-hidden shadow-xl">
+            <div className="border-b border-[#303034] px-5 py-3.5 flex items-center justify-between">
               <span className="text-xs font-bold uppercase tracking-wider text-muted">Drafts List ({filteredDrafts.length})</span>
             </div>
 
             {state === "loading" && (
               <div className="flex items-center justify-center gap-2 p-12 text-sm text-muted" role="status">
-                <Loader2 aria-hidden="true" className="size-5 animate-spin text-accent" />
+                <Loader2 aria-hidden="true" className="size-5 animate-spin text-[#D4AF37]" />
                 Loading drafts...
               </div>
             )}
@@ -542,7 +537,7 @@ export default function Drafts({ gmail, health }) {
             )}
 
             {state === "ready" && filteredDrafts.length > 0 && (
-              <div className="divide-y divide-line max-h-[700px] overflow-y-auto">
+              <div className="divide-y divide-[#303034] max-h-[700px] overflow-y-auto">
                 {filteredDrafts.map((d) => {
                   const isSelected = selectedDraft?.draft_id === d.draft_id;
                   const companyName = d.original_sender || d.recipient || "Company";
@@ -552,13 +547,13 @@ export default function Drafts({ gmail, health }) {
                     <div
                       key={d.draft_id}
                       onClick={() => handleSelectDraft(d)}
-                      className={`cursor-pointer p-4 transition-all hover:bg-ink-800/60 ${
-                        isSelected ? "bg-ink-800/90 border-l-4 border-accent shadow-inner" : "bg-transparent"
+                      className={`cursor-pointer p-4 transition-all hover:bg-[#1F1F22] ${
+                        isSelected ? "bg-[#D4AF37]/15 border-l-4 border-[#D4AF37] shadow-inner" : "bg-transparent"
                       }`}
                     >
                       <div className="flex items-start justify-between gap-3">
                         <div className="flex items-start gap-3">
-                          <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-emerald-500/10 text-emerald-300 font-bold border border-emerald-500/20 text-sm">
+                          <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-[#1F1F22] text-[#D4AF37] font-bold border border-[#303034] text-sm">
                             {initial}
                           </span>
                           <div>
@@ -581,8 +576,8 @@ export default function Drafts({ gmail, health }) {
 
         {/* Right Column: Selected Draft Detail Panel (7 cols) */}
         <div className="lg:col-span-7 flex flex-col">
-          <div className="rounded-2xl border border-line bg-ink-900/80 p-6 shadow-xl relative overflow-hidden">
-            <div className="absolute right-0 top-0 h-48 w-48 bg-gradient-to-br from-purple-500/10 via-indigo-500/5 to-transparent pointer-events-none rounded-bl-full" />
+          <div className="rounded-2xl border border-[#303034] bg-[#19191C] p-6 shadow-xl relative overflow-hidden">
+            <div className="absolute right-0 top-0 h-48 w-48 bg-gradient-to-br from-[#D4AF37]/10 via-[#303034]/10 to-transparent pointer-events-none rounded-bl-full" />
 
             {!selectedDraft ? (
               <div className="flex flex-col items-center justify-center p-16 text-center text-muted">
@@ -602,21 +597,21 @@ export default function Drafts({ gmail, health }) {
                   </div>
                   <div className="flex items-center gap-2">
                     <EligibilityBadge eligibility={selectedClassification?.reply_eligibility || "reply_recommended"} />
-                    <span className="inline-flex items-center rounded-lg bg-indigo-500/10 border border-indigo-500/20 px-3 py-1 text-xs font-semibold text-indigo-300">
+                    <span className="inline-flex items-center rounded-lg bg-[#1F1F22] border border-[#303034] px-3 py-1 text-xs font-semibold text-[#D4AF37]">
                       96% AI Confidence
                     </span>
                   </div>
                 </div>
 
                 {/* Tabs Row */}
-                <div className="flex items-center gap-2 border-b border-line pb-3">
+                <div className="flex items-center gap-2 border-b border-[#303034] pb-3">
                   <button
                     type="button"
                     onClick={() => setDetailTab("draft")}
                     className={`inline-flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs font-semibold transition-colors ${
                       detailTab === "draft"
-                        ? "bg-accent-strong text-white shadow-md"
-                        : "border border-line bg-ink-950/60 text-muted hover:text-fg"
+                        ? "bg-[#D4AF37] text-[#0B0B0D] shadow-md"
+                        : "border border-[#303034] bg-[#141416] text-muted hover:text-fg"
                     }`}
                   >
                     <Edit3 className="size-3.5" /> Draft Reply
@@ -626,8 +621,8 @@ export default function Drafts({ gmail, health }) {
                     onClick={() => setDetailTab("original")}
                     className={`inline-flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs font-semibold transition-colors ${
                       detailTab === "original"
-                        ? "bg-accent-strong text-white shadow-md"
-                        : "border border-line bg-ink-950/60 text-muted hover:text-fg"
+                        ? "bg-[#D4AF37] text-[#0B0B0D] shadow-md"
+                        : "border border-[#303034] bg-[#141416] text-muted hover:text-fg"
                     }`}
                   >
                     <Mail className="size-3.5" /> Original Email
@@ -637,8 +632,8 @@ export default function Drafts({ gmail, health }) {
                     onClick={() => setDetailTab("opportunity")}
                     className={`inline-flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs font-semibold transition-colors ${
                       detailTab === "opportunity"
-                        ? "bg-accent-strong text-white shadow-md"
-                        : "border border-line bg-ink-950/60 text-muted hover:text-fg"
+                        ? "bg-[#D4AF37] text-[#0B0B0D] shadow-md"
+                        : "border border-[#303034] bg-[#141416] text-muted hover:text-fg"
                     }`}
                   >
                     <Building className="size-3.5" /> Opportunity Details
@@ -656,7 +651,7 @@ export default function Drafts({ gmail, health }) {
                           value={editRecipient}
                           onChange={(e) => setEditRecipient(e.target.value)}
                           disabled={selectedDraft.status === "sent"}
-                          className="w-full rounded-xl border border-line bg-ink-950 px-3 py-2 text-xs text-fg focus:border-accent focus:outline-none"
+                          className="w-full rounded-xl border border-[#303034] bg-[#0B0B0D] px-3 py-2 text-xs text-fg focus:border-[#D4AF37] focus:outline-none"
                         />
                       </div>
                       <div>
@@ -666,7 +661,7 @@ export default function Drafts({ gmail, health }) {
                           value={editSubject}
                           onChange={(e) => setEditSubject(e.target.value)}
                           disabled={selectedDraft.status === "sent"}
-                          className="w-full rounded-xl border border-line bg-ink-950 px-3 py-2 text-xs text-fg focus:border-accent focus:outline-none"
+                          className="w-full rounded-xl border border-[#303034] bg-[#0B0B0D] px-3 py-2 text-xs text-fg focus:border-[#D4AF37] focus:outline-none"
                         />
                       </div>
                     </div>
@@ -678,7 +673,7 @@ export default function Drafts({ gmail, health }) {
                         value={editBody}
                         onChange={(e) => setEditBody(e.target.value)}
                         disabled={selectedDraft.status === "sent"}
-                        className="w-full rounded-xl border border-line bg-ink-950 p-4 text-sm text-fg focus:border-accent focus:outline-none font-sans leading-relaxed"
+                        className="w-full rounded-xl border border-[#303034] bg-[#0B0B0D] p-4 text-sm text-fg focus:border-[#D4AF37] focus:outline-none font-sans leading-relaxed"
                       />
                     </div>
 
@@ -688,12 +683,12 @@ export default function Drafts({ gmail, health }) {
                         This draft was successfully sent through Gmail on {formatDateTime(selectedDraft.sent_at)}.
                       </div>
                     ) : (
-                      <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-line">
+                      <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-[#303034]">
                         <div className="flex flex-wrap items-center gap-2">
                           <button
                             type="button"
                             onClick={handleCopyDraft}
-                            className="inline-flex items-center gap-1.5 rounded-xl border border-line bg-ink-950 px-3 py-2 text-xs font-semibold text-fg hover:bg-ink-800"
+                            className="inline-flex items-center gap-1.5 rounded-xl border border-[#303034] bg-[#141416] px-3 py-2 text-xs font-semibold text-fg hover:bg-[#1F1F22]"
                           >
                             <Copy className="size-3.5" /> Copy Draft
                           </button>
@@ -701,7 +696,7 @@ export default function Drafts({ gmail, health }) {
                             type="button"
                             onClick={handleSave}
                             disabled={busy}
-                            className="inline-flex items-center gap-1.5 rounded-xl border border-line bg-ink-950 px-3 py-2 text-xs font-semibold text-fg hover:bg-ink-800"
+                            className="inline-flex items-center gap-1.5 rounded-xl border border-[#303034] bg-[#141416] px-3 py-2 text-xs font-semibold text-fg hover:bg-[#1F1F22]"
                           >
                             <Save className="size-3.5" /> Save
                           </button>
@@ -709,7 +704,7 @@ export default function Drafts({ gmail, health }) {
                             type="button"
                             onClick={handleRegenerate}
                             disabled={busy}
-                            className="inline-flex items-center gap-1.5 rounded-xl border border-line bg-ink-950 px-3 py-2 text-xs font-semibold text-fg hover:bg-ink-800"
+                            className="inline-flex items-center gap-1.5 rounded-xl border border-[#303034] bg-[#141416] px-3 py-2 text-xs font-semibold text-fg hover:bg-[#1F1F22]"
                           >
                             <RefreshCw className="size-3.5" /> Regenerate
                           </button>
@@ -745,7 +740,7 @@ export default function Drafts({ gmail, health }) {
                 {/* Tab 2: Original Email */}
                 {detailTab === "original" && (
                   <div className="flex flex-col gap-4">
-                    <div className="rounded-xl border border-line bg-ink-950 p-5">
+                    <div className="rounded-xl border border-[#303034] bg-[#0B0B0D] p-5">
                       <h4 className="text-sm font-bold text-white">{selectedDraft.original_subject || selectedDraft.subject}</h4>
                       <p className="text-xs text-muted mt-1">From: <strong className="text-fg">{selectedDraft.original_sender}</strong></p>
                       {selectedDraft.reason && (
@@ -753,7 +748,7 @@ export default function Drafts({ gmail, health }) {
                           <strong>AI Analysis Reason:</strong> {selectedDraft.reason}
                         </div>
                       )}
-                      <div className="mt-4 pt-4 border-t border-line text-sm text-muted leading-relaxed whitespace-pre-wrap">
+                      <div className="mt-4 pt-4 border-t border-[#303034] text-sm text-muted leading-relaxed whitespace-pre-wrap">
                         {selectedDraft.original_body || "(Original message body unavailable)"}
                       </div>
                     </div>
@@ -766,29 +761,29 @@ export default function Drafts({ gmail, health }) {
                     {selectedOpportunity ? (
                       <div className="flex flex-col gap-4">
                         <div className="grid gap-3 sm:grid-cols-2 text-xs">
-                          <div className="rounded-xl border border-line bg-ink-950 p-3.5">
+                          <div className="rounded-xl border border-[#303034] bg-[#0B0B0D] p-3.5">
                             <span className="text-muted block">Company</span>
                             <span className="font-semibold text-white text-sm">{selectedOpportunity.company_name || "N/A"}</span>
                           </div>
-                          <div className="rounded-xl border border-line bg-ink-950 p-3.5">
+                          <div className="rounded-xl border border-[#303034] bg-[#0B0B0D] p-3.5">
                             <span className="text-muted block">Role</span>
                             <span className="font-semibold text-white text-sm">{selectedOpportunity.job_role || "N/A"}</span>
                           </div>
-                          <div className="rounded-xl border border-line bg-ink-950 p-3.5">
+                          <div className="rounded-xl border border-[#303034] bg-[#0B0B0D] p-3.5">
                             <span className="text-muted block">Location</span>
                             <span className="font-semibold text-white text-sm">{selectedOpportunity.location || "N/A"}</span>
                           </div>
-                          <div className="rounded-xl border border-line bg-ink-950 p-3.5">
+                          <div className="rounded-xl border border-[#303034] bg-[#0B0B0D] p-3.5">
                             <span className="text-muted block">Deadline</span>
                             <span className="font-semibold text-amber-200 text-sm">{selectedOpportunity.deadline || "Rolling"}</span>
                           </div>
                         </div>
                         {selectedOpportunity.skills && selectedOpportunity.skills.length > 0 && (
-                          <div className="rounded-xl border border-line bg-ink-950 p-4">
-                            <span className="text-xs font-bold uppercase tracking-wider text-accent block mb-2">Required Skills</span>
+                          <div className="rounded-xl border border-[#303034] bg-[#0B0B0D] p-4">
+                            <span className="text-xs font-bold uppercase tracking-wider text-[#D4AF37] block mb-2">Required Skills</span>
                             <div className="flex flex-wrap gap-1.5">
                               {selectedOpportunity.skills.map((s, idx) => (
-                                <span key={idx} className="rounded-lg bg-ink-800 border border-line px-2.5 py-1 text-xs text-fg">
+                                <span key={idx} className="rounded-lg bg-[#1F1F22] border border-[#303034] px-2.5 py-1 text-xs text-fg">
                                   {s}
                                 </span>
                               ))}
@@ -814,14 +809,14 @@ export default function Drafts({ gmail, health }) {
       {/* Confirmation Modal before sending */}
       {confirmModal && selectedDraft && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
-          <div className="w-full max-w-lg rounded-2xl border border-line bg-ink-950 p-6 shadow-2xl">
-            <div className="flex items-center justify-between pb-4 border-b border-line">
+          <div className="w-full max-w-lg rounded-2xl border border-[#303034] bg-[#0B0B0D] p-6 shadow-2xl">
+            <div className="flex items-center justify-between pb-4 border-b border-[#303034]">
               <h3 className="text-lg font-bold text-fg flex items-center gap-2">
                 <CheckCircle className="size-5 text-emerald-400" /> Confirm Email Send
               </h3>
               <button
                 onClick={() => setConfirmModal(false)}
-                className="rounded-lg p-1 text-muted hover:bg-ink-800 hover:text-fg"
+                className="rounded-lg p-1 text-muted hover:bg-[#1F1F22] hover:text-fg"
               >
                 <X className="size-5" />
               </button>
@@ -831,7 +826,7 @@ export default function Drafts({ gmail, health }) {
               Please review the final recipient, subject, and message body before approving the send through your Gmail account.
             </p>
 
-            <div className="mt-4 space-y-3 rounded-xl border border-line bg-ink-900 p-4 text-xs">
+            <div className="mt-4 space-y-3 rounded-xl border border-[#303034] bg-[#19191C] p-4 text-xs">
               <div>
                 <span className="text-muted block font-medium">To (Recipient):</span>
                 <span className="font-semibold text-fg">{editRecipient}</span>
@@ -842,17 +837,17 @@ export default function Drafts({ gmail, health }) {
               </div>
               <div>
                 <span className="text-muted block font-medium">Message Body:</span>
-                <div className="mt-1 max-h-48 overflow-y-auto whitespace-pre-wrap rounded-lg bg-ink-950 p-3 font-mono text-fg border border-line/50">
+                <div className="mt-1 max-h-48 overflow-y-auto whitespace-pre-wrap rounded-lg bg-[#0B0B0D] p-3 font-mono text-fg border border-[#303034]">
                   {editBody}
                 </div>
               </div>
             </div>
 
-            <div className="mt-6 flex items-center justify-end gap-3 pt-4 border-t border-line">
+            <div className="mt-6 flex items-center justify-end gap-3 pt-4 border-t border-[#303034]">
               <button
                 type="button"
                 onClick={() => setConfirmModal(false)}
-                className="rounded-lg border border-line bg-ink-800 px-4 py-2 text-sm font-semibold text-fg hover:bg-ink-700"
+                className="rounded-lg border border-[#303034] bg-[#1F1F22] px-4 py-2 text-sm font-semibold text-fg hover:bg-[#2A2A2E]"
               >
                 Cancel
               </button>
@@ -873,14 +868,14 @@ export default function Drafts({ gmail, health }) {
       {/* Confirm No Reply Generate Warning Modal */}
       {confirmNoReplyModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
-          <div className="w-full max-w-md rounded-2xl border border-line bg-ink-950 p-6 shadow-2xl">
-            <div className="flex items-center justify-between pb-4 border-b border-line">
+          <div className="w-full max-w-md rounded-2xl border border-[#303034] bg-[#0B0B0D] p-6 shadow-2xl">
+            <div className="flex items-center justify-between pb-4 border-b border-[#303034]">
               <h3 className="text-lg font-bold text-fg flex items-center gap-2">
                 <AlertTriangle className="size-5 text-amber-400" /> Generate Drafts Warning
               </h3>
               <button
                 onClick={() => setConfirmNoReplyModal(false)}
-                className="rounded-lg p-1 text-muted hover:bg-ink-800 hover:text-fg"
+                className="rounded-lg p-1 text-muted hover:bg-[#1F1F22] hover:text-fg"
               >
                 <X className="size-5" />
               </button>
@@ -890,7 +885,6 @@ export default function Drafts({ gmail, health }) {
               This email has been evaluated as <strong>No Reply Needed</strong>:
             </p>
 
-
             <div className="mt-3 rounded-xl border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-200">
               {pendingEligibilityReason}
             </div>
@@ -899,11 +893,11 @@ export default function Drafts({ gmail, health }) {
               Automatically generating a reply draft for this email is not recommended. You can proceed to generate a draft if you intentionally choose to reply.
             </p>
 
-            <div className="mt-6 flex items-center justify-end gap-3 pt-4 border-t border-line">
+            <div className="mt-6 flex items-center justify-end gap-3 pt-4 border-t border-[#303034]">
               <button
                 type="button"
-                onClick={() => setConfirmModal(false)}
-                className="rounded-lg border border-line bg-ink-800 px-4 py-2 text-sm font-semibold text-fg hover:bg-ink-700"
+                onClick={() => setConfirmNoReplyModal(false)}
+                className="rounded-lg border border-[#303034] bg-[#1F1F22] px-4 py-2 text-sm font-semibold text-fg hover:bg-[#2A2A2E]"
               >
                 Cancel
               </button>
@@ -911,7 +905,7 @@ export default function Drafts({ gmail, health }) {
                 type="button"
                 onClick={handleConfirmNoReplyGenerate}
                 disabled={busy}
-                className="inline-flex items-center gap-2 rounded-lg bg-accent-strong px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500"
+                className="inline-flex items-center gap-2 rounded-lg bg-[#D4AF37] px-4 py-2 text-sm font-semibold text-[#0B0B0D] hover:bg-[#F5D77A]"
               >
                 {busy ? <Loader2 className="size-4 animate-spin" /> : <ArrowRight className="size-4" />}
                 Continue Anyway

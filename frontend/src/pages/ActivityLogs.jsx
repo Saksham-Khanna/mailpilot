@@ -36,7 +36,7 @@ function ActivityBadge({ type }) {
   const isSync = type?.includes("sync") || type?.includes("connected");
 
   const tones = isDraft
-    ? "bg-purple-500/10 text-purple-300 border-purple-500/20"
+    ? "bg-[#D4AF37]/15 text-[#D4AF37] border-[#D4AF37]/30"
     : isClassify
     ? "bg-amber-500/10 text-amber-300 border-amber-500/20"
     : isSync
@@ -99,7 +99,6 @@ export default function ActivityLogs({ health }) {
 
   const selectedLog = logs.find((l) => l.log_id === selectedId) || logs[0] || null;
 
-  // Stat counts
   const totalActivitiesCount = total || logs.length || 780;
   const repliesGeneratedCount = logs.filter((l) => l.activity_type?.includes("draft")).length || 268;
   const opportunitiesFoundCount = logs.filter((l) => l.activity_type?.includes("classify")).length || 42;
@@ -108,7 +107,6 @@ export default function ActivityLogs({ health }) {
     <div className="flex flex-col gap-6 font-sans text-fg">
       {health?.state === "offline" && <ErrorBanner onRetry={health.retry} />}
 
-      {/* Page Header */}
       <div>
         <h2 className="text-2xl font-bold tracking-tight sm:text-3xl text-white">Activity Logs</h2>
         <p className="mt-1 text-sm text-muted">
@@ -124,9 +122,9 @@ export default function ActivityLogs({ health }) {
 
       {/* Top 4 Stat Cards */}
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <div className="rounded-2xl border border-line bg-ink-900/80 p-5 shadow-sm transition-all hover:border-accent/40">
+        <div className="rounded-2xl border border-[#303034] bg-[#19191C] p-5 shadow-sm transition-all hover:border-[#D4AF37]/40">
           <div className="flex items-center justify-between">
-            <span className="grid size-10 place-items-center rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20">
+            <span className="grid size-10 place-items-center rounded-xl bg-[#1F1F22] text-[#D4AF37] border border-[#303034]">
               <ScrollText className="size-5" />
             </span>
           </div>
@@ -136,9 +134,9 @@ export default function ActivityLogs({ health }) {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-line bg-ink-900/80 p-5 shadow-sm transition-all hover:border-accent/40">
+        <div className="rounded-2xl border border-[#303034] bg-[#19191C] p-5 shadow-sm transition-all hover:border-[#D4AF37]/40">
           <div className="flex items-center justify-between">
-            <span className="grid size-10 place-items-center rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            <span className="grid size-10 place-items-center rounded-xl bg-[#1F1F22] text-[#D4AF37] border border-[#303034]">
               <CheckCircle className="size-5" />
             </span>
           </div>
@@ -148,9 +146,9 @@ export default function ActivityLogs({ health }) {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-line bg-ink-900/80 p-5 shadow-sm transition-all hover:border-accent/40">
+        <div className="rounded-2xl border border-[#303034] bg-[#19191C] p-5 shadow-sm transition-all hover:border-[#D4AF37]/40">
           <div className="flex items-center justify-between">
-            <span className="grid size-10 place-items-center rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
+            <span className="grid size-10 place-items-center rounded-xl bg-[#1F1F22] text-[#D4AF37] border border-[#303034]">
               <FileText className="size-5" />
             </span>
           </div>
@@ -160,9 +158,9 @@ export default function ActivityLogs({ health }) {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-line bg-ink-900/80 p-5 shadow-sm transition-all hover:border-accent/40">
+        <div className="rounded-2xl border border-[#303034] bg-[#19191C] p-5 shadow-sm transition-all hover:border-[#D4AF37]/40">
           <div className="flex items-center justify-between">
-            <span className="grid size-10 place-items-center rounded-xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+            <span className="grid size-10 place-items-center rounded-xl bg-[#1F1F22] text-[#D4AF37] border border-[#303034]">
               <Calendar className="size-5" />
             </span>
           </div>
@@ -183,8 +181,8 @@ export default function ActivityLogs({ health }) {
               onClick={() => setActiveTab(tab.value)}
               className={`rounded-xl px-4 py-2 text-xs font-semibold transition-colors ${
                 activeTab === tab.value
-                  ? "bg-accent-strong text-white shadow-md"
-                  : "border border-line bg-ink-900/80 text-muted hover:text-fg"
+                  ? "bg-[#D4AF37] text-[#0B0B0D] shadow-md"
+                  : "border border-[#303034] bg-[#19191C] text-muted hover:text-fg"
               }`}
             >
               {tab.label} {tab.value === "" ? totalActivitiesCount : tab.value === "sync" ? 310 : tab.value === "classified" ? 42 : tab.value === "draft" ? 268 : 160}
@@ -194,13 +192,13 @@ export default function ActivityLogs({ health }) {
         <div className="flex items-center gap-2">
           <button
             type="button"
-            className="inline-flex items-center gap-2 rounded-xl border border-line bg-ink-900/80 px-3 py-2 text-xs font-medium text-muted hover:text-fg"
+            className="inline-flex items-center gap-2 rounded-xl border border-[#303034] bg-[#19191C] px-3 py-2 text-xs font-medium text-muted hover:text-fg"
           >
             <ArrowUpDown className="size-3.5" /> Sort: Newest
           </button>
           <button
             type="button"
-            className="grid size-9 place-items-center rounded-xl border border-line bg-ink-900/80 text-muted hover:text-fg"
+            className="grid size-9 place-items-center rounded-xl border border-[#303034] bg-[#19191C] text-muted hover:text-fg"
             aria-label="Filter"
           >
             <Filter className="size-4" />
@@ -212,14 +210,14 @@ export default function ActivityLogs({ health }) {
       <div className="grid gap-6 lg:grid-cols-12">
         {/* Left Column: Activity Timeline List (5 cols) */}
         <div className="lg:col-span-5 flex flex-col gap-3">
-          <div className="rounded-2xl border border-line bg-ink-900/80 overflow-hidden shadow-xl">
-            <div className="border-b border-line px-5 py-3.5 flex items-center justify-between">
+          <div className="rounded-2xl border border-[#303034] bg-[#19191C] overflow-hidden shadow-xl">
+            <div className="border-b border-[#303034] px-5 py-3.5 flex items-center justify-between">
               <span className="text-xs font-bold uppercase tracking-wider text-muted">Activity Timeline ({logs.length})</span>
               <button
                 type="button"
                 onClick={loadLogs}
                 disabled={state === "loading"}
-                className="text-xs text-accent hover:underline flex items-center gap-1"
+                className="text-xs text-[#D4AF37] hover:underline flex items-center gap-1"
               >
                 <RefreshCw className={`size-3 ${state === "loading" ? "animate-spin" : ""}`} /> Refresh
               </button>
@@ -227,7 +225,7 @@ export default function ActivityLogs({ health }) {
 
             {state === "loading" && (
               <div className="flex items-center justify-center gap-2 p-12 text-sm text-muted" role="status">
-                <Loader2 aria-hidden="true" className="size-5 animate-spin text-accent" />
+                <Loader2 aria-hidden="true" className="size-5 animate-spin text-[#D4AF37]" />
                 Loading activity logs...
               </div>
             )}
@@ -252,7 +250,7 @@ export default function ActivityLogs({ health }) {
             )}
 
             {state === "ready" && logs.length > 0 && (
-              <div className="divide-y divide-line max-h-[700px] overflow-y-auto">
+              <div className="divide-y divide-[#303034] max-h-[700px] overflow-y-auto">
                 {logs.map((log) => {
                   const isSelected = log.log_id === selectedId;
                   const Icon = getLogIcon(log.activity_type);
@@ -262,13 +260,13 @@ export default function ActivityLogs({ health }) {
                     <div
                       key={log.log_id}
                       onClick={() => setSelectedId(log.log_id)}
-                      className={`cursor-pointer p-4 transition-all hover:bg-ink-800/60 ${
-                        isSelected ? "bg-ink-800/90 border-l-4 border-accent shadow-inner" : "bg-transparent"
+                      className={`cursor-pointer p-4 transition-all hover:bg-[#1F1F22] ${
+                        isSelected ? "bg-[#D4AF37]/15 border-l-4 border-[#D4AF37] shadow-inner" : "bg-transparent"
                       }`}
                     >
                       <div className="flex items-start justify-between gap-3">
                         <div className="flex items-start gap-3">
-                          <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-purple-500/10 text-purple-300 font-bold border border-purple-500/20 text-sm">
+                          <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-[#1F1F22] text-[#D4AF37] font-bold border border-[#303034] text-sm">
                             <Icon className="size-4" />
                           </span>
                           <div>
@@ -291,8 +289,8 @@ export default function ActivityLogs({ health }) {
 
         {/* Right Column: Selected Activity Detail Panel (7 cols) */}
         <div className="lg:col-span-7 flex flex-col">
-          <div className="rounded-2xl border border-line bg-ink-900/80 p-6 shadow-xl relative overflow-hidden">
-            <div className="absolute right-0 top-0 h-48 w-48 bg-gradient-to-br from-purple-500/10 via-indigo-500/5 to-transparent pointer-events-none rounded-bl-full" />
+          <div className="rounded-2xl border border-[#303034] bg-[#19191C] p-6 shadow-xl relative overflow-hidden">
+            <div className="absolute right-0 top-0 h-48 w-48 bg-gradient-to-br from-[#D4AF37]/10 via-[#303034]/10 to-transparent pointer-events-none rounded-bl-full" />
 
             {!selectedLog ? (
               <div className="flex flex-col items-center justify-center p-16 text-center text-muted">
@@ -316,25 +314,25 @@ export default function ActivityLogs({ health }) {
                 </div>
 
                 {/* Details Section */}
-                <div className="rounded-xl border border-line bg-ink-950 p-5">
-                  <span className="text-xs font-bold uppercase tracking-wider text-accent block mb-3">Details</span>
+                <div className="rounded-xl border border-[#303034] bg-[#0B0B0D] p-5">
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#D4AF37] block mb-3">Details</span>
                   <div className="grid gap-3 text-xs">
-                    <div className="flex items-center justify-between py-1.5 border-b border-line/40">
+                    <div className="flex items-center justify-between py-1.5 border-b border-[#303034]/40">
                       <span className="text-muted">Event Type</span>
                       <span className="font-mono text-fg">{selectedLog.activity_type}</span>
                     </div>
-                    <div className="flex items-center justify-between py-1.5 border-b border-line/40">
+                    <div className="flex items-center justify-between py-1.5 border-b border-[#303034]/40">
                       <span className="text-muted">Status</span>
                       <span className="font-semibold text-emerald-300 capitalize">{selectedLog.status}</span>
                     </div>
                     {selectedLog.message_id && (
-                      <div className="flex items-center justify-between py-1.5 border-b border-line/40">
+                      <div className="flex items-center justify-between py-1.5 border-b border-[#303034]/40">
                         <span className="text-muted">Message ID</span>
                         <span className="font-mono text-fg">{selectedLog.message_id}</span>
                       </div>
                     )}
                     {selectedLog.metadata && Object.entries(selectedLog.metadata).map(([k, v]) => (
-                      <div key={k} className="flex items-center justify-between py-1.5 border-b border-line/40">
+                      <div key={k} className="flex items-center justify-between py-1.5 border-b border-[#303034]/40">
                         <span className="text-muted capitalize">{k.replace(/_/g, " ")}</span>
                         <span className="font-medium text-fg">{String(v)}</span>
                       </div>
@@ -343,8 +341,8 @@ export default function ActivityLogs({ health }) {
                 </div>
 
                 {/* Description & Preview */}
-                <div className="rounded-xl border border-line bg-ink-950 p-5">
-                  <span className="text-xs font-bold uppercase tracking-wider text-accent block mb-2">Event Description</span>
+                <div className="rounded-xl border border-[#303034] bg-[#0B0B0D] p-5">
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#D4AF37] block mb-2">Event Description</span>
                   <p className="text-sm text-fg leading-relaxed">{selectedLog.description}</p>
                 </div>
 
@@ -352,13 +350,13 @@ export default function ActivityLogs({ health }) {
                 <div className="flex flex-wrap items-center gap-3 pt-2">
                   <a
                     href="#/drafts"
-                    className="inline-flex items-center gap-2 rounded-xl bg-accent-strong px-4 py-2.5 text-xs font-semibold text-white shadow-lg transition-colors hover:bg-indigo-500"
+                    className="inline-flex items-center gap-2 rounded-xl bg-[#D4AF37] px-4 py-2.5 text-xs font-semibold text-[#0B0B0D] shadow-lg transition-colors hover:bg-[#F5D77A]"
                   >
                     <ExternalLink className="size-3.5" /> View Full Draft
                   </a>
                   <a
                     href="#/inbox"
-                    className="inline-flex items-center gap-2 rounded-xl border border-line bg-ink-950 px-4 py-2.5 text-xs font-semibold text-fg transition-colors hover:bg-ink-800"
+                    className="inline-flex items-center gap-2 rounded-xl border border-[#303034] bg-[#0B0B0D] px-4 py-2.5 text-xs font-semibold text-fg transition-colors hover:bg-[#1F1F22]"
                   >
                     <Mail className="size-3.5" /> Open Original Email
                   </a>
