@@ -1,35 +1,50 @@
 # MailPilot — Last Session Handoff
 
-**Date:** 2026-11-04  
+**Date:** 2026-11-05  
 **Workspace:** `D:\work\mailpilot\mailpilot`  
-**Status:** **Complete Application Theme Redesign to Gray + Black + Golden visual theme across all pages, components, and Tailwind tokens.**
+**Status:** **Theme redesign completed, commits pushed to master, and comprehensive product roadmap defined for building a production-ready user-usable product.**
 
 ## Summary of Accomplishments
-1. **Complete Theme Redesign (Gray + Black + Golden)**:
+1. **GitHub Contributions Fix & Commit Push**:
+   - Organized changes into 5 clean, atomic commits (`refactor(components)`, `refactor(pages)`, `style(css)`, `docs`, `docs`).
+   - Discovered and resolved the remote default branch discrepancy (`main` vs `master` on GitHub) so that contribution graph activity displays correctly on GitHub.
+   - Pushed all commits successfully to `master`.
+
+2. **Complete Theme Redesign (Gray + Black + Golden)**:
    - Established global design tokens in `frontend/src/index.css`: Main background (`#0B0B0D`), Sidebar background (`#141416`), Surfaces/Panels (`#19191C`), Cards (`#1F1F22`), Borders (`#303034`), Primary Gold (`#D4AF37`), Light Gold (`#F5D77A`), Primary Text (`#F5F5F5`), Secondary/Muted Text (`#A3A3A8` / `#77777D`).
-   - Removed old blue, purple, and green decorative accent styling across the app.
-   - Styled Sidebar with deep charcoal background, subtle gray separators, muted golden background for active navigation items, and gold icon accents.
-   - Refactored Buttons to use primary golden backgrounds with dark text and dark secondary buttons with subtle borders.
-   - Updated Inputs and Search with dark graphite backgrounds, gray borders, and golden focus rings.
-   - Updated Tables, Lists, and Detail Panels with consistent dark surfaces, subtle gold highlighting for selected items, and readable typography.
+   - Refactored all components and pages (`Sidebar`, `Header`, `Overview`, `Inbox`, `Opportunities`, `Drafts`, `ActivityLogs`, `Settings`, etc.) to match the unified dark + gold aesthetic.
+   - Frontend Vite production build and backend pytest suite (133+ tests) passing successfully.
 
-2. **Components & Pages Updated**:
-   - `Sidebar.jsx`, `Header.jsx`, `StatCard.jsx`, `Panel.jsx`, `SecurityNotice.jsx`, `GmailConnectionCard.jsx`, `MessageList.jsx`, `MessageDetail.jsx`
-   - `Overview.jsx`, `Inbox.jsx`, `Opportunities.jsx`, `Drafts.jsx`, `ActivityLogs.jsx`, `Settings.jsx`, `ComingSoon.jsx`
+## Product Roadmap to Production-Ready User-Usable Product
+To transform MailPilot from an inbox viewer into a fully user-usable, production-ready product, we will implement the following features step-by-step in future sessions:
 
-3. **Build & Test Verification**:
-   - Frontend production build passed successfully via Vite (`npm run build`).
-   - All 133 backend tests passed successfully via pytest (`pytest`).
+1. **Phase 3: AI Email Classification & Opportunity Extraction**
+   - Integrate LLM (Groq / OpenAI) to automatically classify incoming synced emails (Recruiter Outreach, Interview Invite, OA, Rejection).
+   - Extract key metadata (Company Name, Role/Position, Salary, Deadline).
+   - Populate the **Opportunities** page dashboard cards with real extracted data.
 
-## Discussion / Future Widget Suggestions
-- Reviewed the mock "Outreach Performance" chart/stats on the Overview page and agreed it is less relevant for an inbound email intelligence tool (since MailPilot does not do mass cold outreach).
-- Suggested product-aligned alternatives for future implementation:
-  1. **Upcoming Opportunity Deadlines (Application Tracker)**
-  2. **Inbox Pipeline / Funnel View** (Synced Inbound → Opportunities Extracted → Drafts Ready → Interviews)
-  3. **AI Classification Breakdown**
-  4. **Priority Action Queue**
+2. **Phase 4: Resume Context & AI Reply Drafts**
+   - Store user resume (markdown/text/PDF).
+   - Generate tailored reply drafts using LLM matching recruiter email context with user resume.
+   - Wire up the **Drafts** page for user review and editing.
+
+3. **Phase 5: Approval Flow & Gmail Sending**
+   - Request required send scope (`gmail.send` / `gmail.compose`) upon user consent.
+   - Securely send approved reply drafts via Gmail API.
+   - Populate the **Activity Logs** page with real audit records of sync, classification, and send events.
+
+4. **Authentication & Multi-Tenancy**
+   - Replace development-only anonymous cookies with proper user accounts / Google Sign-In (JWT / secure sessions).
+   - Ensure robust per-user tenant isolation in MongoDB.
+
+5. **Background Sync & Webhooks**
+   - Implement background task worker (Celery/APScheduler) or Gmail History ID push notifications for automatic inbox synchronization.
+
+6. **Production Deployment & Hardening**
+   - Dockerize FastAPI backend and setup containerized deployments (Render/Railway/Fly.io).
+   - Deploy React frontend to Vercel/Netlify.
+   - Add rate limiting (`slowapi`), security headers, and production SSL/TLS configuration.
 
 ## Next Steps for Future Sessions
-- Review and implement the suggested product-aligned dashboard widgets on the Overview page if desired.
-- Perform end-to-end integration testing of Gmail OAuth flows, synchronization, classification, and draft sending.
-- Ensure MongoDB and n8n containers are running via `docker compose up -d` before development.
+- Begin implementing **Phase 3: AI Email Classification & Opportunity Extraction** step by step.
+- Ensure MongoDB is running (`docker compose up -d mongodb`) before starting backend development.
