@@ -27,18 +27,18 @@ export default function Header({ health, gmail, onOpenMenu }) {
   const mail = gmailPill(gmail);
 
   return (
-    <header className="border-b border-line bg-ink-950/80 px-4 py-5 backdrop-blur sm:px-8">
+    <header className="border-b border-[#303034] bg-[#0B0B0D]/80 px-4 py-5 backdrop-blur sm:px-8">
       <div className="flex items-start gap-3">
         <button
           type="button"
           onClick={onOpenMenu}
           aria-label="Open navigation menu"
-          className="mt-0.5 rounded-lg border border-line p-2 text-muted hover:text-fg lg:hidden"
+          className="mt-0.5 rounded-lg border border-[#303034] p-2 text-muted hover:text-fg lg:hidden"
         >
           <Menu aria-hidden="true" className="size-5" />
         </button>
         <div className="min-w-0 flex-1">
-          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Email Command Center</h1>
+          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl text-white">Email Command Center</h1>
           <p className="mt-1 max-w-prose text-sm text-muted sm:text-base">
             Track recruiter email, opportunities and reply drafts in one place, with you approving
             every future send.
@@ -56,7 +56,7 @@ export default function Header({ health, gmail, onOpenMenu }) {
             <button
               type="button"
               onClick={health.retry}
-              className="ml-1 rounded-md px-1.5 text-xs font-semibold underline underline-offset-2"
+              className="ml-1 rounded-md px-1.5 text-xs font-semibold underline underline-offset-2 text-[#D4AF37]"
             >
               Retry
             </button>

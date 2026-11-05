@@ -5,13 +5,13 @@ import { NAV_ITEMS } from "../lib/navigation.js";
 
 function NavContent({ active, onNavigate, onClose }) {
   return (
-    <div className="flex h-full flex-col gap-6 p-4">
+    <div className="flex h-full flex-col gap-6 p-4 bg-[#141416]">
       <div className="flex items-center justify-between px-2 pt-1">
         <div className="flex items-center gap-2.5">
-          <span className="grid size-9 place-items-center rounded-xl bg-accent-strong">
-            <Mails aria-hidden="true" className="size-5 text-white" />
+          <span className="grid size-9 place-items-center rounded-xl bg-[#D4AF37]/15 border border-[#D4AF37]/30 text-[#D4AF37]">
+            <Mails aria-hidden="true" className="size-5" />
           </span>
-          <span className="text-lg font-bold tracking-tight">MailPilot</span>
+          <span className="text-lg font-bold tracking-tight text-white">MailPilot</span>
         </div>
         {onClose && (
           <button
@@ -37,14 +37,14 @@ function NavContent({ active, onNavigate, onClose }) {
                   aria-current={isActive ? "page" : undefined}
                   className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
                     isActive
-                      ? "bg-accent-strong/20 text-fg ring-1 ring-accent/40"
-                      : "text-muted hover:bg-ink-800 hover:text-fg"
+                      ? "bg-[#D4AF37]/15 text-[#D4AF37] ring-1 ring-[#D4AF37]/40 font-semibold"
+                      : "text-muted hover:bg-[#1F1F22] hover:text-fg"
                   }`}
                 >
-                  <Icon aria-hidden="true" className="size-[18px]" />
+                  <Icon aria-hidden="true" className={`size-[18px] ${isActive ? "text-[#D4AF37]" : "text-muted"}`} />
                   <span className="flex-1">{label}</span>
                   {!implemented && (
-                    <span className="rounded-md bg-ink-800 px-1.5 py-0.5 text-xs text-muted">
+                    <span className="rounded-md bg-[#1F1F22] px-1.5 py-0.5 text-xs text-muted">
                       Phase {phase}
                     </span>
                   )}
@@ -75,7 +75,7 @@ export default function Sidebar({ active, mobileOpen, onCloseMobile }) {
 
   return (
     <>
-      <aside className="hidden w-64 shrink-0 border-r border-line bg-ink-900 lg:block">
+      <aside className="hidden w-64 shrink-0 border-r border-[#303034] bg-[#141416] lg:block">
         <div className="sticky top-0 h-screen">
           <NavContent active={active} />
         </div>
@@ -97,7 +97,7 @@ export default function Sidebar({ active, mobileOpen, onCloseMobile }) {
               role="dialog"
               aria-modal="true"
               aria-label="Navigation"
-              className="absolute inset-y-0 left-0 w-72 max-w-[85vw] border-r border-line bg-ink-900"
+              className="absolute inset-y-0 left-0 w-72 max-w-[85vw] border-r border-[#303034] bg-[#141416]"
               initial={{ x: "-100%" }}
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}

@@ -20,9 +20,9 @@ function errorLabel(code) {
 function Button({ variant = "secondary", ...props }) {
   const styles = {
     primary:
-      "bg-accent-strong text-white hover:bg-indigo-500 disabled:bg-ink-700 disabled:text-muted",
+      "bg-[#D4AF37] text-[#0B0B0D] hover:bg-[#F5D77A] font-semibold disabled:bg-[#303034] disabled:text-muted",
     secondary:
-      "border border-line bg-ink-800 text-fg hover:border-accent/50 disabled:text-muted",
+      "border border-[#303034] bg-[#1F1F22] text-fg hover:border-[#D4AF37]/50 disabled:text-muted",
     danger:
       "border border-rose-400/40 bg-rose-400/10 text-rose-100 hover:bg-rose-400/20 disabled:text-muted",
   };
@@ -76,7 +76,7 @@ export default function GmailConnectionCard({
         {gmail.state === "ready" && !connected && (
           <div className="flex flex-col gap-4">
             <div>
-              <p className="font-semibold">Gmail is not connected</p>
+              <p className="font-semibold text-white">Gmail is not connected</p>
               <p className="mt-1 max-w-prose text-sm text-muted">
                 Connect Gmail to read a limited number of recent inbox messages. MailPilot requests
                 read-only access and never sends email.
@@ -88,7 +88,7 @@ export default function GmailConnectionCard({
                 Connect Gmail
               </Button>
               <span className="inline-flex items-center gap-1.5 text-xs text-muted">
-                <ShieldCheck aria-hidden="true" className="size-4" />
+                <ShieldCheck aria-hidden="true" className="size-4 text-[#D4AF37]" />
                 Read-only Gmail scope
               </span>
             </div>
@@ -99,7 +99,7 @@ export default function GmailConnectionCard({
           <div className="flex flex-col gap-4">
             <div className="flex flex-wrap items-start justify-between gap-2">
               <div className="min-w-0">
-                <p className="flex items-center gap-2 text-sm font-semibold">
+                <p className="flex items-center gap-2 text-sm font-semibold text-white">
                   <span className="size-2 rounded-full bg-emerald-400" aria-hidden="true" />
                   Connected
                 </p>
@@ -116,17 +116,17 @@ export default function GmailConnectionCard({
             <dl className="grid gap-3 text-sm sm:grid-cols-3">
               <div>
                 <dt className="text-muted">Last sync</dt>
-                <dd className="mt-0.5 font-medium">
+                <dd className="mt-0.5 font-medium text-white">
                   {status.last_sync_at ? formatDateTime(status.last_sync_at) : "Never"}
                 </dd>
               </div>
               <div>
                 <dt className="text-muted">Stored messages</dt>
-                <dd className="mt-0.5 font-medium tabular-nums">{status.message_count}</dd>
+                <dd className="mt-0.5 font-medium tabular-nums text-white">{status.message_count}</dd>
               </div>
               <div>
                 <dt className="text-muted">Access</dt>
-                <dd className="mt-0.5 font-medium">Read-only inbox</dd>
+                <dd className="mt-0.5 font-medium text-white">Read-only inbox</dd>
               </div>
             </dl>
 

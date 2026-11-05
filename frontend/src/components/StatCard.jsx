@@ -7,14 +7,14 @@ export default function StatCard({ label, icon: Icon, value = null, note, index 
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35, delay: index * 0.07 }}
-      className="rounded-2xl border border-line bg-ink-900 p-5"
+      className="rounded-2xl border border-[#303034] bg-[#19191C] p-5 shadow-sm"
     >
       <dl>
         <div className="flex items-center justify-between">
           <dt className="text-sm font-medium text-muted">{label}</dt>
-          <Icon aria-hidden="true" className="size-4 text-accent" />
+          <Icon aria-hidden="true" className="size-4 text-[#D4AF37]" />
         </div>
-        <dd className="mt-3 text-3xl font-bold tabular-nums">
+        <dd className="mt-3 text-3xl font-bold tabular-nums text-white">
           {value ?? (
             <>
               <span aria-hidden="true">—</span>

@@ -15,7 +15,7 @@ function getSenderBrand(senderName, senderEmail) {
   if (s.includes("notion")) return { label: "N", bg: "bg-zinc-900" };
   if (s.includes("linkedin")) return { label: "in", bg: "bg-blue-700" };
   const name = senderName || senderEmail || "U";
-  return { label: name.charAt(0).toUpperCase(), bg: "from-indigo-600 to-purple-600" };
+  return { label: name.charAt(0).toUpperCase(), bg: "bg-[#1F1F22] text-[#D4AF37] border border-[#D4AF37]/30" };
 }
 
 function getCategoryBadge(message) {
@@ -35,7 +35,7 @@ function getCategoryBadge(message) {
     text.includes("alert") ||
     text.includes("position")
   ) {
-    return { label: "Opportunity", color: "bg-purple-500/15 text-purple-300 border-purple-500/30" };
+    return { label: "Opportunity", color: "bg-[#D4AF37]/15 text-[#D4AF37] border-[#D4AF37]/30" };
   }
   if (text.includes("interview") || text.includes("schedule") || text.includes("invitation")) {
     return { label: "High Priority", color: "bg-rose-500/15 text-rose-300 border-rose-500/30" };
@@ -43,7 +43,7 @@ function getCategoryBadge(message) {
   if (text.includes("reply") || text.includes("question") || text.includes("availability") || text.includes("challenge")) {
     return { label: "Needs Reply", color: "bg-amber-500/15 text-amber-300 border-amber-500/30" };
   }
-  return { label: "Update", color: "bg-indigo-500/15 text-indigo-300 border-indigo-500/30" };
+  return { label: "Update", color: "bg-[#1F1F22] text-muted border-[#303034]" };
 }
 
 export default function MessageList({
@@ -56,10 +56,10 @@ export default function MessageList({
   onRetry,
 }) {
   return (
-    <div className="flex flex-col h-full bg-[#13151e] rounded-2xl border border-[#232638] overflow-hidden shadow-sm">
+    <div className="flex flex-col h-full bg-[#19191C] rounded-2xl border border-[#303034] overflow-hidden shadow-sm">
       {loading && (
         <div className="flex items-center gap-2 p-8 text-sm text-muted" role="status">
-          <Loader2 aria-hidden="true" className="size-4 animate-spin text-accent" />
+          <Loader2 aria-hidden="true" className="size-4 animate-spin text-[#D4AF37]" />
           Loading synchronized messages…
         </div>
       )}
@@ -70,7 +70,7 @@ export default function MessageList({
           <button
             type="button"
             onClick={onRetry}
-            className="mt-3 inline-flex items-center gap-2 rounded-lg border border-[#232638] px-3 py-1.5 text-sm font-semibold hover:border-accent/50 bg-[#151722]"
+            className="mt-3 inline-flex items-center gap-2 rounded-lg border border-[#303034] px-3 py-1.5 text-sm font-semibold hover:border-[#D4AF37]/50 bg-[#1F1F22] text-white"
           >
             <RefreshCw aria-hidden="true" className="size-4" />
             Retry
@@ -90,7 +90,7 @@ export default function MessageList({
 
       {!loading && !error && items.length > 0 && (
         <>
-          <div className="divide-y divide-[#232638] overflow-y-auto max-h-[640px]" aria-label="Synchronized messages">
+          <div className="divide-y divide-[#303034] overflow-y-auto max-h-[640px]" aria-label="Synchronized messages">
             {items.map((message) => {
               const selected = message.id === selectedId;
               const badge = getCategoryBadge(message);
@@ -101,13 +101,13 @@ export default function MessageList({
                   key={message.id}
                   onClick={() => onSelect(message.id)}
                   className={`cursor-pointer flex items-center gap-3.5 px-4 py-4 transition-colors ${
-                    selected ? "bg-purple-900/20 border-l-4 border-purple-500" : "hover:bg-[#181b28]"
+                    selected ? "bg-[#D4AF37]/15 border-l-4 border-[#D4AF37]" : "hover:bg-[#1F1F22]"
                   }`}
                 >
                   <button type="button" className="text-muted hover:text-fg" onClick={(e) => e.stopPropagation()}>
                     <Square className="size-4" />
                   </button>
-                  <span className={`grid size-9 shrink-0 place-items-center rounded-xl text-white font-bold text-xs shadow-inner ${brand.bg.startsWith("bg-") ? brand.bg : `bg-gradient-to-br ${brand.bg}`}`}>
+                  <span className={`grid size-9 shrink-0 place-items-center rounded-xl font-bold text-xs shadow-inner ${brand.bg}`}>
                     {brand.label}
                   </span>
                   <div className="min-w-0 flex-1">
@@ -123,21 +123,21 @@ export default function MessageList({
                     </div>
                     <p className="line-clamp-1 text-xs text-muted mt-1">{message.snippet || "No preview available."}</p>
                   </div>
-                  <button type="button" className="text-muted hover:text-amber-300 shrink-0" onClick={(e) => e.stopPropagation()}>
+                  <button type="button" className="text-muted hover:text-[#D4AF37] shrink-0" onClick={(e) => e.stopPropagation()}>
                     <Star className="size-4" />
                   </button>
                 </div>
               );
             })}
           </div>
-          <div className="border-t border-[#232638] px-4 py-3.5 text-xs text-muted flex items-center justify-between bg-[#10121a]">
+          <div className="border-t border-[#303034] px-4 py-3.5 text-xs text-muted flex items-center justify-between bg-[#141416]">
             <span>Showing 1–{items.length} of {total || 1428} stored messages.</span>
             <div className="flex items-center gap-1.5 font-medium">
-              <span className="px-2.5 py-1 rounded-lg bg-accent-strong text-white text-xs shadow">1</span>
-              <span className="px-2.5 py-1 hover:bg-[#181b28] rounded-lg cursor-pointer">2</span>
-              <span className="px-2.5 py-1 hover:bg-[#181b28] rounded-lg cursor-pointer">3</span>
+              <span className="px-2.5 py-1 rounded-lg bg-[#D4AF37] text-[#0B0B0D] text-xs font-semibold shadow">1</span>
+              <span className="px-2.5 py-1 hover:bg-[#1F1F22] rounded-lg cursor-pointer text-muted hover:text-fg">2</span>
+              <span className="px-2.5 py-1 hover:bg-[#1F1F22] rounded-lg cursor-pointer text-muted hover:text-fg">3</span>
               <span className="text-muted">...</span>
-              <span className="px-2.5 py-1 hover:bg-[#181b28] rounded-lg cursor-pointer">58</span>
+              <span className="px-2.5 py-1 hover:bg-[#1F1F22] rounded-lg cursor-pointer text-muted hover:text-fg">58</span>
             </div>
           </div>
         </>
