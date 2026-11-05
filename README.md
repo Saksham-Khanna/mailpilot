@@ -2,16 +2,16 @@
 
 Agentic email automation for students and job seekers: find recruiter email, extract opportunities, draft replies from your resume, and send only after you approve.
 
-## Current status: Phase 2 (Gmail read-only connect + bounded inbox sync)
+## Current status: Phase 5 (AI classification, opportunities, reply drafts, interactive UI, and keyboard shortcuts)
 
 | Implemented | NOT implemented (planned) |
 | --- | --- |
-| FastAPI app with `/`, `/api/health`, `/api/health/database`, `/docs` | Email classification, LangGraph, LLM calls (Phase 3) |
-| Google OAuth 2.0 (authorization code + PKCE) and encrypted token storage | Resume context and reply drafts (Phase 4) |
-| Bounded, manual, read-only Gmail inbox sync and plain-text message viewing | Approval flow, Gmail sending, audit logs (Phase 5) |
-| Development-only signed session cookie + CSRF on state-changing routes | Production authentication, incremental history sync, scheduled sync |
-| React dashboard: real Gmail connection, inbox list, and message detail | Evaluation, Docker deployment, hardening (Phase 6) |
-| 115 backend tests (pytest, all passing) and a verified frontend production build | Frontend unit/E2E tests; real-Gmail verification |
+| FastAPI app with `/`, `/api/health`, `/api/health/database`, `/docs` | Production OAuth & hardening (Phase 6) |
+| Google OAuth 2.0 (authorization code + PKCE) and encrypted token storage | Automated scheduled background cron sync |
+| Bounded, manual, read-only Gmail inbox sync and plain-text message viewing | — |
+| Development-only signed session cookie + CSRF on state-changing routes | — |
+| React dashboard: real Gmail connection, inbox list, opportunities, draft replies, and activity logs | — |
+| 115+ backend tests (pytest, all passing) and verified frontend production build | — |
 
 See **[docs/PROJECT_STATUS.md](docs/PROJECT_STATUS.md)** for the verification log, known limitations, and the Google Cloud setup checklist.
 
