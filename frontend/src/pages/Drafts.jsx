@@ -22,6 +22,7 @@ import {
   CheckCircle2,
   Clock,
   ExternalLink,
+  Download,
 } from "lucide-react";
 import Panel from "../components/Panel.jsx";
 import Notice from "../components/Notice.jsx";
@@ -318,6 +319,17 @@ export default function Drafts({ gmail, health }) {
   const handleCopyDraft = () => {
     navigator.clipboard.writeText(editBody);
     setNotice({ tone: "success", text: "Draft content copied to clipboard!" });
+  };
+
+  const handleDownloadDraft = () => {
+    const element = document.createElement("a");
+    const file = new Blob([`To: ${editRecipient}\nSubject: ${editSubject}\n\n${editBody}`], { type: 'text/plain' });
+    element.href = URL.createObjectURL(file);
+    element.download = `mailpilot-reply-${selectedDraft?.draft_id || 'draft'}.txt`;
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+    setNotice({ tone: "success", text: "Draft downloaded as text file." });
   };
 
   const filteredDrafts = drafts.filter((d) => {
@@ -691,6 +703,13 @@ export default function Drafts({ gmail, health }) {
                             className="inline-flex items-center gap-1.5 rounded-xl border border-[#303034] bg-[#141416] px-3 py-2 text-xs font-semibold text-fg hover:bg-[#1F1F22]"
                           >
                             <Copy className="size-3.5" /> Copy Draft
+                          </button>
+                          <button
+                            type="button"
+                            onClick={handleDownloadDraft}
+                            className="inline-flex items-center gap-1.5 rounded-xl border border-[#303034] bg-[#141416] px-3 py-2 text-xs font-semibold text-fg hover:bg-[#1F1F22]"
+                          >
+                            <Download className="size-3.5" /> Download
                           </button>
                           <button
                             type="button"
