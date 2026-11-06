@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Filter,
   Loader2,
@@ -32,6 +33,25 @@ const CATEGORY_TABS = [
   { label: "Job", value: "Job Opportunity" },
   { label: "Collaboration", value: "Recruiter Outreach" },
 ];
+
+const listContainerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.05,
+    },
+  },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 15 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.3 },
+  },
+};
 
 function PriorityBadge({ priority }) {
   const tones = {
@@ -196,15 +216,17 @@ export default function Opportunities({ gmail, health }) {
       <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[#303034] bg-[#19191C] p-4">
         <div className="flex flex-wrap items-center gap-3">
           {connected ? (
-            <button
+            <motion.button
               type="button"
               onClick={handleClassify}
               disabled={busy}
-              className="inline-flex items-center gap-2 rounded-xl bg-[#D4AF37] px-4 py-2.5 text-sm font-semibold text-[#0B0B0D] shadow-lg transition-colors hover:bg-[#F5D77A] disabled:bg-[#303034] disabled:text-muted"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="inline-flex items-center gap-2 rounded-xl bg-[#D4AF37] px-4 py-2.5 text-sm font-semibold text-[#0B0B0D] shadow-lg transition-colors hover:bg-[#F5D77A] disabled:bg-[#303034] disabled:text-muted cursor-pointer disabled:cursor-not-allowed"
             >
               {busy ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : <Tag aria-hidden="true" className="size-4" />}
-              {busy ? "Classifying..." : "Classify Synchronized Emails"}
-            </button>
+              {busy ? "Classifying with AI..." : "Classify Synchronized Emails"}
+            </motion.button>
           ) : (
             <span className="text-xs text-muted">Connect Gmail in Inbox to classify messages.</span>
           )}
@@ -281,21 +303,37 @@ export default function Opportunities({ gmail, health }) {
             )}
 
             {state === "ready" && items.length === 0 && (
-              <div className="p-8">
-                <EmptyState
-                  icon={Target}
-                  title="No classified emails found"
-                  description={
-                    !connected
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ duration: 0.4 }}
+                className="p-8"
+              >
+                <div className="flex flex-col items-center px-4 py-8 text-center">
+                  <motion.span
+                    animate={{ y: [0, -6, 0] }}
+                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                    className="grid size-11 place-items-center rounded-xl bg-[#1F1F22] text-[#D4AF37] border border-[#303034]"
+                  >
+                    <Target aria-hidden="true" className="size-5" />
+                  </motion.span>
+                  <p className="mt-3 text-sm font-semibold text-white">No classified emails found</p>
+                  <p className="mt-1 max-w-xs text-sm text-muted">
+                    {!connected
                       ? "Connect Gmail in Inbox and synchronize messages first."
-                      : "Click “Classify Synchronized Emails” above to run AI classification on your synced emails."
-                  }
-                />
-              </div>
+                      : "Click “Classify Synchronized Emails” above to run AI classification on your synced emails."}
+                  </p>
+                </div>
+              </motion.div>
             )}
 
             {state === "ready" && items.length > 0 && (
-              <div className="divide-y divide-[#303034] max-h-[700px] overflow-y-auto">
+              <motion.div
+                variants={listContainerVariants}
+                initial="hidden"
+                animate="visible"
+                className="divide-y divide-[#303034] max-h-[700px] overflow-y-auto"
+              >
                 {items.map((item) => {
                   const isSelected = item.message_id === selectedId;
                   const itemOpp = item.opportunity;
@@ -304,11 +342,14 @@ export default function Opportunities({ gmail, health }) {
                   const initial = companyName.charAt(0).toUpperCase();
 
                   return (
-                    <div
+                    <motion.div
                       key={item.message_id}
+                      variants={cardVariants}
+                      whileHover={{ scale: 1.01 }}
+                      whileTap={{ scale: 0.99 }}
                       onClick={() => setSelectedId(item.message_id)}
-                      className={`cursor-pointer p-4 transition-all hover:bg-[#1F1F22] ${
-                        isSelected ? "bg-[#D4AF37]/15 border-l-4 border-[#D4AF37] shadow-inner" : "bg-transparent"
+                      className={`cursor-pointer p-4 transition-colors ${
+                        isSelected ? "bg-[#D4AF37]/15 border-l-4 border-[#D4AF37] shadow-inner" : "bg-transparent hover:bg-[#1F1F22]"
                       }`}
                     >
                       <div className="flex items-start justify-between gap-3">
@@ -344,10 +385,10 @@ export default function Opportunities({ gmail, health }) {
                           </span>
                         )}
                       </div>
-                    </div>
+                    </motion.div>
                   );
                 })}
-              </div>
+              </motion.div>
             )}
           </div>
         </div>
@@ -366,7 +407,15 @@ export default function Opportunities({ gmail, health }) {
                 </p>
               </div>
             ) : (
-              <div className="flex flex-col gap-6 relative z-10">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={selectedItem.message_id}
+                  initial={{ opacity: 0, x: 10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -10 }}
+                  transition={{ duration: 0.25, ease: "easeOut" }}
+                  className="flex flex-col gap-6 relative z-10"
+                >
                 {/* Header row */}
                 <div className="flex flex-wrap items-start justify-between gap-4">
                   <div className="flex items-center gap-4">
@@ -470,7 +519,8 @@ export default function Opportunities({ gmail, health }) {
                     </div>
                   </div>
                 )}
-              </div>
+                </motion.div>
+              </AnimatePresence>
             )}
           </div>
         </div>

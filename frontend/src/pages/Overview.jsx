@@ -19,6 +19,7 @@ import {
   CheckCircle,
   XCircle,
   AlertTriangle,
+  Sparkles,
 } from "lucide-react";
 import Panel from "../components/Panel.jsx";
 import EmptyState from "../components/EmptyState.jsx";
@@ -386,83 +387,88 @@ export default function Overview({ health, gmail }) {
             </div>
           </div>
 
-          {/* Outreach Performance Panel */}
+          {/* AI Co-Pilot Summary & Action Ticker Panel */}
           <div className="rounded-2xl border border-[#303034] bg-[#19191C] p-6 shadow-sm">
             <div className="flex items-center justify-between pb-4 border-b border-[#303034]">
               <div className="flex items-center gap-2.5">
-                <Activity className="size-5 text-[#D4AF37]" />
-                <h3 className="text-base font-bold text-white">Outreach Performance</h3>
+                <div className="p-2 rounded-xl bg-[#D4AF37]/10 border border-[#D4AF37]/30">
+                  <Sparkles className="size-5 text-[#D4AF37]" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-white">AI Co-Pilot Live Insights</h3>
+                  <p className="text-xs text-muted">Real-time intelligence from your synced inbox</p>
+                </div>
               </div>
-              <span className="rounded-lg border border-[#303034] bg-[#141416] px-3 py-1 text-xs font-medium text-muted">
-                Last 7 Days ▾
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-400">
+                <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                Active Co-Pilot
               </span>
             </div>
 
-            <div className="mt-6 grid gap-6 md:grid-cols-2 items-center">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between text-sm py-2 border-b border-[#303034]/50">
-                  <span className="text-muted flex items-center gap-2"><Mail className="size-4 text-[#D4AF37]" /> Emails Sent</span>
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-white">268</span>
-                    <span className="text-xs text-emerald-400 font-semibold">↑ +18%</span>
-                  </div>
+            <div className="mt-6 grid gap-4 md:grid-cols-3">
+              <div className="rounded-xl border border-[#303034] bg-[#141416] p-4 flex flex-col justify-between">
+                <div>
+                  <span className="text-xs text-muted font-medium">Synced Inbox</span>
+                  <div className="text-2xl font-extrabold text-white mt-1">{messageCount}</div>
                 </div>
-                <div className="flex items-center justify-between text-sm py-2 border-b border-[#303034]/50">
-                  <span className="text-muted flex items-center gap-2"><FileEdit className="size-4 text-[#D4AF37]" /> Replies</span>
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-white">47</span>
-                    <span className="text-xs text-emerald-400 font-semibold">↑ +32%</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between text-sm py-2 border-b border-[#303034]/50">
-                  <span className="text-muted flex items-center gap-2"><Target className="size-4 text-[#D4AF37]" /> Reply Rate</span>
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-white">17.5%</span>
-                    <span className="text-xs text-emerald-400 font-semibold">↑ +11%</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between text-sm py-2">
-                  <span className="text-muted flex items-center gap-2"><CheckCircle2 className="size-4 text-emerald-400" /> Avg. Reply Time</span>
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-white">6.4 hrs</span>
-                    <span className="text-xs text-rose-400 font-semibold">↓ -26%</span>
-                  </div>
-                </div>
+                <p className="text-[11px] text-muted mt-3 pt-2 border-t border-[#303034]/60">
+                  {messageCount > 0 ? "Emails synced & ready for AI evaluation." : "Connect Gmail to sync messages."}
+                </p>
               </div>
 
-              {/* SVG Area Chart */}
-              <div className="h-48 w-full flex flex-col justify-end">
-                <svg className="w-full h-36 overflow-visible" viewBox="0 0 350 120" preserveAspectRatio="none">
-                  <defs>
-                    <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#D4AF37" stopOpacity="0.3" />
-                      <stop offset="100%" stopColor="#D4AF37" stopOpacity="0.0" />
-                    </linearGradient>
-                  </defs>
-                  <path
-                    d="M 0 90 Q 50 40 100 80 T 200 50 T 300 30 T 350 20 L 350 120 L 0 120 Z"
-                    fill="url(#chartGradient)"
-                  />
-                  <path
-                    d="M 0 90 Q 50 40 100 80 T 200 50 T 300 30 T 350 20"
-                    fill="none"
-                    stroke="#D4AF37"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                  />
-                  <circle cx="100" cy="80" r="4" fill="#D4AF37" />
-                  <circle cx="200" cy="50" r="4" fill="#D4AF37" />
-                  <circle cx="300" cy="30" r="4" fill="#D4AF37" />
-                </svg>
-                <div className="flex justify-between text-[11px] text-muted pt-2 border-t border-[#303034]">
-                  <span>Mon</span>
-                  <span>Tue</span>
-                  <span>Wed</span>
-                  <span>Thu</span>
-                  <span>Fri</span>
-                  <span>Sat</span>
-                  <span>Sun</span>
+              <div className="rounded-xl border border-[#303034] bg-[#141416] p-4 flex flex-col justify-between">
+                <div>
+                  <span className="text-xs text-muted font-medium">Classified Opportunities</span>
+                  <div className="text-2xl font-extrabold text-[#D4AF37] mt-1">{opportunities.length}</div>
                 </div>
+                <p className="text-[11px] text-muted mt-3 pt-2 border-t border-[#303034]/60">
+                  {opportunities.length > 0 ? "Tracked recruiter outreach & replies." : "Run AI classifier to extract."}
+                </p>
+              </div>
+
+              <div className="rounded-xl border border-[#303034] bg-[#141416] p-4 flex flex-col justify-between">
+                <div>
+                  <span className="text-xs text-muted font-medium">Pending Reply Drafts</span>
+                  <div className="text-2xl font-extrabold text-emerald-400 mt-1">{pendingDraftsCount}</div>
+                </div>
+                <p className="text-[11px] text-muted mt-3 pt-2 border-t border-[#303034]/60">
+                  {pendingDraftsCount > 0 ? "AI drafts awaiting your review." : "All drafts reviewed or sent."}
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-5 rounded-xl border border-[#D4AF37]/30 bg-[#D4AF37]/5 p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="flex items-start gap-3">
+                <Sparkles className="size-5 text-[#D4AF37] shrink-0 mt-0.5" />
+                <div className="text-xs leading-relaxed text-fg">
+                  <span className="font-semibold text-white">Co-Pilot Recommendation: </span>
+                  {pendingDraftsCount > 0 
+                    ? `You have ${pendingDraftsCount} pending AI reply draft(s) waiting for approval. Review and send them to boost response rate.`
+                    : opportunities.length === 0 && messageCount > 0
+                    ? `You have ${messageCount} synced email(s). Run the AI Classifier to extract interview invites and recruiter outreach.`
+                    : `Your inbox is up to date! Continue monitoring your opportunities and drafts.`
+                  }
+                </div>
+              </div>
+              <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto">
+                {pendingDraftsCount > 0 ? (
+                  <a
+                    href="#/drafts"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 rounded-lg bg-[#D4AF37] px-3 py-2 text-xs font-bold text-[#0B0B0D] hover:bg-[#F5D77A] transition-all"
+                  >
+                    Review Drafts →
+                  </a>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={handleQuickClassify}
+                    disabled={busyAction === "classify" || !connected || messageCount === 0}
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 rounded-lg bg-[#D4AF37] px-3 py-2 text-xs font-bold text-[#0B0B0D] hover:bg-[#F5D77A] transition-all disabled:opacity-50"
+                  >
+                    {busyAction === "classify" ? <Loader2 className="size-3.5 animate-spin" /> : <Sparkles className="size-3.5" />}
+                    Classify New Emails
+                  </button>
+                )}
               </div>
             </div>
           </div>
