@@ -190,3 +190,55 @@ def test_classify_sanitize_job_alert_digest(client, auth_cookies, csrf_headers, 
         # Sanitization should result in opportunity being null if both company and role are invalid/digest placeholders
         assert item["opportunity"] is None
 
+
+def test_classify_via_ollama_mock(client, auth_cookies, csrf_headers, gmail_store, monkeypatch):
+    user_id = client.app.state.session_signer.verify(client.cookies["mailpilot_session"])
+    gmail_store.upsert_messages(
+        user_id=user_id,
+        messages=[{
+            "gmail_message_id": "msg-ollama",
+            "gmail_thread_id": "thread-ollama",
+            "sender_name": "AI Recruiter",
+            "sender_email": "ai@company.com",
+            "recipient": "me@example.com",
+            "subject": "Machine Learning Engineer Interview",
+            "received_at": None,
+            "snippet": "We want to interview you...",
+            "body_text": "We would like to invite you for an interview for ML Engineer. Location: Hybrid.",
+            "body_source": "text",
+            "labels": ["INBOX"],
+            "has_body": True,
+        }],
+        synced_at=None,
+    )
+
+    class MockOllamaResponse:
+        status_code = 200
+        def json(self):
+            return {
+                "choices": [{
+                    "message": {
+                        "content": '{"category": "Interview", "summary": "ML Engineer Interview invitation", "priority": "High", "confidence": 0.95, "opportunity": {"company_name": "AI Company", "job_role": "ML Engineer", "location": "Hybrid", "work_mode": "Hybrid", "salary": "$150k", "skills": ["Python", "PyTorch"], "deadline": null, "application_link": null}, "reply_eligibility": "reply_required", "reason": "Interview invitation received."}'
+                    }
+                }]
+            }
+
+    monkeypatch.setenv("OLLAMA_BASE_URL", "http://localhost:11434/v1")
+    monkeypatch.setenv("OLLAMA_MODEL", "qwen2.5:7b")
+
+    with patch("requests.post", return_value=MockOllamaResponse()):
+        res = client.post(
+            "/api/opportunities/classify",
+            headers=csrf_headers,
+            cookies=auth_cookies,
+            json={"message_id": "msg-ollama"},
+        )
+        assert res.status_code == 200
+        data = res.json()
+        assert data["classified_count"] == 1
+        item = data["items"][0]
+        assert item["category"] == "Interview"
+        assert item["opportunity"]["company_name"] == "AI Company"
+        assert item["opportunity"]["job_role"] == "ML Engineer"
+
+
