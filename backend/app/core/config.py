@@ -169,7 +169,7 @@ class Settings:
     groq_api_key: str = field(default="", repr=False)
     llm_model: str = ""
     ollama_base_url: str = "http://localhost:11434/v1"
-    ollama_model: str = "llama3"
+    ollama_model: str = "qwen2.5:7b"
     n8n_webhook_url: str = "http://localhost:5678/webhook/mailpilot-classify"
     # Phase 2: Google OAuth client and token encryption. Secrets use repr=False.
     google_client_id: str = ""
@@ -271,7 +271,7 @@ class Settings:
             groq_api_key=get("GROQ_API_KEY"),
             llm_model=get("LLM_MODEL"),
             ollama_base_url=get("OLLAMA_BASE_URL", "http://localhost:11434/v1"),
-            ollama_model=get("OLLAMA_MODEL", "llama3"),
+            ollama_model=get("OLLAMA_MODEL", "qwen2.5:7b"),
             n8n_webhook_url=get("N8N_WEBHOOK_URL", "http://localhost:5678/webhook/mailpilot-classify"),
             google_client_id=google_client_id,
             google_client_secret=google_client_secret,
