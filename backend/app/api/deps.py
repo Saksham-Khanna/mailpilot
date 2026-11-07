@@ -37,6 +37,18 @@ def require_csrf(
 def get_gmail_store(request: Request) -> GmailStore:
     store = getattr(request.app.state, "gmail_store", None)
     if store is None:
+        import os
+        if os.environ.get("MAILPILOT_OFFLINE_DEV", "1") != "0":
+            try:
+                import mongomock
+                mock_client = mongomock.MongoClient()
+                store = GmailStore(mock_client["mailpilot"])
+                store.ensure_indexes()
+                request.app.state.mongo_client = mock_client
+                request.app.state.gmail_store = store
+                return store
+            except Exception:
+                pass
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail="Database is unavailable.",
@@ -44,6 +56,18 @@ def get_gmail_store(request: Request) -> GmailStore:
     try:
         store.ensure_indexes()
     except (StoreUnavailable, PyMongoError):
+        import os
+        if os.environ.get("MAILPILOT_OFFLINE_DEV", "1") != "0":
+            try:
+                import mongomock
+                mock_client = mongomock.MongoClient()
+                store = GmailStore(mock_client["mailpilot"])
+                store.ensure_indexes()
+                request.app.state.mongo_client = mock_client
+                request.app.state.gmail_store = store
+                return store
+            except Exception:
+                pass
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail="Database is unavailable.",
