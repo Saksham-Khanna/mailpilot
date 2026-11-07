@@ -1,0 +1,441 @@
+{
+  "backend/app/__init__.py": {
+    "mtime": 1792867186.3933828,
+    "seen": 1794057353.4715202,
+    "ast_hash": "68b329da9893e34099c7d8ad5cb9c940",
+    "semantic_hash": "68b329da9893e34099c7d8ad5cb9c940"
+  },
+  "backend/app/api/__init__.py": {
+    "mtime": 1792867186.4130435,
+    "seen": 1794057353.4715202,
+    "ast_hash": "68b329da9893e34099c7d8ad5cb9c940",
+    "semantic_hash": "68b329da9893e34099c7d8ad5cb9c940"
+  },
+  "backend/app/api/deps.py": {
+    "mtime": 1792870994.2588441,
+    "seen": 1794057353.472523,
+    "ast_hash": "af4a6ad3dda2ed6ce5487b82394a8437",
+    "semantic_hash": "af4a6ad3dda2ed6ce5487b82394a8437"
+  },
+  "backend/app/api/routes/__init__.py": {
+    "mtime": 1792867186.4268072,
+    "seen": 1794057353.472523,
+    "ast_hash": "68b329da9893e34099c7d8ad5cb9c940",
+    "semantic_hash": "68b329da9893e34099c7d8ad5cb9c940"
+  },
+  "backend/app/api/routes/activity.py": {
+    "mtime": 1793533913.660119,
+    "seen": 1794057353.472523,
+    "ast_hash": "07d5511919beaf126e4bbf80d9e4f779",
+    "semantic_hash": "07d5511919beaf126e4bbf80d9e4f779"
+  },
+  "backend/app/api/routes/auth.py": {
+    "mtime": 1793442944.420347,
+    "seen": 1794057353.472523,
+    "ast_hash": "079e93bd363ffa6d71973ffffe0b2012",
+    "semantic_hash": "079e93bd363ffa6d71973ffffe0b2012"
+  },
+  "backend/app/api/routes/drafts.py": {
+    "mtime": 1793534050.5252259,
+    "seen": 1794057353.472523,
+    "ast_hash": "6e2538ee713247478929b8245bc44206",
+    "semantic_hash": "6e2538ee713247478929b8245bc44206"
+  },
+  "backend/app/api/routes/gmail.py": {
+    "mtime": 1793442771.840613,
+    "seen": 1794057353.472523,
+    "ast_hash": "08e4bcb61910dc553961df8707e5c816",
+    "semantic_hash": "08e4bcb61910dc553961df8707e5c816"
+  },
+  "backend/app/api/routes/health.py": {
+    "mtime": 1792869457.6219418,
+    "seen": 1794057353.472523,
+    "ast_hash": "6255c3a2d326cc53e7bc41fb326761f7",
+    "semantic_hash": "6255c3a2d326cc53e7bc41fb326761f7"
+  },
+  "backend/app/api/routes/opportunities.py": {
+    "mtime": 1793533990.5391798,
+    "seen": 1794057353.472523,
+    "ast_hash": "c2b601ee386902092452e0cc6f8ea448",
+    "semantic_hash": "c2b601ee386902092452e0cc6f8ea448"
+  },
+  "backend/app/core/__init__.py": {
+    "mtime": 1792867186.4990077,
+    "seen": 1794057353.472523,
+    "ast_hash": "68b329da9893e34099c7d8ad5cb9c940",
+    "semantic_hash": "68b329da9893e34099c7d8ad5cb9c940"
+  },
+  "backend/app/core/config.py": {
+    "mtime": 1794047347.3586173,
+    "seen": 1794057353.472523,
+    "ast_hash": "0adee4942d9312d9ef03e711d7557ef0",
+    "semantic_hash": "0adee4942d9312d9ef03e711d7557ef0"
+  },
+  "backend/app/core/crypto.py": {
+    "mtime": 1792870721.7372358,
+    "seen": 1794057353.474028,
+    "ast_hash": "9fa5aff7a0a632ddea212ae4d0a90828",
+    "semantic_hash": "9fa5aff7a0a632ddea212ae4d0a90828"
+  },
+  "backend/app/core/sessions.py": {
+    "mtime": 1792870732.2757907,
+    "seen": 1794057353.474028,
+    "ast_hash": "2d2f72835a552d2c39a8411d9c73c034",
+    "semantic_hash": "2d2f72835a552d2c39a8411d9c73c034"
+  },
+  "backend/app/db/__init__.py": {
+    "mtime": 1792867186.460806,
+    "seen": 1794057353.474028,
+    "ast_hash": "68b329da9893e34099c7d8ad5cb9c940",
+    "semantic_hash": "68b329da9893e34099c7d8ad5cb9c940"
+  },
+  "backend/app/db/gmail_store.py": {
+    "mtime": 1793643978.4902785,
+    "seen": 1794057353.474028,
+    "ast_hash": "99e4b4690eb9618fb3bbb06c8a0f3d30",
+    "semantic_hash": "99e4b4690eb9618fb3bbb06c8a0f3d30"
+  },
+  "backend/app/db/mongodb.py": {
+    "mtime": 1792871016.8142073,
+    "seen": 1794057353.474028,
+    "ast_hash": "21a37dd89aa385e89d847df5273a95b7",
+    "semantic_hash": "21a37dd89aa385e89d847df5273a95b7"
+  },
+  "backend/app/main.py": {
+    "mtime": 1794040389.481829,
+    "seen": 1794057353.474028,
+    "ast_hash": "e6b1208ae0372b0180b273bfb279d75e",
+    "semantic_hash": "e6b1208ae0372b0180b273bfb279d75e"
+  },
+  "backend/app/schemas/__init__.py": {
+    "mtime": 1792870967.1805725,
+    "seen": 1794057353.474028,
+    "ast_hash": "1fac82d6f59d316a71bb684e91859833",
+    "semantic_hash": "1fac82d6f59d316a71bb684e91859833"
+  },
+  "backend/app/schemas/activity.py": {
+    "mtime": 1793533907.7257285,
+    "seen": 1794057353.474028,
+    "ast_hash": "363c0b4808960080f3b1ffb54463bcfd",
+    "semantic_hash": "363c0b4808960080f3b1ffb54463bcfd"
+  },
+  "backend/app/schemas/drafts.py": {
+    "mtime": 1793532082.3733397,
+    "seen": 1794057353.4750335,
+    "ast_hash": "48587e602096b43e5b94b09a6754c404",
+    "semantic_hash": "48587e602096b43e5b94b09a6754c404"
+  },
+  "backend/app/schemas/gmail.py": {
+    "mtime": 1793442764.7247944,
+    "seen": 1794057353.4750335,
+    "ast_hash": "ba28e99548fe19866075516ef33cd6d9",
+    "semantic_hash": "ba28e99548fe19866075516ef33cd6d9"
+  },
+  "backend/app/schemas/opportunities.py": {
+    "mtime": 1793532048.3766508,
+    "seen": 1794057353.4750335,
+    "ast_hash": "f6367766014049d377ad72b877801dc5",
+    "semantic_hash": "f6367766014049d377ad72b877801dc5"
+  },
+  "backend/app/services/__init__.py": {
+    "mtime": 1792870967.1805725,
+    "seen": 1794057353.4750335,
+    "ast_hash": "6b106426ef446f243c5269e4db7faad0",
+    "semantic_hash": "6b106426ef446f243c5269e4db7faad0"
+  },
+  "backend/app/services/classifier.py": {
+    "mtime": 1794047364.0205083,
+    "seen": 1794057353.4750335,
+    "ast_hash": "7a597260765ecb1e8dd967822b0b8f9e",
+    "semantic_hash": "7a597260765ecb1e8dd967822b0b8f9e"
+  },
+  "backend/app/services/drafter.py": {
+    "mtime": 1793442836.7921343,
+    "seen": 1794057353.4750335,
+    "ast_hash": "d5c312dab7ee0b2e84a505e1c9599aa9",
+    "semantic_hash": "d5c312dab7ee0b2e84a505e1c9599aa9"
+  },
+  "backend/app/services/gmail_client.py": {
+    "mtime": 1793442898.7485242,
+    "seen": 1794057353.476037,
+    "ast_hash": "4f50e4aaeae4b124a6b100a5cac58335",
+    "semantic_hash": "4f50e4aaeae4b124a6b100a5cac58335"
+  },
+  "backend/app/services/gmail_sync.py": {
+    "mtime": 1793533967.0012453,
+    "seen": 1794057353.476037,
+    "ast_hash": "706ed2465fa2d470f09a5ddcb1d5d449",
+    "semantic_hash": "706ed2465fa2d470f09a5ddcb1d5d449"
+  },
+  "backend/app/services/google_oauth.py": {
+    "mtime": 1793442969.0012476,
+    "seen": 1794057353.476037,
+    "ast_hash": "3e5387c03db06f50951d0aa3cb32804f",
+    "semantic_hash": "3e5387c03db06f50951d0aa3cb32804f"
+  },
+  "backend/app/services/mime.py": {
+    "mtime": 1792871344.2020125,
+    "seen": 1794057353.476037,
+    "ast_hash": "31fb7cef66f662e00c732bc3f334883b",
+    "semantic_hash": "31fb7cef66f662e00c732bc3f334883b"
+  },
+  "backend/tests/conftest.py": {
+    "mtime": 1792871125.0650258,
+    "seen": 1794057353.476037,
+    "ast_hash": "c8580f95434d1d6f02f7f15b96b5fefa",
+    "semantic_hash": "c8580f95434d1d6f02f7f15b96b5fefa"
+  },
+  "backend/tests/test_activity.py": {
+    "mtime": 1793534111.4269018,
+    "seen": 1794057353.476037,
+    "ast_hash": "6b9e99a237e12c8c0a1312b53688cceb",
+    "semantic_hash": "6b9e99a237e12c8c0a1312b53688cceb"
+  },
+  "backend/tests/test_config.py": {
+    "mtime": 1792871125.0650258,
+    "seen": 1794057353.47704,
+    "ast_hash": "6d56a98ffd7501f8ff929e05c8344709",
+    "semantic_hash": "6d56a98ffd7501f8ff929e05c8344709"
+  },
+  "backend/tests/test_crypto.py": {
+    "mtime": 1792871138.4068842,
+    "seen": 1794057353.47704,
+    "ast_hash": "787a43cbe46a0cc8c6949bd5e743ce7c",
+    "semantic_hash": "787a43cbe46a0cc8c6949bd5e743ce7c"
+  },
+  "backend/tests/test_drafts.py": {
+    "mtime": 1793532220.112491,
+    "seen": 1794057353.47704,
+    "ast_hash": "8ad80ad648ae2cfe3f01e423dd7266f0",
+    "semantic_hash": "8ad80ad648ae2cfe3f01e423dd7266f0"
+  },
+  "backend/tests/test_gmail_client.py": {
+    "mtime": 1793643523.8552818,
+    "seen": 1794057353.47704,
+    "ast_hash": "76e0584811869dda25b75396476de58a",
+    "semantic_hash": "76e0584811869dda25b75396476de58a"
+  },
+  "backend/tests/test_gmail_routes.py": {
+    "mtime": 1793443020.679541,
+    "seen": 1794057353.4780433,
+    "ast_hash": "cd8de9bfc8ef20c78c3d12f344585cc1",
+    "semantic_hash": "cd8de9bfc8ef20c78c3d12f344585cc1"
+  },
+  "backend/tests/test_gmail_store.py": {
+    "mtime": 1793643986.2178018,
+    "seen": 1794057353.4780433,
+    "ast_hash": "5e1b49b4d661066d2de199b7c7971552",
+    "semantic_hash": "5e1b49b4d661066d2de199b7c7971552"
+  },
+  "backend/tests/test_google_oauth.py": {
+    "mtime": 1792871344.2020125,
+    "seen": 1794057353.4780433,
+    "ast_hash": "d74394ee5cb678870c8c9090df11be61",
+    "semantic_hash": "d74394ee5cb678870c8c9090df11be61"
+  },
+  "backend/tests/test_health.py": {
+    "mtime": 1794040208.2260609,
+    "seen": 1794057353.4780433,
+    "ast_hash": "96f24b2f4d99bf8ab3fd52d43b8a7b91",
+    "semantic_hash": "96f24b2f4d99bf8ab3fd52d43b8a7b91"
+  },
+  "backend/tests/test_mime.py": {
+    "mtime": 1792871289.6395464,
+    "seen": 1794057353.4790394,
+    "ast_hash": "0ad19d602bf868c73cc8d054f1d8ca24",
+    "semantic_hash": "0ad19d602bf868c73cc8d054f1d8ca24"
+  },
+  "backend/tests/test_opportunities.py": {
+    "mtime": 1793441335.1492133,
+    "seen": 1794057353.4790394,
+    "ast_hash": "690e3de91cf735bd1029439716987c51",
+    "semantic_hash": "690e3de91cf735bd1029439716987c51"
+  },
+  "backend/tests/test_sessions.py": {
+    "mtime": 1792871138.4068842,
+    "seen": 1794057353.4790394,
+    "ast_hash": "5ad248e2b0c5054e67d5ef6611d7616a",
+    "semantic_hash": "5ad248e2b0c5054e67d5ef6611d7616a"
+  },
+  "docker-compose.yml": {
+    "mtime": 1793344099.0403743,
+    "seen": 1794057353.4790394,
+    "ast_hash": "9edbd50cd558ea4ebbaa6852cfeb92ec",
+    "semantic_hash": "9edbd50cd558ea4ebbaa6852cfeb92ec"
+  },
+  "frontend/package.json": {
+    "mtime": 1792867186.141853,
+    "seen": 1794057353.4790394,
+    "ast_hash": "e30e75a271063ef90175f71f9cf61634",
+    "semantic_hash": "e30e75a271063ef90175f71f9cf61634"
+  },
+  "frontend/src/App.jsx": {
+    "mtime": 1793609659.8164911,
+    "seen": 1794057353.4790394,
+    "ast_hash": "c16c223f974fa1342de57238657a5433",
+    "semantic_hash": "c16c223f974fa1342de57238657a5433"
+  },
+  "frontend/src/components/EmptyState.jsx": {
+    "mtime": 1792867186.2009692,
+    "seen": 1794057353.4800363,
+    "ast_hash": "6165a70e2c4b1961a68ec1001f46d92d",
+    "semantic_hash": "6165a70e2c4b1961a68ec1001f46d92d"
+  },
+  "frontend/src/components/ErrorBanner.jsx": {
+    "mtime": 1792869491.9272544,
+    "seen": 1794057353.4800363,
+    "ast_hash": "d0b109e9b730411a24531b978b1b89bf",
+    "semantic_hash": "d0b109e9b730411a24531b978b1b89bf"
+  },
+  "frontend/src/components/GmailConnectionCard.jsx": {
+    "mtime": 1793786486.684598,
+    "seen": 1794057353.4800363,
+    "ast_hash": "e4c758b165c48b34b91aabc480a49883",
+    "semantic_hash": "e4c758b165c48b34b91aabc480a49883"
+  },
+  "frontend/src/components/Header.jsx": {
+    "mtime": 1793786464.6111236,
+    "seen": 1794057353.4800363,
+    "ast_hash": "d8667fb235de9c79a12a32d8214dec07",
+    "semantic_hash": "d8667fb235de9c79a12a32d8214dec07"
+  },
+  "frontend/src/components/MessageDetail.jsx": {
+    "mtime": 1793786504.4688435,
+    "seen": 1794057353.4800363,
+    "ast_hash": "358768e56ee80ea7b3b0f4ee8bc7869d",
+    "semantic_hash": "358768e56ee80ea7b3b0f4ee8bc7869d"
+  },
+  "frontend/src/components/MessageList.jsx": {
+    "mtime": 1793786496.075291,
+    "seen": 1794057353.4800363,
+    "ast_hash": "bfb0c0cbe7a0198efc45c5fa0797079c",
+    "semantic_hash": "bfb0c0cbe7a0198efc45c5fa0797079c"
+  },
+  "frontend/src/components/Notice.jsx": {
+    "mtime": 1793704880.3075185,
+    "seen": 1794057353.4800363,
+    "ast_hash": "a61035afc3ef1aa877c4a311c28fc3ac",
+    "semantic_hash": "a61035afc3ef1aa877c4a311c28fc3ac"
+  },
+  "frontend/src/components/Panel.jsx": {
+    "mtime": 1793786474.9371212,
+    "seen": 1794057353.4810379,
+    "ast_hash": "553303df474a9d8312d574fb4db20db4",
+    "semantic_hash": "553303df474a9d8312d574fb4db20db4"
+  },
+  "frontend/src/components/SecurityNotice.jsx": {
+    "mtime": 1793786478.8304927,
+    "seen": 1794057353.4810379,
+    "ast_hash": "ffbb8ab1f7f63be0517fd4ab16ad5f33",
+    "semantic_hash": "ffbb8ab1f7f63be0517fd4ab16ad5f33"
+  },
+  "frontend/src/components/Sidebar.jsx": {
+    "mtime": 1793786459.7431326,
+    "seen": 1794057353.4810379,
+    "ast_hash": "667e6fd401a45255dcce4f9cf8e4b57f",
+    "semantic_hash": "667e6fd401a45255dcce4f9cf8e4b57f"
+  },
+  "frontend/src/components/StatCard.jsx": {
+    "mtime": 1793786469.954723,
+    "seen": 1794057353.4810379,
+    "ast_hash": "10b3f5b79a0b61e94ae37bdb976f9cf6",
+    "semantic_hash": "10b3f5b79a0b61e94ae37bdb976f9cf6"
+  },
+  "frontend/src/components/StatusPill.jsx": {
+    "mtime": 1792867186.2269566,
+    "seen": 1794057353.4810379,
+    "ast_hash": "93cfe7f87d70805bbd897034ba22f8f8",
+    "semantic_hash": "93cfe7f87d70805bbd897034ba22f8f8"
+  },
+  "frontend/src/lib/api.js": {
+    "mtime": 1793534073.7820935,
+    "seen": 1794057353.4810379,
+    "ast_hash": "6716d007ba0c467ddc116139d2735a30",
+    "semantic_hash": "6716d007ba0c467ddc116139d2735a30"
+  },
+  "frontend/src/lib/format.js": {
+    "mtime": 1792871456.99034,
+    "seen": 1794057353.4810379,
+    "ast_hash": "f67831f4a9efae58d1ee2a32ded16061",
+    "semantic_hash": "f67831f4a9efae58d1ee2a32ded16061"
+  },
+  "frontend/src/lib/navigation.js": {
+    "mtime": 1793606847.138799,
+    "seen": 1794057353.482037,
+    "ast_hash": "95a3009c49a5333c10572de2aeae23e1",
+    "semantic_hash": "95a3009c49a5333c10572de2aeae23e1"
+  },
+  "frontend/src/lib/useBackendHealth.js": {
+    "mtime": 1792869487.7251875,
+    "seen": 1794057353.482037,
+    "ast_hash": "d7d33087d0adc92b3bf29b72f0920480",
+    "semantic_hash": "d7d33087d0adc92b3bf29b72f0920480"
+  },
+  "frontend/src/lib/useGmailConnection.js": {
+    "mtime": 1792871456.9892511,
+    "seen": 1794057353.482037,
+    "ast_hash": "f937387c621d783312deabdbc1c34e93",
+    "semantic_hash": "f937387c621d783312deabdbc1c34e93"
+  },
+  "frontend/src/main.jsx": {
+    "mtime": 1792867186.1902065,
+    "seen": 1794057353.482037,
+    "ast_hash": "0b40fc58074dfe68080f9502b4af54fe",
+    "semantic_hash": "0b40fc58074dfe68080f9502b4af54fe"
+  },
+  "frontend/src/pages/ActivityLogs.jsx": {
+    "mtime": 1793786602.0545745,
+    "seen": 1794057353.482037,
+    "ast_hash": "4697030f0082c6403bfc0e7127b6e7ee",
+    "semantic_hash": "4697030f0082c6403bfc0e7127b6e7ee"
+  },
+  "frontend/src/pages/ComingSoon.jsx": {
+    "mtime": 1793786648.4226935,
+    "seen": 1794057353.482037,
+    "ast_hash": "4890525a7e9824cb2cfd5695d8b6963c",
+    "semantic_hash": "4890525a7e9824cb2cfd5695d8b6963c"
+  },
+  "frontend/src/pages/Drafts.jsx": {
+    "mtime": 1793969995.2253973,
+    "seen": 1794057353.482037,
+    "ast_hash": "28e7fb01fd56055d2b1c4bd578c7faf5",
+    "semantic_hash": "28e7fb01fd56055d2b1c4bd578c7faf5"
+  },
+  "frontend/src/pages/Inbox.jsx": {
+    "mtime": 1793786539.323609,
+    "seen": 1794057353.4830344,
+    "ast_hash": "945950ae97d6490daa0d5af7bbeeefdc",
+    "semantic_hash": "945950ae97d6490daa0d5af7bbeeefdc"
+  },
+  "frontend/src/pages/Opportunities.jsx": {
+    "mtime": 1793954898.5337298,
+    "seen": 1794057353.4830344,
+    "ast_hash": "266c7610a7a189edca35772dec87c1fd",
+    "semantic_hash": "266c7610a7a189edca35772dec87c1fd"
+  },
+  "frontend/src/pages/Overview.jsx": {
+    "mtime": 1793961019.292191,
+    "seen": 1794057353.483433,
+    "ast_hash": "4027c2e14dae97196e5b96da653c405a",
+    "semantic_hash": "4027c2e14dae97196e5b96da653c405a"
+  },
+  "frontend/src/pages/Settings.jsx": {
+    "mtime": 1793786641.1893387,
+    "seen": 1794057353.483433,
+    "ast_hash": "75bd2117014ef8a75e238227652fe7d8",
+    "semantic_hash": "75bd2117014ef8a75e238227652fe7d8"
+  },
+  "frontend/vite.config.js": {
+    "mtime": 1792867186.1022635,
+    "seen": 1794057353.4837632,
+    "ast_hash": "d9e5303020caaa368fb61e680cccd328",
+    "semantic_hash": "d9e5303020caaa368fb61e680cccd328"
+  },
+  "n8n/mailpilot_classification_workflow.json": {
+    "mtime": 1793441299.6624393,
+    "seen": 1794057353.4842744,
+    "ast_hash": "3265dd3584124a2f167c920e57033bf2",
+    "semantic_hash": "3265dd3584124a2f167c920e57033bf2",
+    "ast_empty": true
+  }
+}

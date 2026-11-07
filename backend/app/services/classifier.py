@@ -196,14 +196,7 @@ def classify_email(*, settings: Settings, subject: str, sender: str, body: str) 
                             "reason": reason,
                         }
         except Exception as exc:
-            logger.warning("n8n webhook call failed (%s), falling back to direct Groq/heuristic", type(exc).__name__)
-
-    # Fallback to direct Groq API if configured
-    api_key = settings.groq_api_key
-    model = settings.llm_model or "llama-3.3-70b-versatile"
-
-    if not api_key:
-        return _heuristic_classify(subject, body)
+            logger.warning("n8n webhook call failed (%s), falling back to Ollama/Groq/heuristic", type(exc).__name__)
 
     prompt = f"""You are MailPilot, an AI email assistant for students and job seekers. Classify the following email into exactly ONE of these categories:
 - Job Opportunity
@@ -261,6 +254,54 @@ Email Subject: {subject}
 Email Body:
 {body[:3000]}
 """
+
+    # Try local Ollama API if configured
+    ollama_url = getattr(settings, "ollama_base_url", "")
+    ollama_model = getattr(settings, "ollama_model", "llama3")
+    if ollama_url:
+        try:
+            ollama_response = requests.post(
+                f"{ollama_url.rstrip('/')}/chat/completions",
+                headers={"Content-Type": "application/json"},
+                json={
+                    "model": ollama_model,
+                    "messages": [{"role": "user", "content": prompt}],
+                    "temperature": 0.1,
+                    "format": "json",
+                },
+                timeout=20,
+            )
+            if ollama_response.status_code == 200:
+                data = ollama_response.json()
+                content = data["choices"][0]["message"]["content"]
+                parsed = json.loads(content)
+                category = parsed.get("category", "Other")
+                if category not in VALID_CATEGORIES:
+                    category = "Other"
+                reply_eligibility = parsed.get("reply_eligibility", "reply_recommended")
+                if reply_eligibility not in {"reply_required", "reply_recommended", "no_reply_needed"}:
+                    reply_eligibility = "reply_recommended"
+                reason = str(parsed.get("reason") or "Evaluated based on email content.")
+                opp_data = parsed.get("opportunity") if category in {"Job Opportunity", "Internship", "Internship Opportunity", "Interview", "Offer Letter"} else None
+                sanitized_opp = _sanitize_opportunity(opp_data, subject) if opp_data else None
+                return {
+                    "category": category,
+                    "summary": str(parsed.get("summary") or subject),
+                    "priority": parsed.get("priority") in {"High", "Medium", "Low"} and parsed.get("priority") or "Medium",
+                    "confidence": float(parsed.get("confidence", 0.9)),
+                    "opportunity": sanitized_opp,
+                    "reply_eligibility": reply_eligibility,
+                    "reason": reason,
+                }
+        except Exception as exc:
+            logger.warning("Local Ollama classification failed (%s), falling back to Groq/heuristic", type(exc).__name__)
+
+    # Fallback to direct Groq API if configured
+    api_key = settings.groq_api_key
+    model = settings.llm_model or "llama-3.3-70b-versatile"
+
+    if not api_key:
+        return _heuristic_classify(subject, body)
 
     try:
         response = requests.post(

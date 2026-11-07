@@ -5,7 +5,7 @@ from __future__ import annotations
 import logging
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, Response, status
 from fastapi.middleware.cors import CORSMiddleware
 from pymongo.errors import PyMongoError
 
@@ -14,7 +14,7 @@ from app.core.config import STRICT_ENVIRONMENTS, get_settings
 from app.core.crypto import EncryptionError, TokenCipher
 from app.core.sessions import SessionConfig, SessionMiddleware, SessionSigner
 from app.db.gmail_store import GmailStore
-from app.db.mongodb import close_client, create_client, get_database
+from app.db.mongodb import close_client, create_client, get_database, ping
 from app.services.gmail_client import GmailClient
 
 logger = logging.getLogger(__name__)
@@ -117,6 +117,31 @@ def create_app() -> FastAPI:
             "docs": "/docs",
             "health": "/api/health",
         }
+
+    @app.get("/health", tags=["health"])
+    def root_health(response: Response) -> dict:
+        settings = get_settings()
+        response.headers["Cache-Control"] = "no-store"
+        return {
+            "status": "ok",
+            "service": settings.app_name,
+            "version": settings.version,
+            "environment": settings.environment,
+            "database": {"checked": False},
+        }
+
+    @app.get("/health/database", tags=["health"])
+    def root_database_health(request: Request, response: Response) -> dict:
+        response.headers["Cache-Control"] = "no-store"
+        client = getattr(request.app.state, "mongo_client", None)
+        if client is not None and ping(client):
+            return {"status": "ok", "database": {"checked": True, "reachable": True}}
+        response.status_code = status.HTTP_503_SERVICE_UNAVAILABLE
+        return {"status": "unavailable", "database": {"checked": True, "reachable": False}}
+
+    @app.get("/v1/models", tags=["ai"])
+    def list_models() -> dict:
+        return {"object": "list", "data": []}
 
     app.include_router(health.router, prefix="/api")
     app.include_router(auth.router, prefix="/api/auth")

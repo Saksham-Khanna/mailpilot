@@ -125,3 +125,15 @@ def test_cors_allows_configured_origin_only(monkeypatch):
     assert ok.headers.get("access-control-allow-origin") == "http://localhost:5173"
     bad = client.get("/api/health", headers={"Origin": "https://evil.example"})
     assert "access-control-allow-origin" not in bad.headers
+
+
+def test_root_health_endpoints(monkeypatch):
+    client, mongo = make_client(monkeypatch)
+    r = client.get("/health")
+    assert r.status_code == 200
+    assert r.json()["status"] == "ok"
+
+    with client:
+        db_res = client.get("/health/database")
+    assert db_res.status_code == 200
+    assert db_res.json()["database"]["checked"] is True
