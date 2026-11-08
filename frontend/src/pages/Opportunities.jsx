@@ -53,7 +53,16 @@ const cardVariants = {
   },
 };
 
-function PriorityBadge({ priority }) {
+function PriorityBadge({ priority, companyName, senderName, subject }) {
+  const combined = `${companyName || ""} ${senderName || ""} ${subject || ""}`.toLowerCase();
+  const isOptional = combined.includes("linkedin") || combined.includes("quora") || combined.includes("medium") || combined.includes("reddit") || combined.includes("digest") || combined.includes("newsletter") || combined.includes("no-reply") || combined.includes("notifications");
+  if (isOptional) {
+    return (
+      <span className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold bg-sky-500/10 text-sky-300 border-sky-500/20">
+        Optional
+      </span>
+    );
+  }
   const tones = {
     High: "bg-rose-500/10 text-rose-300 border-rose-500/20",
     Medium: "bg-[#D4AF37]/15 text-[#D4AF37] border-[#D4AF37]/30",
@@ -61,16 +70,17 @@ function PriorityBadge({ priority }) {
   };
   return (
     <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold ${tones[priority] || tones.Medium}`}>
-      {priority === "High" ? "High Priority" : priority === "Medium" ? "Opportunity" : "Needs Reply"}
+      {priority === "High" ? "Priority" : priority === "Medium" ? "Opening" : "Needs Response"}
     </span>
   );
 }
 
 function CategoryBadge({ category }) {
   const isInternship = category?.toLowerCase().includes("internship");
+  const cleanedCategory = category ? category.replace(/opportunity/gi, "Opening") : "Opening";
   return (
     <span className="inline-flex items-center rounded-lg bg-[#1F1F22] border border-[#303034] px-2.5 py-1 text-xs font-medium text-[#D4AF37]">
-      {isInternship ? "Internship" : category}
+      {isInternship ? "Internship Opening" : cleanedCategory}
     </span>
   );
 }
@@ -149,9 +159,9 @@ export default function Opportunities({ gmail, health }) {
       {health?.state === "offline" && <ErrorBanner onRetry={health.retry} />}
 
       <div>
-        <h2 className="text-2xl font-bold tracking-tight sm:text-3xl text-white">Opportunities</h2>
+        <h2 className="text-2xl font-bold tracking-tight sm:text-3xl text-white">Openings</h2>
         <p className="mt-1 text-sm text-muted">
-          AI-powered extraction and tracking of job, internship, and collaboration opportunities from your emails.
+          AI-powered extraction and tracking of job, internship, and collaboration openings from your emails.
         </p>
       </div>
 
@@ -171,7 +181,7 @@ export default function Opportunities({ gmail, health }) {
           </div>
           <div className="mt-4">
             <h3 className="text-2xl font-bold tracking-tight text-white">{totalCount}</h3>
-            <p className="mt-0.5 text-xs font-medium text-muted">Total Opportunities</p>
+            <p className="mt-0.5 text-xs font-medium text-muted">Total Openings</p>
           </div>
         </div>
 
@@ -183,7 +193,7 @@ export default function Opportunities({ gmail, health }) {
           </div>
           <div className="mt-4">
             <h3 className="text-2xl font-bold tracking-tight text-white">{highPriorityCount}</h3>
-            <p className="mt-0.5 text-xs font-medium text-muted">High Priority</p>
+            <p className="mt-0.5 text-xs font-medium text-muted">Priority</p>
           </div>
         </div>
 
@@ -195,7 +205,7 @@ export default function Opportunities({ gmail, health }) {
           </div>
           <div className="mt-4">
             <h3 className="text-2xl font-bold tracking-tight text-white">{needsReplyCount}</h3>
-            <p className="mt-0.5 text-xs font-medium text-muted">Needs Reply</p>
+            <p className="mt-0.5 text-xs font-medium text-muted">Needs Response</p>
           </div>
         </div>
 
@@ -279,24 +289,24 @@ export default function Opportunities({ gmail, health }) {
 
       {/* Two-Column Split Workspace */}
       <div className="grid gap-6 lg:grid-cols-12">
-        {/* Left Column: Opportunities List (5 cols) */}
+        {/* Left Column: Openings List (5 cols) */}
         <div className="lg:col-span-5 flex flex-col gap-3">
           <div className="rounded-2xl border border-[#303034] bg-[#19191C] overflow-hidden shadow-xl">
             <div className="border-b border-[#303034] px-5 py-3.5 flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-muted">Opportunities List ({items.length})</span>
+              <span className="text-xs font-bold uppercase tracking-wider text-muted">Openings List ({items.length})</span>
             </div>
 
             {state === "loading" && (
               <div className="flex items-center justify-center gap-2 p-12 text-sm text-muted" role="status">
                 <Loader2 aria-hidden="true" className="size-5 animate-spin text-[#D4AF37]" />
-                Loading opportunities...
+                Loading openings...
               </div>
             )}
 
             {state === "error" && (
               <div className="p-6">
                 <Notice tone="error" onDismiss={null}>
-                  <p className="font-semibold">Failed to load opportunities</p>
+                  <p className="font-semibold">Failed to load openings</p>
                   <p className="mt-1 text-rose-100/90">{error}</p>
                 </Notice>
               </div>
@@ -363,8 +373,7 @@ export default function Opportunities({ gmail, health }) {
                           </div>
                         </div>
                         <div className="flex flex-col items-end gap-1.5 shrink-0">
-                          <PriorityBadge priority={item.priority} />
-                          <span className="text-[11px] font-semibold text-[#D4AF37]">{Math.round(item.confidence * 100)}%</span>
+                          <PriorityBadge priority={item.priority} companyName={companyName} senderName={item.sender_name} subject={item.subject} />
                         </div>
                       </div>
 
@@ -401,9 +410,9 @@ export default function Opportunities({ gmail, health }) {
             {!selectedItem ? (
               <div className="flex flex-col items-center justify-center p-16 text-center text-muted">
                 <Target className="size-12 text-muted/40 mb-3" />
-                <h3 className="text-lg font-semibold text-white">No opportunity selected</h3>
+                <h3 className="text-lg font-semibold text-white">No opening selected</h3>
                 <p className="text-xs text-muted mt-1 max-w-sm">
-                  Select an opportunity from the list on the left to review AI extraction details, email summary, and requirements.
+                  Select an opening from the list on the left to review AI extraction details, email summary, and requirements.
                 </p>
               </div>
             ) : (
@@ -446,10 +455,12 @@ export default function Opportunities({ gmail, health }) {
                 {/* Badges row */}
                 <div className="flex flex-wrap items-center gap-2.5 pt-2 border-t border-[#303034]/60">
                   <CategoryBadge category={selectedItem.category} />
-                  <PriorityBadge priority={selectedItem.priority} />
-                  <span className="inline-flex items-center rounded-lg bg-[#1F1F22] border border-[#303034] px-3 py-1 text-xs font-semibold text-[#D4AF37]">
-                    {Math.round(selectedItem.confidence * 100)}% AI Confidence
-                  </span>
+                  <PriorityBadge
+                    priority={selectedItem.priority}
+                    companyName={opp?.company_name || selectedItem.sender_name}
+                    senderName={selectedItem.sender_name}
+                    subject={selectedItem.subject}
+                  />
                   {selectedItem.received_at && (
                     <span className="text-xs text-muted ml-auto">{formatDateTime(selectedItem.received_at)}</span>
                   )}
