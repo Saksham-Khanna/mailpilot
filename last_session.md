@@ -1,23 +1,18 @@
 # MailPilot — Last Session Handoff
 
-**Date:** 2026-11-07  
+**Date:** 2026-11-08  
 **Workspace:** D:\work\mailpilot\mailpilot  
-**Status:** **Health endpoints added, Graphify knowledge graph integrated, Ollama (qwen2.5:7b) local AI classification configured and tested, and backend database reliability hardened.**
+**Status:** **Enhanced heuristic classifier for newsletters/digests, refined UI terminology from opportunities to openings/priority/optional, and updated workspace components.**
 
 ## Summary of Accomplishments (Today's Completed Work)
-1. **Health & AI Endpoint Liveness (backend/app/main.py)**:
-   - Added root-level /health and /health/database endpoints to prevent 404 spam.
-   - Added OpenAI-compatible /v1/models stub endpoint.
-2. **Graphify Knowledge Graph Integration**:
-   - Installed graphifyy and generated repository knowledge graph (761 nodes, 2037 edges, 26 communities).
-3. **Phase 3 Local LLM Integration (Ollama + qwen2.5:7b)**:
-   - Configured local Ollama support defaulting to qwen2.5:7b for local AI classification and opportunity extraction.
-   - Added unit test (test_classify_via_ollama_mock).
-4. **Database Resilience & Bug Fixes**:
-   - Fixed MongoDB connection handling and removed unintended mock fallback to protect user data.
-5. **Comprehensive Test Suite & Quality Assurance**:
-   - Verified 135 passing backend tests (python -m pytest backend/tests).
-   - Verified Vite frontend production build.
+1. **Heuristic Classifier Enhancements (backend/app/services/classifier.py)**:
+   - Added robust detection for automated digests, social platform notifications (Quora, Medium, Reddit, alerts), and no-reply sources.
+   - Refined reply eligibility rules to avoid false positives on automated digests.
+2. **Frontend UI Terminology & Badge Refinement (frontend/src/components/MessageList.jsx, Inbox.jsx, Opportunities.jsx)**:
+   - Updated terminology across tabs and sidebars from "Opportunities" / "High Priority" / "Needs Reply" to "Openings" / "Priority" / "Needs Response".
+   - Introduced smart "Optional" badge detection for platform newsletters, digests, and notifications.
+3. **Database & Git Contribution Sync**:
+   - Organized atomic commits and documentation to update the contribution timeline.
 
 ## Product Roadmap to Production-Ready User-Usable Product
 1. **Phase 3: AI Email Classification & Opportunity Extraction** (Completed - Ollama qwen2.5:7b integrated & tested)
