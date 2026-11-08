@@ -70,11 +70,11 @@ def _heuristic_classify(subject: str, body: str) -> dict[str, Any]:
     reply_eligibility = "reply_recommended"
     reason = "General professional message where a response may be appropriate."
     
-    if any(kw in text for kw in ["newsletter", "digest", "weekly update", "edition"]):
+    if any(kw in text for kw in ["quora", "medium", "reddit", "digest", "newsletter", "weekly update", "edition", "no-reply", "notifications@", "alerts"]):
         category = "Newsletter"
         priority = "Low"
         reply_eligibility = "no_reply_needed"
-        reason = "Automated newsletter or update providing information without expecting a response."
+        reason = "Automated digest, Q&A update, or newsletter not requiring a response."
     elif any(kw in text for kw in ["job alert", "jobs matching", "alerts for", "new jobs"]):
         category = "Job Opportunity"
         priority = "Medium"
@@ -117,7 +117,7 @@ def _heuristic_classify(subject: str, body: str) -> dict[str, Any]:
         reason = "Direct recruiter outreach or message where a response is recommended."
 
     if any(p in text for p in ["?", "let me know", "confirm", "availability", "reply", "respond"]):
-        if reply_eligibility == "no_reply_needed" and not any(kw in text for kw in ["unfortunately", "regret", "application received"]):
+        if reply_eligibility == "no_reply_needed" and not any(kw in text for kw in ["unfortunately", "regret", "application received", "quora", "medium", "reddit", "digest", "newsletter", "notifications"]):
             reply_eligibility = "reply_recommended"
             reason = "Email contains questions or a call to action expecting a response."
     if "do not reply" in text or "no-reply" in text or "automated message" in text or "automated email" in text:
