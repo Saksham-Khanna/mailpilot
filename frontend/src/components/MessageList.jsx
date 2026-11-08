@@ -19,7 +19,10 @@ function getSenderBrand(senderName, senderEmail) {
 }
 
 function getCategoryBadge(message) {
-  const text = `${message.subject || ""} ${message.snippet || ""} ${message.sender_name || ""}`.toLowerCase();
+  const text = `${message.subject || ""} ${message.snippet || ""} ${message.sender_name || ""} ${message.sender_email || ""}`.toLowerCase();
+  if (text.includes("linkedin")) {
+    return { label: "Optional", color: "bg-sky-500/15 text-sky-300 border-sky-500/30" };
+  }
   if (
     text.includes("intern") ||
     text.includes("engineer") ||
@@ -35,13 +38,13 @@ function getCategoryBadge(message) {
     text.includes("alert") ||
     text.includes("position")
   ) {
-    return { label: "Opportunity", color: "bg-[#D4AF37]/15 text-[#D4AF37] border-[#D4AF37]/30" };
+    return { label: "Opening", color: "bg-[#D4AF37]/15 text-[#D4AF37] border-[#D4AF37]/30" };
   }
   if (text.includes("interview") || text.includes("schedule") || text.includes("invitation")) {
-    return { label: "High Priority", color: "bg-rose-500/15 text-rose-300 border-rose-500/30" };
+    return { label: "Priority", color: "bg-rose-500/15 text-rose-300 border-rose-500/30" };
   }
   if (text.includes("reply") || text.includes("question") || text.includes("availability") || text.includes("challenge")) {
-    return { label: "Needs Reply", color: "bg-amber-500/15 text-amber-300 border-amber-500/30" };
+    return { label: "Needs Response", color: "bg-amber-500/15 text-amber-300 border-amber-500/30" };
   }
   return { label: "Update", color: "bg-[#1F1F22] text-muted border-[#303034]" };
 }

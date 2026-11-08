@@ -35,7 +35,10 @@ import {
 import { pluralize, formatDateTime } from "../lib/format.js";
 
 function getMessageCategory(message) {
-  const text = `${message.subject || ""} ${message.snippet || ""} ${message.sender_name || ""}`.toLowerCase();
+  const text = `${message.subject || ""} ${message.snippet || ""} ${message.sender_name || ""} ${message.sender_email || ""}`.toLowerCase();
+  if (text.includes("linkedin")) {
+    return "Optional";
+  }
   if (
     text.includes("intern") ||
     text.includes("engineer") ||
@@ -51,13 +54,13 @@ function getMessageCategory(message) {
     text.includes("alert") ||
     text.includes("position")
   ) {
-    return "Opportunity";
+    return "Opening";
   }
   if (text.includes("interview") || text.includes("schedule") || text.includes("invitation")) {
-    return "High Priority";
+    return "Priority";
   }
   if (text.includes("reply") || text.includes("question") || text.includes("availability") || text.includes("challenge")) {
-    return "Needs Reply";
+    return "Needs Response";
   }
   return "Update";
 }
@@ -257,18 +260,18 @@ export default function Inbox({ gmail, health }) {
 
     const cat = getMessageCategory(m);
 
-    if (activeTab === "Opportunities") {
-      if (cat !== "Opportunity") return false;
-    } else if (activeTab === "Needs Reply") {
-      if (cat !== "Needs Reply") return false;
+    if (activeTab === "Openings") {
+      if (cat !== "Opening") return false;
+    } else if (activeTab === "Needs Response") {
+      if (cat !== "Needs Response") return false;
     }
 
-    if (activeCategory === "Opportunities") {
-      if (cat !== "Opportunity") return false;
-    } else if (activeCategory === "High Priority") {
-      if (cat !== "High Priority") return false;
-    } else if (activeCategory === "Needs Reply") {
-      if (cat !== "Needs Reply") return false;
+    if (activeCategory === "Openings") {
+      if (cat !== "Opening") return false;
+    } else if (activeCategory === "Priority") {
+      if (cat !== "Priority") return false;
+    } else if (activeCategory === "Needs Response") {
+      if (cat !== "Needs Response") return false;
     }
 
     return true;
@@ -384,8 +387,8 @@ export default function Inbox({ gmail, health }) {
           {[
             { label: "All", count: total || 1, active: activeTab === "All", onClick: () => setActiveTab("All") },
             { label: "Unread", count: 327, active: activeTab === "Unread", onClick: () => setActiveTab("Unread") },
-            { label: "Opportunities", count: 42, active: activeTab === "Opportunities", onClick: () => setActiveTab("Opportunities") },
-            { label: "Needs Reply", count: 28, active: activeTab === "Needs Reply", onClick: () => setActiveTab("Needs Reply") },
+            { label: "Openings", count: 42, active: activeTab === "Openings", onClick: () => setActiveTab("Openings") },
+            { label: "Needs Response", count: 28, active: activeTab === "Needs Response", onClick: () => setActiveTab("Needs Response") },
           ].map((tab) => (
             <button
               key={tab.label}
@@ -422,9 +425,9 @@ export default function Inbox({ gmail, health }) {
             <nav className="space-y-1">
               {[
                 { id: "All Emails", label: "All Emails", count: total || 1428, icon: Mail, color: "text-[#D4AF37]" },
-                { id: "Opportunities", label: "Opportunities", count: 42, icon: Target, color: "text-[#D4AF37]" },
-                { id: "High Priority", label: "High Priority", count: 12, icon: Star, color: "text-amber-400" },
-                { id: "Needs Reply", label: "Needs Reply", count: 28, icon: Clock, color: "text-rose-400" },
+                { id: "Openings", label: "Openings", count: 42, icon: Target, color: "text-[#D4AF37]" },
+                { id: "Priority", label: "Priority", count: 12, icon: Star, color: "text-amber-400" },
+                { id: "Needs Response", label: "Needs Response", count: 28, icon: Clock, color: "text-rose-400" },
                 { id: "Replied", label: "Replied", count: 268, icon: CheckCircle, color: "text-emerald-400" },
                 { id: "Sent", label: "Sent", count: 310, icon: Send, color: "text-[#D4AF37]" },
                 { id: "Archived", label: "Archived", count: 780, icon: Archive, color: "text-zinc-400" },
