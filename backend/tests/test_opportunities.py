@@ -191,6 +191,76 @@ def test_classify_sanitize_job_alert_digest(client, auth_cookies, csrf_headers, 
         assert item["opportunity"] is None
 
 
+def test_classify_quora_digest_no_reply(client, auth_cookies, csrf_headers, gmail_store):
+    user_id = client.app.state.session_signer.verify(client.cookies["mailpilot_session"])
+    gmail_store.upsert_messages(
+        user_id=user_id,
+        messages=[{
+            "gmail_message_id": "msg-quora",
+            "gmail_thread_id": "thread-quora",
+            "sender_name": "Quora Suggested Spaces",
+            "sender_email": "onlytruthataboutrussia-space@quora.com",
+            "recipient": "me@example.com",
+            "subject": "If Russia invaded the UK, what would the US do?",
+            "received_at": None,
+            "snippet": "Trending Stories from Only Truth About Russia...",
+            "body_text": "Question: If Russia invaded the UK, what would the US do? Answer from Raymond Trip Remar...",
+            "body_source": "text",
+            "labels": ["INBOX"],
+            "has_body": True,
+        }],
+        synced_at=None,
+    )
+
+    res = client.post(
+        "/api/opportunities/classify",
+        headers=csrf_headers,
+        cookies=auth_cookies,
+        json={"message_id": "msg-quora"},
+    )
+    assert res.status_code == 200
+    data = res.json()
+    item = data["items"][0]
+    assert item["category"] == "Newsletter"
+    assert item["reply_eligibility"] == "no_reply_needed"
+    assert item["opportunity"] is None
+
+
+def test_classify_openai_billing_notice(client, auth_cookies, csrf_headers, gmail_store):
+    user_id = client.app.state.session_signer.verify(client.cookies["mailpilot_session"])
+    gmail_store.upsert_messages(
+        user_id=user_id,
+        messages=[{
+            "gmail_message_id": "msg-openai",
+            "gmail_thread_id": "thread-openai",
+            "sender_name": "OpenAI",
+            "sender_email": "noreply@tm.openai.com",
+            "recipient": "me@example.com",
+            "subject": "Please update your Go payment method",
+            "received_at": None,
+            "snippet": "Your Go subscription payment failed...",
+            "body_text": "Your Go subscription payment failed. Please update your payment method.",
+            "body_source": "text",
+            "labels": ["INBOX"],
+            "has_body": True,
+        }],
+        synced_at=None,
+    )
+
+    res = client.post(
+        "/api/opportunities/classify",
+        headers=csrf_headers,
+        cookies=auth_cookies,
+        json={"message_id": "msg-openai"},
+    )
+    assert res.status_code == 200
+    data = res.json()
+    item = data["items"][0]
+    assert item["reply_eligibility"] == "no_reply_needed"
+    assert item["priority"] == "Low"
+    assert item["opportunity"] is None
+
+
 def test_classify_via_ollama_mock(client, auth_cookies, csrf_headers, gmail_store, monkeypatch):
     user_id = client.app.state.session_signer.verify(client.cookies["mailpilot_session"])
     gmail_store.upsert_messages(
@@ -240,5 +310,3 @@ def test_classify_via_ollama_mock(client, auth_cookies, csrf_headers, gmail_stor
         assert item["category"] == "Interview"
         assert item["opportunity"]["company_name"] == "AI Company"
         assert item["opportunity"]["job_role"] == "ML Engineer"
-
-
