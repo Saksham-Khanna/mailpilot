@@ -25,7 +25,7 @@ import Notice from "../components/Notice.jsx";
 import EmptyState from "../components/EmptyState.jsx";
 import ErrorBanner from "../components/ErrorBanner.jsx";
 import { formatDateTime, pluralize } from "../lib/format.js";
-import { getClassifications, classifyEmails } from "../lib/api.js";
+import { getClassifications, classifyEmails, generateDraft } from "../lib/api.js";
 
 const CATEGORY_TABS = [
   { label: "All", value: "All" },
@@ -75,6 +75,23 @@ function PriorityBadge({ priority, companyName, senderName, subject }) {
   );
 }
 
+function isOptionalOrNonActionable(item, opp) {
+  const combined = `${opp?.company_name || ""} ${item?.sender_name || ""} ${item?.subject || ""} ${item?.snippet || ""}`.toLowerCase();
+  return (
+    combined.includes("linkedin") ||
+    combined.includes("quora") ||
+    combined.includes("medium") ||
+    combined.includes("reddit") ||
+    combined.includes("digest") ||
+    combined.includes("newsletter") ||
+    combined.includes("no-reply") ||
+    combined.includes("notifications") ||
+    item?.reply_eligibility === "no_reply_needed" ||
+    item?.category === "Newsletter" ||
+    item?.priority === "Low"
+  );
+}
+
 function CategoryBadge({ category }) {
   const isInternship = category?.toLowerCase().includes("internship");
   const cleanedCategory = category ? category.replace(/opportunity/gi, "Opening") : "Opening";
@@ -96,7 +113,37 @@ export default function Opportunities({ gmail, health }) {
   const [selectedId, setSelectedId] = useState(null);
   const [lastClassifiedTime, setLastClassifiedTime] = useState("Oct 31, 2026, 3:59 PM");
 
-  const connected = Boolean(gmail?.status?.connected);
+  const [connected, setConnected] = useState(false); // or derived
+  const [generatingDraft, setGeneratingDraft] = useState(false);
+  const [draftNotice, setDraftNotice] = useState(null);
+
+  const handleDraftReply = async () => {
+    if (!selectedItem?.message_id) return;
+    try {
+      setGeneratingDraft(true);
+      setDraftNotice(null);
+      await generateDraft({
+        csrfToken: gmail?.csrfToken,
+        message_id: selectedItem.message_id,
+        reply_type: "general_reply"
+      });
+      setDraftNotice("AI reply draft generated successfully! Opening Drafts...");
+      setTimeout(() => {
+        window.location.hash = "#/drafts";
+      }, 1000);
+    } catch (err) {
+      if (err?.detail?.error_code === "reply_not_needed" || err?.message?.includes("no reply needed")) {
+        setDraftNotice("This email was classified as no reply needed. Opening Drafts anyway...");
+        setTimeout(() => {
+          window.location.hash = "#/drafts";
+        }, 1200);
+      } else {
+        setDraftNotice(err?.detail || err?.message || "Failed to generate AI reply draft.");
+      }
+    } finally {
+      setGeneratingDraft(false);
+    }
+  };
 
   const loadItems = useCallback(async () => {
     setState("loading");
@@ -426,6 +473,13 @@ export default function Opportunities({ gmail, health }) {
                   className="flex flex-col gap-6 relative z-10"
                 >
                 {/* Header row */}
+                {draftNotice && (
+                  <div className="mb-2">
+                    <Notice tone={draftNotice.includes("Failed") ? "error" : "success"} onDismiss={() => setDraftNotice(null)}>
+                      {draftNotice}
+                    </Notice>
+                  </div>
+                )}
                 <div className="flex flex-wrap items-start justify-between gap-4">
                   <div className="flex items-center gap-4">
                     <span className="grid size-14 place-items-center rounded-2xl bg-[#1F1F22] text-[#D4AF37] font-bold text-xl border border-[#303034] shadow-md">
@@ -436,7 +490,11 @@ export default function Opportunities({ gmail, health }) {
                       <h4 className="text-sm font-semibold text-[#D4AF37] mt-0.5">{opp?.job_role || selectedItem.subject}</h4>
                     </div>
                   </div>
-                  {opp?.application_link ? (
+                  {isOptionalOrNonActionable(selectedItem, opp) ? (
+                    <span className="inline-flex items-center gap-1.5 rounded-xl border border-sky-500/30 bg-sky-500/10 px-4 py-2 text-xs font-semibold text-sky-300">
+                      Informational Notice — No Action Required
+                    </span>
+                  ) : opp?.application_link ? (
                     <a
                       href={opp.application_link}
                       target="_blank"
@@ -446,9 +504,14 @@ export default function Opportunities({ gmail, health }) {
                       Apply Now <ExternalLink className="size-4" />
                     </a>
                   ) : (
-                    <span className="inline-flex items-center gap-1.5 rounded-xl border border-[#303034] bg-[#1F1F22] px-4 py-2 text-xs font-semibold text-muted">
-                      No Direct Link
-                    </span>
+                    <button
+                      onClick={handleDraftReply}
+                      disabled={generatingDraft}
+                      className="inline-flex items-center gap-2 rounded-xl bg-[#D4AF37] px-4 py-2.5 text-sm font-semibold text-[#0B0B0D] shadow-lg transition-colors hover:bg-[#F5D77A] disabled:opacity-50"
+                    >
+                      {generatingDraft ? <Loader2 className="size-4 animate-spin" /> : <Mail className="size-4" />}
+                      Draft AI Reply
+                    </button>
                   )}
                 </div>
 
