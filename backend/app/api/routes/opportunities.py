@@ -92,7 +92,7 @@ def classify_messages(
     _no_store(response)
     settings = get_settings()
 
-    # Determine which messages to classify
+    force = payload.force if payload and payload.force else False
     messages_to_classify = []
     if payload and payload.message_id:
         msg = store.get_message(user_id=user_id, gmail_message_id=payload.message_id)
@@ -111,7 +111,11 @@ def classify_messages(
             existing = store.get_classification(
                 user_id=user_id, gmail_message_id=msg["gmail_message_id"]
             )
-            if not existing:
+            if force:
+                if existing and existing.get("user_modified"):
+                    continue
+                messages_to_classify.append(msg)
+            elif not existing:
                 messages_to_classify.append(msg)
 
     classified_results = []
@@ -123,6 +127,8 @@ def classify_messages(
         sender = f"{full_msg.get('sender_name', '')} <{full_msg.get('sender_email', '')}>"
         body = full_msg.get("body_text", "")
 
+        existing = store.get_classification(user_id=user_id, gmail_message_id=msg["gmail_message_id"])
+
         result = classify_email(
             settings=settings,
             subject=subject,
@@ -130,21 +136,39 @@ def classify_messages(
             body=body,
         )
 
-        classification_doc = {
-            "gmail_message_id": full_msg["gmail_message_id"],
-            "gmail_thread_id": full_msg.get("gmail_thread_id"),
-            "sender_name": full_msg.get("sender_name"),
-            "sender_email": full_msg.get("sender_email"),
-            "subject": subject,
-            "received_at": full_msg.get("received_at"),
-            "category": result["category"],
-            "summary": result["summary"],
-            "priority": result["priority"],
-            "confidence": result["confidence"],
-            "opportunity": result["opportunity"],
-            "reply_eligibility": result.get("reply_eligibility", "reply_recommended"),
-            "reason": result.get("reason", ""),
-        }
+        if existing and existing.get("user_modified"):
+            classification_doc = {
+                "gmail_message_id": full_msg["gmail_message_id"],
+                "gmail_thread_id": full_msg.get("gmail_thread_id"),
+                "sender_name": full_msg.get("sender_name"),
+                "sender_email": full_msg.get("sender_email"),
+                "subject": subject,
+                "received_at": full_msg.get("received_at"),
+                "category": existing.get("category", result["category"]),
+                "summary": existing.get("summary", result["summary"]),
+                "priority": existing.get("priority", result["priority"]),
+                "confidence": existing.get("confidence", result["confidence"]),
+                "opportunity": existing.get("opportunity", result["opportunity"]),
+                "reply_eligibility": existing.get("reply_eligibility", result.get("reply_eligibility")),
+                "reason": existing.get("reason", result.get("reason")),
+                "user_modified": True,
+            }
+        else:
+            classification_doc = {
+                "gmail_message_id": full_msg["gmail_message_id"],
+                "gmail_thread_id": full_msg.get("gmail_thread_id"),
+                "sender_name": full_msg.get("sender_name"),
+                "sender_email": full_msg.get("sender_email"),
+                "subject": subject,
+                "received_at": full_msg.get("received_at"),
+                "category": result["category"],
+                "summary": result["summary"],
+                "priority": result["priority"],
+                "confidence": result["confidence"],
+                "opportunity": result["opportunity"],
+                "reply_eligibility": result.get("reply_eligibility", "reply_recommended"),
+                "reason": result.get("reason", ""),
+            }
 
         store.upsert_classification(
             user_id=user_id,
