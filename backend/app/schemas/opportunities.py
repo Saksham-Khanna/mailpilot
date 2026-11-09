@@ -19,6 +19,9 @@ CategoryType = Literal[
     "Recruiter Message",
     "Recruiter Outreach",
     "Newsletter",
+    "Billing & Invoices",
+    "Security Notice",
+    "Transactional",
     "Other",
 ]
 
@@ -77,6 +80,7 @@ class OpportunityListResponse(BaseModel):
 class ClassifyRequest(BaseModel):
     message_id: str | None = None
     limit: int | None = Field(default=20, ge=1, le=50)
+    force: bool | None = False
 
 
 class ClassifyResponse(BaseModel):

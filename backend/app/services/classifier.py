@@ -24,6 +24,9 @@ VALID_CATEGORIES = {
     "Recruiter Message",
     "Recruiter Outreach",
     "Newsletter",
+    "Billing & Invoices",
+    "Security Notice",
+    "Transactional",
     "Other",
 }
 
@@ -71,35 +74,17 @@ def _heuristic_classify(*, subject: str, body: str, sender: str = "") -> dict[st
     reason = "General informational message where no response is required."
     
     if any(kw in text for kw in ["payment", "billing", "invoice", "receipt", "charge", "subscription", "credit card", "update your payment", "payment failed", "go payment", "please update your"]):
-        category = "Other"
+        category = "Billing & Invoices"
         priority = "Low"
         reply_eligibility = "no_reply_needed"
         reason = "Automated billing or subscription notification not requiring a human reply."
         confidence = 0.95
-    elif any(kw in text for kw in ["quora", "medium", "reddit", "digest", "newsletter", "weekly update", "edition", "no-reply", "notifications@", "alerts", "suggested spaces"]):
-        category = "Newsletter"
-        priority = "Low"
+    elif any(kw in text for kw in ["security alert", "password reset", "new sign-in", "verification code", "two-factor", "auth alert"]):
+        category = "Security Notice"
+        priority = "High"
         reply_eligibility = "no_reply_needed"
-        reason = "Automated digest, Q&A update, or newsletter not requiring a response."
-        confidence = 0.92
-    elif any(kw in text for kw in ["job alert", "jobs matching", "alerts for", "new jobs"]):
-        category = "Job Opportunity"
-        priority = "Medium"
-        reply_eligibility = "no_reply_needed"
-        reason = "Automated job alert or digest listing multiple opportunities without asking for a direct response."
-        confidence = 0.85
-    elif any(kw in text for kw in ["unfortunately", "regret", "not moving forward", "status of your application", "other candidates", "position has been filled"]):
-        category = "Rejection"
-        priority = "Low"
-        reply_eligibility = "no_reply_needed"
-        reason = "Rejection notification or application status update informing you the decision is final and not requiring a reply."
+        reason = "Security or account notification not requiring a human response."
         confidence = 0.95
-    elif any(kw in text for kw in ["application received", "thank you for applying", "we have received your application", "application confirmation", "submission received"]):
-        category = "Application Update"
-        priority = "Medium"
-        reply_eligibility = "no_reply_needed"
-        reason = "Application submission confirmation informing you that your application was received; no reply needed."
-        confidence = 0.92
     elif any(kw in text for kw in ["offer", "congratulations", "pleased to offer"]):
         category = "Offer Letter"
         priority = "High"
@@ -118,18 +103,48 @@ def _heuristic_classify(*, subject: str, body: str, sender: str = "") -> dict[st
         reply_eligibility = "reply_required"
         reason = "Assessment or coding test invitation requiring confirmation or completion."
         confidence = 0.95
-    elif any(kw in text for kw in ["job opportunity", "position", "we are hiring", "engineer", "developer"]):
+    elif any(kw in text for kw in ["unfortunately", "regret", "not moving forward", "status of your application", "other candidates", "position has been filled", "decided not to move forward"]):
+        category = "Rejection"
+        priority = "Low"
+        reply_eligibility = "no_reply_needed"
+        reason = "Rejection notification or application status update informing you the decision is final and not requiring a reply."
+        confidence = 0.95
+    elif any(kw in text for kw in ["application received", "thank you for applying", "we have received your application", "application confirmation", "submission received", "update on your application"]):
+        category = "Application Update"
+        priority = "Medium"
+        reply_eligibility = "no_reply_needed"
+        reason = "Application submission confirmation informing you that your application was received; no reply needed."
+        confidence = 0.92
+    elif any(kw in text for kw in ["job opportunity", "we are hiring", "engineer position", "developer position", "job opening"]):
         category = "Job Opportunity"
+        priority = "High" if "job alert" not in text else "Medium"
+        reply_eligibility = "no_reply_needed" if "job alert" in text or "jobs matching" in text else "reply_recommended"
+        reason = "Job opportunity or automated job alert."
+        confidence = 0.85
+    elif any(kw in text for kw in ["internship", "intern"]):
+        category = "Internship"
         priority = "High"
         reply_eligibility = "reply_recommended"
-        reason = "Job opportunity where expressing interest or starting a conversation is recommended."
-        confidence = 0.82
-    elif any(kw in text for kw in ["reaching out", "connect", "recruiter", "talent", "profile"]):
+        reason = "Internship opportunity where expressing interest is recommended."
+        confidence = 0.85
+    elif any(kw in text for kw in ["reaching out", "wanted to connect", "technical recruiter", "recruiter at", "talent at", "wanted to connect about", "connecting regarding"]) or ("recruiter" in sender.lower() and "opportunity" not in subject.lower()):
         category = "Recruiter Message"
         priority = "Medium"
         reply_eligibility = "reply_recommended"
         reason = "Direct recruiter outreach or message where a response is recommended."
-        confidence = 0.82
+        confidence = 0.85
+    elif any(kw in text for kw in ["quora", "medium", "reddit", "digest", "newsletter", "weekly update", "edition", "no-reply", "notifications@", "suggested spaces"]):
+        category = "Newsletter"
+        priority = "Low"
+        reply_eligibility = "no_reply_needed"
+        reason = "Automated digest, Q&A update, or newsletter not requiring a response."
+        confidence = 0.92
+    elif any(kw in text for kw in ["due tomorrow", "reminder", "loan", "statement", "booking"]):
+        category = "Transactional"
+        priority = "Medium"
+        reply_eligibility = "no_reply_needed"
+        reason = "Informational transactional notice."
+        confidence = 0.90
 
     # A question mark alone must NEVER trigger reply_recommended / reply_required unless explicitly conversational human intent
     if any(phrase in text for phrase in ["let me know", "confirm your availability", "please reply", "can you chat"]):
@@ -146,16 +161,17 @@ def _heuristic_classify(*, subject: str, body: str, sender: str = "") -> dict[st
     
     opportunity = None
     if category in {"Job Opportunity", "Internship", "Internship Opportunity", "Offer Letter"}:
-        opportunity = {
-            "company_name": None,
-            "job_role": None,
-            "location": None,
-            "work_mode": None,
-            "salary": None,
-            "skills": [],
-            "deadline": None,
-            "application_link": None,
-        }
+        if "job alert" not in text and "10 new" not in text and "digest" not in text and "matching your" not in text:
+            opportunity = _sanitize_opportunity({
+                "company_name": sender.split("<")[0].strip() if "<" in sender else sender,
+                "job_role": subject,
+                "location": None,
+                "work_mode": None,
+                "salary": None,
+                "skills": [],
+                "deadline": None,
+                "application_link": None,
+            }, subject)
 
     return {
         "category": category,
@@ -225,14 +241,17 @@ def classify_email(*, settings: Settings, subject: str, sender: str, body: str) 
 - Offer Letter
 - Recruiter Message
 - Newsletter
+- Billing & Invoices
+- Security Notice
+- Transactional
 - Other
 
 CRITICAL CLASSIFICATION RULES:
-1. Correctly distinguish between job/internship opportunities, interview invitations, assessments, application updates, rejections, offers, recruiter messages, newsletters/promotional notifications, and billing/invoices/subscriptions (classify billing, invoice, and payment alerts such as OpenAI payment failed or Stripe/AWS charges as "Other" with "no_reply_needed" and "Low" priority).
-2. Separate category from reply_eligibility ("reply_required", "reply_recommended", "no_reply_needed"). A question mark (?) alone in email subjects or digests (such as Quora questions or Q&A spaces like "If Russia invaded the UK...") must NEVER trigger reply_recommended or reply_required. Base reply eligibility purely on conversational intent and whether a human sender explicitly expects a response from you.
-3. For job alerts or digest emails containing multiple jobs, extract ONLY the top/most prominent featured job (do not treat the entire digest as a single job). If no specific verified single job opportunity is detailed, set opportunity to null.
-4. Extract only verified opportunity fields (company_name, job_role, location, work_mode, salary, skills, deadline, application_link). Never invent missing information; use null for unknown fields.
-5. Provide a dynamic confidence score between 0.50 and 0.99 based on classification certainty. Handle ambiguous or unfamiliar emails conservatively (default to "Other" and "no_reply_needed").
+1. Accurately distinguish all email types based on actual context, intent, sender and body content: Job/internship opportunities, job alert digests containing multiple openings, recruiter messages, interview invitations, assessments, application confirmations/status updates, rejections, offer letters, newsletters/promotional emails, billing/payment/invoices/subscriptions (Billing & Invoices), security/account notifications (Security Notice), general informational/transactional emails (Transactional), and previously unseen/unfamiliar email types (Other).
+2. Evaluate reply eligibility independently from category classification ("reply_required", "reply_recommended", "no_reply_needed"). A question mark (?) alone in email subjects or digests (such as Quora questions or Q&A spaces like "If Russia invaded the UK...") must NEVER trigger reply_recommended or reply_required. Base reply eligibility purely on actual human intent and whether a response is expected.
+3. For job alerts or digest emails containing multiple jobs, extract ONLY the top/most prominent featured job, or set opportunity to null if no specific verified single job opportunity is detailed. Do not treat multi-job digests as a single opportunity.
+4. Extract only verified opportunity fields (company_name, job_role, location, work_mode, salary, skills, deadline, application_link). Never invent missing information or company names/roles; use null for unknown fields.
+5. Provide a dynamic confidence score between 0.50 and 0.99 based on classification certainty. Handle ambiguous or unfamiliar emails conservatively (default to "Other", "no_reply_needed", and lower confidence).
 
 Extract structured opportunity fields when available:
 - company_name: The actual hiring company (NEVER put job boards like LinkedIn, Indeed, Glassdoor, Quora, OpenAI as company name; use null if unknown)
