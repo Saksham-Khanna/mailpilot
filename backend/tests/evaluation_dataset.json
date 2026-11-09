@@ -1,0 +1,142 @@
+[
+  {
+    "id": "eval-1",
+    "sender_name": "Google Talent",
+    "sender_email": "recruiting@google.com",
+    "subject": "Software Engineer, Full Stack - Google Opportunity",
+    "body_text": "Hello, we reviewed your resume and would like to discuss a Full Stack Software Engineer position at Google, Mountain View. Salary: $160k. Please let us know if you are interested.",
+    "expected_category": "Job Opportunity",
+    "expected_reply_eligibility": "reply_recommended",
+    "expected_opportunity_extracted": true
+  },
+  {
+    "id": "eval-2",
+    "sender_name": "Meta Careers",
+    "sender_email": "internships@meta.com",
+    "subject": "Meta Software Engineering Internship Program 2026",
+    "body_text": "Thank you for your interest in the Meta Internship. We are hiring intern software engineers for Summer 2026. Location: Menlo Park (Hybrid).",
+    "expected_category": "Internship",
+    "expected_reply_eligibility": "reply_recommended",
+    "expected_opportunity_extracted": true
+  },
+  {
+    "id": "eval-3",
+    "sender_name": "LinkedIn Job Alerts",
+    "sender_email": "jobalerts@linkedin.com",
+    "subject": "10 new Software Engineer jobs matching your alert",
+    "body_text": "Here are 10 new jobs matching your alert: Engineer at StartupA, Developer at StartupB, etc.",
+    "expected_category": "Job Opportunity",
+    "expected_reply_eligibility": "no_reply_needed",
+    "expected_opportunity_extracted": false
+  },
+  {
+    "id": "eval-4",
+    "sender_name": "Sarah Connor",
+    "sender_email": "sarah@techrecruiter.io",
+    "subject": "Connecting regarding Engineering roles",
+    "body_text": "Hi, I'm a technical recruiter at TechCorp. I saw your GitHub and wanted to connect about potential engineering roles.",
+    "expected_category": "Recruiter Message",
+    "expected_reply_eligibility": "reply_recommended",
+    "expected_opportunity_extracted": false
+  },
+  {
+    "id": "eval-5",
+    "sender_name": "Stripe Recruiting",
+    "sender_email": "interview@stripe.com",
+    "subject": "Interview Invitation: Stripe Backend Engineer",
+    "body_text": "We are excited to invite you to a 45-minute technical interview for the Backend Engineer position. Please confirm your availability next week.",
+    "expected_category": "Interview",
+    "expected_reply_eligibility": "reply_required",
+    "expected_opportunity_extracted": true
+  },
+  {
+    "id": "eval-6",
+    "sender_name": "HackerRank Assessments",
+    "sender_email": "no-reply@hackerrank.com",
+    "subject": "Coding Assessment for Data Scientist Role",
+    "body_text": "Please complete the attached coding assessment within 48 hours for your application with DataCorp.",
+    "expected_category": "Assessment",
+    "expected_reply_eligibility": "reply_required",
+    "expected_opportunity_extracted": false
+  },
+  {
+    "id": "eval-7",
+    "sender_name": "Amazon Applications",
+    "sender_email": "application-update@amazon.com",
+    "subject": "Application Received: Software Development Engineer",
+    "body_text": "We have received your application for the Software Development Engineer role. Our recruiting team is reviewing your background.",
+    "expected_category": "Application Update",
+    "expected_reply_eligibility": "no_reply_needed",
+    "expected_opportunity_extracted": false
+  },
+  {
+    "id": "eval-8",
+    "sender_name": "Netflix Talent Team",
+    "sender_email": "talent@netflix.com",
+    "subject": "Update on your application to Netflix",
+    "body_text": "Thank you for your interest in Netflix. Unfortunately, we have decided not to move forward with your application at this time.",
+    "expected_category": "Rejection",
+    "expected_reply_eligibility": "no_reply_needed",
+    "expected_opportunity_extracted": false
+  },
+  {
+    "id": "eval-9",
+    "sender_name": "Apple Offer Team",
+    "sender_email": "offers@apple.com",
+    "subject": "Offer Letter: Senior Engineer at Apple",
+    "body_text": "Congratulations! We are pleased to offer you the position of Senior Engineer at Apple. Base salary: $200k. Please review the attached offer letter.",
+    "expected_category": "Offer Letter",
+    "expected_reply_eligibility": "reply_required",
+    "expected_opportunity_extracted": true
+  },
+  {
+    "id": "eval-10",
+    "sender_name": "Medium Daily Digest",
+    "sender_email": "noreply@medium.com",
+    "subject": "Your daily programming digest and top stories",
+    "body_text": "Here are top stories in programming today: 1. Python tips, 2. Fast API best practices.",
+    "expected_category": "Newsletter",
+    "expected_reply_eligibility": "no_reply_needed",
+    "expected_opportunity_extracted": false
+  },
+  {
+    "id": "eval-11",
+    "sender_name": "OpenAI Billing",
+    "sender_email": "billing@openai.com",
+    "subject": "Your subscription payment failed",
+    "body_text": "Your monthly subscription payment failed. Please update your payment method to avoid service interruption.",
+    "expected_category": "Billing & Invoices",
+    "expected_reply_eligibility": "no_reply_needed",
+    "expected_opportunity_extracted": false
+  },
+  {
+    "id": "eval-12",
+    "sender_name": "Google Security",
+    "sender_email": "no-reply@accounts.google.com",
+    "subject": "Security Alert: New sign-in from Windows",
+    "body_text": "We noticed a new sign-in to your Google Account from a Windows device. If this was you, no action is needed.",
+    "expected_category": "Security Notice",
+    "expected_reply_eligibility": "no_reply_needed",
+    "expected_opportunity_extracted": false
+  },
+  {
+    "id": "eval-13",
+    "sender_name": "Library Services",
+    "sender_email": "library@university.edu",
+    "subject": "Your book loan is due tomorrow",
+    "body_text": "This is a reminder that your borrowed book 'Introduction to Algorithms' is due tomorrow.",
+    "expected_category": "Transactional",
+    "expected_reply_eligibility": "no_reply_needed",
+    "expected_opportunity_extracted": false
+  },
+  {
+    "id": "eval-14",
+    "sender_name": "Unknown Entity",
+    "sender_email": "random@unknownxyz123.com",
+    "subject": "Completely unfamiliar subject header XYZ",
+    "body_text": "Some ambiguous text with unknown intent and no clear context whatsoever.",
+    "expected_category": "Other",
+    "expected_reply_eligibility": "no_reply_needed",
+    "expected_opportunity_extracted": false
+  }
+]
